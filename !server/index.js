@@ -6,6 +6,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-mongoose.connect('mongodb+srv://admin:admin@cluster.uuf2say.mongodb.net/pos?retryWrites=true&w=majority&appName=Cluster');
+mongoose.connect(process.env.MONGODB);
 
-app.listen(4000, () => console.log('server is connected to port 4000'));
+const port = 4000
+app.listen(port, () => console.log(`server is connected to port ${port}`));
