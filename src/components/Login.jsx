@@ -36,8 +36,7 @@ function Login() {
           placeholder='Enter Password'
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button>yes</Button>
-        <h5>Suiii</h5>
+        <Button>Login</Button>
       </Form>
     </>
   )
