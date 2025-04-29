@@ -25,12 +25,24 @@ export const login = createAsyncThunk(
   }
 );
 
+export const logout = createAsyncThunk(
+  "users/logout",
+  async () => {
+    try {
+      const response = await axios.post("http://localhost:4000/logout");
+      const msg = response.data.msg;
+      return msg;
+    } catch (error) { }
+  }
+);
+
 export const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // login
       .addCase(login.pending, (state) => {
         state.status = "pending";
       })
@@ -43,6 +55,18 @@ export const userSlice = createSlice({
         state.status = "rejected";
         state.user = null;
         state.msg = action.payload.msg;
+      })
+      //logout
+      .addCase(logout.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.status = "success";
+        state.user = null;
+        state.msg = action.payload;
+      })
+      .addCase(logout.rejected, (state) => {
+        state.status = "rejected";
       })
   }
 })

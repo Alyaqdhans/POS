@@ -25,6 +25,10 @@ app.post("/login", async (req, res) => {
   catch (error) {
     res.status(500).json({ error: "Unxpected error oucerred" });
   }
-})
+});
+
+app.post("/logout", async (req, res) => {
+  res.status(200).json({ msg: "logged out successfully" });
+});
 
 app.listen(4000, () => console.log('server is connected to port 4000'));

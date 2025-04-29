@@ -36,13 +36,14 @@ function Login() {
 
   useEffect(() => {
     if (user)
-      navigate("/home")
+      navigate("/")
   },[user]);
 
 
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
+        <h1>Login</h1>
         <Label>Username</Label>
         <input 
           type='text'
