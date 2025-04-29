@@ -19,7 +19,7 @@ app.post("/login", async (req, res) => {
     } else if (user.password !== password) {
       res.status(500).json({ msg: "Incorrect password" });
     } else {
-      res.send({ user: user, msg: "Login successful" });
+      res.send({ username: user, msg: "Login successful" });
     }
   }
   catch (error) {

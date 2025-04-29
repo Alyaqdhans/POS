@@ -1,42 +1,70 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Label, Input, Button } from "reactstrap";
 import { useState } from 'react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchemaValidation } from "../validations/LoginValidation";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../features/UserSlice';
+import { useForm } from 'react-hook-form';
 
 function Login() {
+
+  const { user, msg } = useSelector((state) => state.users);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
-    handelSubmit,
-    formState: {error},
-  } = userForm({
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(loginSchemaValidation),
   });
 
-  onSubmit = () => {
-    
-  }
+  const onSubmit = () => {
+    const userData = {
+      username: username,
+      password: password,
+    }
+    dispatch(login(userData));
+  };
+
+  useEffect(() => {
+    if (user)
+      navigate("/home")
+  },[user]);
+
 
   return (
     <>
-      <Form onSubmit={handelSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Label>Username</Label>
-        <Input 
+        <input 
           type='text'
           placeholder='Enter Username'
-          onChange={(e) => setUsername(e.target.value)}
+          className='form-control'
+          {...register("username", {
+            onChange: (e) => setUsername(e.target.value)
+          })}
         />
+        <p className='error'>{errors.username?.message}</p>
         <Label>Password</Label>
-        <Input 
+        <input 
           type='password'
           placeholder='Enter Password'
-          onChange={(e) => setPassword(e.target.value)}
+          className='form-control'
+          {...register("password", {
+            onChange: (e) => setPassword(e.target.value)
+          })}
         />
-        <Button>Login</Button>
+        <p className='error'>{errors.password?.message}</p>
+        <Button type='submit'>Login</Button>
+        <p>{msg}</p>
       </Form>
     </>
   )
