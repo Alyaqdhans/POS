@@ -2,10 +2,12 @@ import express, { response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import UserModel from "./models/UserModel.js";
+import dotenv from "dotenv";
 
 const app = express()
 app.use(express.json())
 app.use(cors())
+
 
 mongoose.connect('mongodb+srv://admin:admin@cluster.xhgyf5c.mongodb.net/pos?retryWrites=true&w=majority&appName=Cluster');
 
