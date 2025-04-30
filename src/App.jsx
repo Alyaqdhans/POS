@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import { useSelector } from "react-redux";
 import Header from "./components/Header";
+import "./App.css";
 
 function App() {
 
