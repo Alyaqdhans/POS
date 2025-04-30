@@ -5,7 +5,6 @@ import { Navbar, NavItem, Nav } from 'reactstrap';
 import { logout } from '../features/UserSlice';
 
 function Header() {
-
   const dispatch = useDispatch();
 
   const handleLogout = () => {

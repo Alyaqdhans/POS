@@ -1,0 +1,17 @@
+.error {
+  color: red;
+}
+
+.login {
+  margin: 10rem 8rem;
+  padding: 1rem;
+  border: 2px solid rgb(197, 197, 197);
+  border-radius: 1rem;
+  background: rgb(235, 235, 235);
+}
+
+hr {
+  margin-top: 0;
+  border: 2px solid black;
+  border-radius: 1rem;
+}

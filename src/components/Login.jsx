@@ -9,8 +9,7 @@ import { login } from '../features/UserSlice';
 import { useForm } from 'react-hook-form';
 
 function Login() {
-
-  const { user, msg } = useSelector((state) => state.users);
+  const { user, msg, status } = useSelector((state) => state.users);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -37,35 +36,35 @@ function Login() {
   useEffect(() => {
     if (user)
       navigate("/")
-  },[user]);
-
+  }, [user]);
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} className='login'>
         <h1>Login</h1>
-        <Label>Username</Label>
+        <hr />
+        <Label htmlFor='username'>Username</Label>
         <input 
+          id='username'
           type='text'
           placeholder='Enter Username'
           className='form-control'
-          {...register("username", {
-            onChange: (e) => setUsername(e.target.value)
-          })}
+          {...register("username", {onChange: (e) => setUsername(e.target.value)})}
         />
         <p className='error'>{errors.username?.message}</p>
-        <Label>Password</Label>
+        <Label htmlFor='password'>Password</Label>
         <input 
+          id='password'
           type='password'
           placeholder='Enter Password'
           className='form-control'
-          {...register("password", {
-            onChange: (e) => setPassword(e.target.value)
-          })}
+          {...register("password", {onChange: (e) => setPassword(e.target.value)})}
         />
         <p className='error'>{errors.password?.message}</p>
         <Button type='submit'>Login</Button>
-        <p>{msg}</p>
+        <p></p>
+        <h6>Server Response: <code>{msg}</code></h6>
+        <h6>Server Status: <code>{status}</code></h6>
       </Form>
     </>
   )
