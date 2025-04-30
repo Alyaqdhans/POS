@@ -11,7 +11,7 @@ export const login = createAsyncThunk(
   "users/login",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.SERVER_URL}/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/login`, {
         username: userData.username,
         password: userData.password,
       });
@@ -29,7 +29,7 @@ export const logout = createAsyncThunk(
   "users/logout",
   async () => {
     try {
-      const response = await axios.post(`${process.env.SERVER_URL}/logout`);
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/logout`);
       const msg = response.data.msg;
       return {msg};
     } catch (error) {

@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import UserModel from "./models/UserModel.js";
@@ -9,7 +9,6 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 app.use(cors())
-
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster`);
 
