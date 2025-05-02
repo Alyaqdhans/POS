@@ -19,6 +19,14 @@ function Header() {
         Home
       </NavLink>
 
+      <NavLink to="/products" className={dynamicLink}>
+        Products
+      </NavLink>
+
+      <NavLink to="/users" className={dynamicLink}>
+        Users
+      </NavLink>
+
       <NavLink to="/settings" className={dynamicLink}>
         Settings
       </NavLink>

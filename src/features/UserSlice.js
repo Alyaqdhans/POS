@@ -12,10 +12,10 @@ export const login = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/login`, {
-        username: userData.username,
+        email: userData.email,
         password: userData.password,
       });
-      const user = response.data.username;
+      const user = response.data.email;
       const msg = response.data.msg;
       return {user, msg};
     } catch (error) {

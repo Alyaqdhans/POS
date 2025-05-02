@@ -15,14 +15,14 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD
 // Login
 app.post("/login", async (request, response) => {
   try {
-    const { username, password } = request.body;
-    const user = await UserModel.findOne({username: username});
+    const { email, password } = request.body;
+    const user = await UserModel.findOne({email: email});
     if (!user) {
-      response.status(500).json({msg: "Couldn't find the user"});
+      response.status(500).json({msg: "Couldn't find the email"});
     } else if (user.password !== password) {
       response.status(500).json({msg: "Incorrect password"});
     } else {
-      response.send({username: user, msg: "Login successful"});
+      response.send({email: user, msg: "Login successful"});
     }
   }
   catch (error) {
@@ -31,7 +31,7 @@ app.post("/login", async (request, response) => {
 });
 
 app.post("/logout", async (request, response) => {
-  response.send({msg: "logged out successfully"});
+  response.send({msg: "Logged out successfully"});
 });
 
 app.listen(process.env.PORT, () => console.log(`server is connected to port ${process.env.PORT}`));

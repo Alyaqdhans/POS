@@ -10,9 +10,9 @@ import { useForm } from 'react-hook-form';
 import { CgDanger } from 'react-icons/cg';
 
 function Login() {
-  const { user, msg, status } = useSelector((state) => state.users);
+  const {user, msg, status} = useSelector((state) => state.users);
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function Login() {
 
   const onSubmit = () => {
     const userData = {
-      username: username,
+      email: email,
       password: password,
     }
     dispatch(login(userData));
@@ -40,15 +40,15 @@ function Login() {
       <h1>Login</h1>
       <hr />
       <FormGroup className='group'>
-        <Label htmlFor='username'>Username</Label>
+        <Label htmlFor='email'>Email</Label>
         <input 
-          id='username'
+          id='email'
           type='text'
-          placeholder='Enter Username'
+          placeholder='Enter Email'
           className='form-control'
-          {...register("username", {onChange: (e) => setUsername(e.target.value)})}
+          {...register("email", {onChange: (e) => setEmail(e.target.value)})}
         />
-        <p className='error'>{errors.username?.message}</p>
+        <p className='error'>{errors.email?.message}</p>
         <Label htmlFor='password'>Password</Label>
         <input 
           id='password'

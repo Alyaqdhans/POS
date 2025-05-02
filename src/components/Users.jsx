@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-function Home() {
+function Users() {
   const {user} = useSelector((state) => state.users);
   const navigate = useNavigate();
 
@@ -12,9 +12,9 @@ function Home() {
 
   return (
     <>
-      <h1>Home</h1>
+      <h1>Users</h1>
     </>
   )
 }
 
-export default Home;
+export default Users;
