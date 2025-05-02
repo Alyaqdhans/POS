@@ -42,6 +42,20 @@ hr {
   border-radius: 1rem;
 }
 
-.right {
-  float: right;
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.action .alert {
+  width: calc(100% - 7rem);
+  margin-bottom: 0;
+  padding-block: 0.5rem;
+}
+
+.action :last-child {
+  flex-shrink: 1;
+  margin-left: auto;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Label, Input, Button, FormGroup } from "reactstrap";
+import { Form, Label, Button, FormGroup, Spinner, Alert } from "reactstrap";
 import { useState } from 'react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchemaValidation } from "../validations/LoginValidation";
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../features/UserSlice';
 import { useForm } from 'react-hook-form';
+import { CgDanger } from 'react-icons/cg';
 
 function Login() {
   const { user, msg, status } = useSelector((state) => state.users);
@@ -17,11 +18,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const {register, handleSubmit, formState: { errors }} = useForm({
     resolver: yupResolver(loginSchemaValidation),
   });
 
@@ -61,10 +58,20 @@ function Login() {
           {...register("password", {onChange: (e) => setPassword(e.target.value)})}
         />
         <p className='error'>{errors.password?.message}</p>
-        <Button color='primary' type='submit' className='right'>Login</Button>
-        <p></p>
-        <h6>Server Response: <code>{msg}</code></h6>
-        <h6>Server Status: <code>{status}</code></h6>
+        <section className='action'>
+          {
+            msg ?
+            <Alert color='danger'><CgDanger size={20} style={{margin: "0 5px 2px 0"}} /> {msg}</Alert> :
+            <></>
+          }
+          <Button color='primary' type='submit' disabled={status === "pending"}>
+            {
+              (status === "pending") ?
+              <><Spinner size='sm' /> Login</> :
+              <span>Login</span>
+            }
+          </Button>
+        </section>
       </FormGroup>
     </Form>
   )
