@@ -39,36 +39,34 @@ function Login() {
   }, [user]);
 
   return (
-    <>
-      <Form onSubmit={handleSubmit(onSubmit)} className='login'>
-        <h1>Login</h1>
-        <hr />
-        <FormGroup className='group'>
-          <Label htmlFor='username'>Username</Label>
-          <input 
-            id='username'
-            type='text'
-            placeholder='Enter Username'
-            className='form-control'
-            {...register("username", {onChange: (e) => setUsername(e.target.value)})}
-          />
-          <p className='error'>{errors.username?.message}</p>
-          <Label htmlFor='password'>Password</Label>
-          <input 
-            id='password'
-            type='password'
-            placeholder='Enter Password'
-            className='form-control'
-            {...register("password", {onChange: (e) => setPassword(e.target.value)})}
-          />
-          <p className='error'>{errors.password?.message}</p>
-          <Button color='primary' type='submit' className='right'>Login</Button>
-          <p></p>
-          <h6>Server Response: <code>{msg}</code></h6>
-          <h6>Server Status: <code>{status}</code></h6>
-        </FormGroup>
-      </Form>
-    </>
+    <Form onSubmit={handleSubmit(onSubmit)} className='form'>
+      <h1>Login</h1>
+      <hr />
+      <FormGroup className='group'>
+        <Label htmlFor='username'>Username</Label>
+        <input 
+          id='username'
+          type='text'
+          placeholder='Enter Username'
+          className='form-control'
+          {...register("username", {onChange: (e) => setUsername(e.target.value)})}
+        />
+        <p className='error'>{errors.username?.message}</p>
+        <Label htmlFor='password'>Password</Label>
+        <input 
+          id='password'
+          type='password'
+          placeholder='Enter Password'
+          className='form-control'
+          {...register("password", {onChange: (e) => setPassword(e.target.value)})}
+        />
+        <p className='error'>{errors.password?.message}</p>
+        <Button color='primary' type='submit' className='right'>Login</Button>
+        <p></p>
+        <h6>Server Response: <code>{msg}</code></h6>
+        <h6>Server Status: <code>{status}</code></h6>
+      </FormGroup>
+    </Form>
   )
 }
 

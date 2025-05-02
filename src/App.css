@@ -11,25 +11,22 @@ main {
   display: flex;
   justify-content: center;
   width: 100%;
-  background: rgb(221, 221, 221);
+  background: lightgray;
+  gap: 0.5rem;
+  padding-block: 1rem;
 }
 
-.home {
-  margin-block: auto;
-  margin-top: 0;
+footer {
+  margin-top: auto;
 }
 
 .group {
   margin-inline: 1rem;
 }
 
-.link {
-  margin: 1rem 0.5rem;
-}
-
-.login {
+.form {
   padding: 1rem;
-  border: 2px solid rgb(197, 197, 197);
+  border: 2px solid rgb(176, 176, 176);
   border-radius: 1rem;
   background: rgb(235, 235, 235);
   min-width: 30rem;

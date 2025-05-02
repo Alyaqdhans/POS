@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom';
-import { Nav, Button  } from 'reactstrap';
+import { Nav, Button } from 'reactstrap';
 import { logout } from '../features/UserSlice';
 
 function Header() {
@@ -14,29 +14,19 @@ function Header() {
   const dynamicLink = (e) => (e.isActive ? 'btn btn-primary' : 'btn btn-light')
 
   return (
-    <>
-      <Nav className='nav'>
-        <div className='link'>
-          <NavLink to="/" className={dynamicLink}>
-              Home
-          </NavLink>
-        </div>
+    <Nav>
+      <NavLink to="/" className={dynamicLink}>
+        Home
+      </NavLink>
 
-        <div className='link'>
-          <NavLink to="/settings" className={dynamicLink}>
-              Settings
-          </NavLink>
-        </div>
+      <NavLink to="/settings" className={dynamicLink}>
+        Settings
+      </NavLink>
 
-        <div className='link'>
-          <NavLink>
-            <Button color="danger" onClick={handleLogout}>
-              Logout
-            </Button>
-          </NavLink>
-        </div>
-      </Nav>
-    </>
+      <Button color="danger" onClick={handleLogout}>
+        Logout
+      </Button>
+    </Nav>
   )
 }
 
