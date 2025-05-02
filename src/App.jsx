@@ -17,11 +17,11 @@ function App() {
     <main>
       {user ? <Header /> : <></>}
       <Routes>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/products" element={<Products />}></Route>
-        <Route path="/users" element={<Users />}></Route>
-        <Route path="/settings" element={<Settings />}></Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
       {user ? <Footer /> : <></>}
     </main>
