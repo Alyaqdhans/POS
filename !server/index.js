@@ -18,18 +18,19 @@ app.post("/login", async (request, response) => {
     const { email, password } = request.body;
     const user = await UserModel.findOne({email: email});
     if (!user) {
-      response.status(500).json({msg: "Couldn't find the email"});
+      response.send({msg: "Couldn't find the email"});
     } else if (user.password !== password) {
-      response.status(500).json({msg: "Incorrect password"});
+      response.send({msg: "Incorrect password"});
     } else {
       response.send({email: user, msg: "Login successful"});
     }
   }
   catch (error) {
-    response.status(500).json({error: "Unxpected error oucerred"});
+    response.send({error: "Unxpected error oucerred"});
   }
 });
 
+// Logout
 app.post("/logout", async (request, response) => {
   response.send({msg: "Logged out successfully"});
 });

@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../features/UserSlice';
 import { useForm } from 'react-hook-form';
-import { CgDanger } from 'react-icons/cg';
 
 function Login() {
   const {user, msg, status} = useSelector((state) => state.users);
@@ -17,6 +16,11 @@ function Login() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user)
+      navigate("/")
+  }, [user]);
 
   const {register, handleSubmit, formState: { errors }} = useForm({
     resolver: yupResolver(loginSchemaValidation),
@@ -30,11 +34,6 @@ function Login() {
     dispatch(login(userData));
   };
 
-  useEffect(() => {
-    if (user)
-      navigate("/")
-  }, [user]);
-
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className='form'>
       <h1>Login</h1>
@@ -45,7 +44,7 @@ function Login() {
           id='email'
           type='text'
           placeholder='Enter Email'
-          className='form-control'
+          className={'form-control ' + (errors.email ? 'is-invalid' : '')}
           {...register("email", {onChange: (e) => setEmail(e.target.value)})}
         />
         <p className='error'>{errors.email?.message}</p>
@@ -54,14 +53,14 @@ function Login() {
           id='password'
           type='password'
           placeholder='Enter Password'
-          className='form-control'
+          className={'form-control ' + (errors.password ? 'is-invalid' : '')}
           {...register("password", {onChange: (e) => setPassword(e.target.value)})}
         />
         <p className='error'>{errors.password?.message}</p>
         <section className='action'>
           {
             msg ?
-            <Alert color='danger'><CgDanger size={20} style={{margin: "0 5px 2px 0"}} /> {msg}</Alert> :
+            <Alert color='danger' fade={false}>{msg}</Alert> :
             <></>
           }
           <Button color='primary' type='submit' disabled={status === "pending"}>

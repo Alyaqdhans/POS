@@ -2,9 +2,23 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  user: null,
   status: null,
   msg: null,
+  user: null,
+  permissions: {
+    users: {
+      read: false,
+      add: false,
+      edit: false,
+      delete: false
+    },
+    products: {
+      read: false,
+      add: false,
+      edit: false,
+      delete: false
+    },
+  }
 }
 
 export const login = createAsyncThunk(
@@ -66,7 +80,7 @@ export const userSlice = createSlice({
       .addCase(logout.fulfilled, (state, action) => {
         state.status = "success";
         state.user = null;
-        state.msg = action.payload.msg;
+        state.msg = null;
       })
       .addCase(logout.rejected, (state) => {
         state.status = "rejected";

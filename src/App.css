@@ -6,8 +6,17 @@ main {
   height: calc(100vh - 2rem);
 }
 
+.content {
+  margin-block: auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .nav {
-  margin-bottom: auto;
+  /* margin-bottom: auto; */
   display: flex;
   justify-content: center;
   width: 100%;
@@ -17,7 +26,7 @@ main {
 }
 
 footer {
-  margin-top: auto;
+  /* margin-top: auto; */
 }
 
 .group {
@@ -50,7 +59,7 @@ hr {
 }
 
 .action .alert {
-  width: calc(100% - 7rem);
+  width: fit-content;
   margin-bottom: 0;
   padding-block: 0.5rem;
 }
@@ -58,4 +67,53 @@ hr {
 .action :last-child {
   flex-shrink: 1;
   margin-left: auto;
+}
+
+.search input {
+  border: 2px solid lightgray;
+}
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.search svg {
+  color: grey;
+  position: absolute;
+  right: 0;
+  margin-right: 0.25rem;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.search:has(input:placeholder-shown) svg {
+  opacity: 1;
+  visibility: visible;
+}
+
+.search-section {
+  width: 100%;
+  margin-block: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+}
+
+.search-section > :first-child {
+  flex-grow: 0;
+  width: min(50%, 40rem);
+  margin-left: 12%;
+}
+
+.content-display {
+  background: lightgrey;
+  width: 90%;
+  margin-inline: 1rem;
+  border-radius: 0.5rem;
+  padding: 1rem;
 }

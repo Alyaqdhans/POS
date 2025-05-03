@@ -11,9 +11,9 @@ function Settings() {
   }, [user]);
 
   return (
-    <>
+    <div className='content'>
       <h1>Settings</h1>
-    </>
+    </div>
   )
 }
 
