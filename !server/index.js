@@ -1,4 +1,4 @@
-import express from "express";
+import express, { request, response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import UserModel from "./models/UserModel.js";
@@ -33,6 +33,18 @@ app.post("/login", async (request, response) => {
 // Logout
 app.post("/logout", async (request, response) => {
   response.send({msg: "Logged out successfully"});
+});
+
+// Add users
+
+// Get Users
+app.get("/getUsers", async (request, response) => {
+  try {
+    const userList = await UserModel.find();
+    response.send({ userList: userList});
+  } catch (error) {
+    response.send({ error: "An error oucerred" });
+  }
 });
 
 app.listen(process.env.PORT, () => console.log(`server is connected to port ${process.env.PORT}`));

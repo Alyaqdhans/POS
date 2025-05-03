@@ -5,20 +5,7 @@ const initialState = {
   status: null,
   msg: null,
   user: null,
-  permissions: {
-    users: {
-      read: false,
-      add: false,
-      edit: false,
-      delete: false
-    },
-    products: {
-      read: false,
-      add: false,
-      edit: false,
-      delete: false
-    },
-  }
+  userList: [],
 }
 
 export const login = createAsyncThunk(
@@ -42,15 +29,21 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk(
   "users/logout",
   async () => {
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/logout`);
-      const msg = response.data.msg;
-      return {msg};
-    } catch (error) {
-      
-    }
+    const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/logout`);
+    const msg = response.data.msg;
+    return {msg};  
   }
 );
+
+
+export const getUsers = createAsyncThunk(
+  "users/getUsers",
+  async () => {
+    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getUsers`);
+    const userList = response.data.userList;
+    return {userList};
+  }
+)
 
 export const userSlice = createSlice({
   name: "users",
@@ -85,6 +78,21 @@ export const userSlice = createSlice({
       .addCase(logout.rejected, (state) => {
         state.status = "rejected";
       })
+
+      // getUsers
+      .addCase(getUsers.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.status = "success";
+        state.userList = action.payload.userList;
+        state.msg = null;
+      })
+      .addCase(getUsers.rejected, (state) => {
+        state.status = "rejected";
+      })
+
+      
   }
 })
 

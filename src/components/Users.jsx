@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from 'reactstrap';
 import { loginSchemaValidation } from '../validations/LoginValidation';
+import { getUsers } from '../features/UserSlice';
 
 function Users() {
-  const {user} = useSelector((state) => state.users);
+  const {user, userList} = useSelector((state) => state.users);
 
   const [modal, setModal] = useState(false);
 
@@ -16,7 +17,8 @@ function Users() {
 
   useEffect(() => {
     if (!user) navigate("/login")
-  }, [user]);
+    dispatch(getUsers());
+  }, []);
 
   const {register, handleSubmit, formState: { errors }} = useForm({
     resolver: yupResolver(loginSchemaValidation),
@@ -82,7 +84,18 @@ function Users() {
             </tr>
           </thead>
           <tbody>
-             
+             {
+              userList?.map((user, index) => (
+                <tr key={index}>
+                  <td>{user.username}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <Button color='warning'>Edit</Button>
+                    <Button color='danger'>Delete</Button>
+                  </td>
+                </tr>
+              ))
+             }
           </tbody>
         </Table>
       </div>
