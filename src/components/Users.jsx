@@ -17,6 +17,9 @@ function Users() {
 
   useEffect(() => {
     if (!user) navigate("/login")
+  }, [user]);
+
+  useEffect(() => {
     dispatch(getUsers());
   }, []);
 
