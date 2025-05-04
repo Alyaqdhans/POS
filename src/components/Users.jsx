@@ -108,10 +108,10 @@ function Users() {
             <p className='error'>{errors.password?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" outline onClick={() => setAddModal(!addModal)}>
+            <Button color="secondary" outline onClick={() => setAddModal(!addModal)}>
               Cancel
             </Button>
-            <Button color="primary" type='submit'>
+            <Button color="info" type='submit'>
               Save
             </Button>
           </ModalFooter>
@@ -152,10 +152,10 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" outline onClick={() => setEditModal(!editModal)}>
+            <Button color="secondary" outline onClick={() => setEditModal(!editModal)}>
               Cancel
             </Button>
-            <Button color="primary" type='submit'>
+            <Button color="warning" type='submit'>
               Save
             </Button>
           </ModalFooter>
