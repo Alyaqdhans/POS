@@ -45,6 +45,23 @@ export const getUsers = createAsyncThunk(
   }
 )
 
+export const addUser = createAsyncThunk(
+  "users/addUser",
+  async (userData) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/addUser`, {
+        username: userData.username,
+        email: userData.email,
+        password: userData.password,
+      })
+      const addUser = response.data.addUser
+      return {addUser}
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)
+
 export const userSlice = createSlice({
   name: "users",
   initialState,
@@ -92,7 +109,17 @@ export const userSlice = createSlice({
         state.status = "rejected";
       })
 
-      
+      // addUser
+      .addCase(addUser.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(addUser.fulfilled, (state, action) => {
+        state.status = "success";
+        state.userList = [...state.userList, action.payload.addUser];
+      })
+      .addCase(addUser.rejected, (state) => {
+        state.status = "rejected";
+      })
   }
 })
 

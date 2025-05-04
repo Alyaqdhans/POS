@@ -36,6 +36,15 @@ app.post("/logout", async (request, response) => {
 });
 
 // Add users
+app.post("/addUser", async (request, response) => {
+  try {
+    const { username, email, password } = request.body;
+    const addUser = UserModel({username, email, password});
+    await addUser.save();
+  } catch (error) {
+    response.send({error: "Unxpected error oucerred"})
+  }
+})
 
 // Get Users
 app.get("/getUsers", async (request, response) => {
