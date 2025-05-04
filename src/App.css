@@ -13,10 +13,10 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .nav {
-  /* margin-bottom: auto; */
   display: flex;
   justify-content: center;
   width: 100%;
@@ -25,15 +25,11 @@ main {
   padding-block: 1rem;
 }
 
-footer {
-  /* margin-top: auto; */
-}
-
-.group {
+.logingroup {
   margin-inline: 1rem;
 }
 
-.form {
+.login {
   padding: 1rem;
   border: 2px solid rgb(176, 176, 176);
   border-radius: 1rem;
@@ -51,20 +47,20 @@ hr {
   border-radius: 1rem;
 }
 
-.action {
+.login section {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
 }
 
-.action .alert {
+.login .alert {
   width: fit-content;
   margin-bottom: 0;
   padding-block: 0.5rem;
 }
 
-.action :last-child {
+.login section :last-child {
   flex-shrink: 1;
   margin-left: auto;
 }
@@ -116,4 +112,56 @@ hr {
   margin-inline: 1rem;
   border-radius: 0.5rem;
   padding: 1rem;
+  height: 80%;
+  overflow-y: auto;
+}
+
+.content-display::-webkit-scrollbar {
+    width: 1.5rem;
+}
+
+.content-display::-webkit-scrollbar-track {
+    margin-block: .1rem;
+}
+
+.content-display::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 1rem;
+    border: .3rem solid lightgrey;
+}
+
+.content-display::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+.content-display thead tr {
+  position: sticky;
+  top: -16px;
+}
+
+.content-display thead th {
+  background: rgb(46, 46, 46);
+  color: white;
+}
+
+.content-display thead th:first-child {
+ border-radius: 1rem 0 0 0;
+}
+
+.content-display thead th:last-child {
+ border-radius: 0 1rem 0 0;
+}
+
+.content-display tbody tr:nth-last-of-type(2n + 1) td {
+  background: rgb(228, 228, 228);
+}
+
+.content-display td, .content-display th {
+  padding-left: 2rem;
+  padding-top: 1rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
 }

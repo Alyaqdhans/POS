@@ -25,6 +25,7 @@ function Users() {
   }
 
   const handleDelete = (userId) => {
+    if (!confirm("Are you sure you want to delete?")) return;
     dispatch(deleteUser(userId));
   }
 
@@ -176,9 +177,9 @@ function Users() {
                 <tr key={user._id}>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
-                  <td>
+                  <td className='actions'>
                     <Button color='warning' onClick={() => handleEdit(user)}>Edit</Button>
-                    <Button color='danger' onClick={() => handleDelete(user._id)}>Delete</Button>
+                    {(user.username !== "admin") ? <Button color='danger' onClick={() => handleDelete(user._id)}>Delete</Button> : <></>}
                   </td>
                 </tr>
               ))

@@ -35,10 +35,10 @@ function Login() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)} className='form'>
+    <Form onSubmit={handleSubmit(onSubmit)} className='login'>
       <h1>Login</h1>
       <hr />
-      <FormGroup className='group'>
+      <FormGroup className='logingroup'>
         <Label htmlFor='email'>Email</Label>
         <input 
           id='email'
@@ -57,18 +57,12 @@ function Login() {
           {...register("password", {onChange: (e) => setPassword(e.target.value)})}
         />
         <p className='error'>{errors.password?.message}</p>
-        <section className='action'>
-          {
-            msg ?
-            <Alert color='danger' fade={false}>{msg}</Alert> :
-            <></>
-          }
+        <section>
+          {msg ? <Alert color='danger' fade={false}>{msg}</Alert> : <></>}
+          
           <Button color='primary' type='submit' disabled={status === "pending"}>
-            {
-              (status === "pending") ?
-              <><Spinner size='sm' /> Login</> :
-              <span>Login</span>
-            }
+            {(status === "pending") ? <Spinner size='sm' /> : <></>}
+            Login
           </Button>
         </section>
       </FormGroup>
