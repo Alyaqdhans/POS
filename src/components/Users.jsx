@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from 'reactstrap';
-import { addUser, getUsers } from '../features/UserSlice';
+import { addUser, deleteUser, getUsers } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 
@@ -24,6 +24,9 @@ function Users() {
     setEditUser(user)
   }
 
+  const handleDelete = (userId) => {
+    dispatch(deleteUser(userId));
+  }
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -50,14 +53,14 @@ function Users() {
       dispatch(addUser(userData));
       setAddModal(!addModal);
     }
-    if (editModal) {
-      const userData = {
-        email: email,
-        password: password,
-      }
-      dispatch();
-      setEditModal(!editModal);
-    }
+    // if (editModal) {
+    //   const userData = {
+    //     email: email,
+    //     password: password,
+    //   }
+    //   dispatch();
+    //   setEditModal(!editModal);
+    // }
   };
 
   return (
@@ -169,13 +172,13 @@ function Users() {
           </thead>
           <tbody>
             {
-              userList?.map((user, index) => (
-                <tr key={index}>
+              userList?.map((user) => (
+                <tr key={user._id}>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>
                     <Button color='warning' onClick={() => handleEdit(user)}>Edit</Button>
-                    <Button color='danger'>Delete</Button>
+                    <Button color='danger' onClick={() => handleDelete(user._id)}>Delete</Button>
                   </td>
                 </tr>
               ))

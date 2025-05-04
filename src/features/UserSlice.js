@@ -62,6 +62,18 @@ export const addUser = createAsyncThunk(
   }
 )
 
+export const deleteUser = createAsyncThunk(
+  "users/deleteUser",
+  async (userId, {rejectWithValue}) => {
+    try {
+      await axios.delete(`${import.meta.env.VITE_SERVER_URL}/deleteUser/${userId}`);
+      return {userId};
+    } catch (error) {
+      return rejectWithValue("Failed to delete user");
+    }
+  }
+)
+
 export const userSlice = createSlice({
   name: "users",
   initialState,
@@ -118,6 +130,17 @@ export const userSlice = createSlice({
         state.userList = [...state.userList, action.payload.addUser];
       })
       .addCase(addUser.rejected, (state) => {
+        state.status = "rejected";
+      })
+
+      // deleteUser
+      .addCase(deleteUser.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.userList = state.userList.filter(user => user._id !== action.payload.userId);
+      })      
+      .addCase(deleteUser.rejected, (state) => {
         state.status = "rejected";
       })
   }

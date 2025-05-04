@@ -56,4 +56,15 @@ app.get("/getUsers", async (request, response) => {
   }
 });
 
+// Delete User
+app.delete("/deleteUser/:id", async (request, response) => {
+  try {
+    const userId = request.params.id;
+    await UserModel.findByIdAndDelete(userId);
+    response.send({ msg: "User deleted successfully" });
+  } catch (error) {
+    response.send({ error: "Faild to delete user" });
+  }
+})
+
 app.listen(process.env.PORT, () => console.log(`server is connected to port ${process.env.PORT}`));
