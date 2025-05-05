@@ -12,7 +12,7 @@ export const addUserSchemaValidation = yup.object().shape({
   password: yup
     .string()
     .min(5)
-    .max(20, "Password cannot exceed 20 characters")
+    .max(20)
     .required("Password is required"),
   confirm: yup
     .string()
