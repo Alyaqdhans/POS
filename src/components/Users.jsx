@@ -7,6 +7,7 @@ import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from
 import { addUser, deleteUser, getUsers } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
+import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 
 function Users() {
   const { user, userList } = useSelector((state) => state.users);
@@ -20,7 +21,7 @@ function Users() {
   const [username, setUsername] = useState("");
 
   const handleEdit = (user) => {
-    setEditModal(!editModal)
+    setEditModal(true)
     setEditUser(user)
   }
 
@@ -52,7 +53,7 @@ function Users() {
         password: password,
       }
       dispatch(addUser(userData));
-      setAddModal(!addModal);
+      setAddModal(false);
     }
     // if (editModal) {
     //   const userData = {
@@ -60,7 +61,7 @@ function Users() {
     //     password: password,
     //   }
     //   dispatch();
-    //   setEditModal(!editModal);
+    //   setEditModal(false);
     // }
   };
 
@@ -69,9 +70,9 @@ function Users() {
       <div className='search-section'>
         <div className='search'>
           <input type="search" placeholder='Search' className='form-control' />
-          <svg fill="grey" height="35" width="35" viewBox="-122.1 -122.1 732.60 732.60" stroke="grey" strokeWidth="20"><path d="M0,203.25c0,112.1,91.2,203.2,203.2,203.2c51.6,0,98.8-19.4,134.7-51.2l129.5,129.5c2.4,2.4,5.5,3.6,8.7,3.6 s6.3-1.2,8.7-3.6c4.8-4.8,4.8-12.5,0-17.3l-129.6-129.5c31.8-35.9,51.2-83,51.2-134.7c0-112.1-91.2-203.2-203.2-203.2 S0,91.15,0,203.25z M381.9,203.25c0,98.5-80.2,178.7-178.7,178.7s-178.7-80.2-178.7-178.7s80.2-178.7,178.7-178.7 S381.9,104.65,381.9,203.25z"></path></svg>
+          <FaSearch size={20} />
         </div>
-        <Button color='info' onClick={() => setAddModal(!addModal)}>Add User</Button>
+        <Button color='info' onClick={() => setAddModal(true)}>Add User</Button>
       </div>
 
       <Modal centered isOpen={addModal}>
@@ -97,6 +98,7 @@ function Users() {
               {...register("email", { onChange: (e) => setEmail(e.target.value) })}
             />
             <p className='error'>{errors.email?.message}</p>
+
             <Label htmlFor='password'>Password</Label>
             <input
               id='password'
@@ -106,9 +108,19 @@ function Users() {
               {...register("password", { onChange: (e) => setPassword(e.target.value) })}
             />
             <p className='error'>{errors.password?.message}</p>
+
+            <Label htmlFor='confirm'>Confirm Password</Label>
+            <input
+              id='confirm'
+              type='password'
+              placeholder='Confirm New Password'
+              className={'form-control ' + (errors.confirm ? 'is-invalid' : '')}
+              {...register("confirm")}
+            />
+            <p className='error'>{errors.confirm?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" outline onClick={() => setAddModal(!addModal)}>
+            <Button color="secondary" outline onClick={() => setAddModal(false)}>
               Cancel
             </Button>
             <Button color="info" type='submit'>
@@ -132,6 +144,7 @@ function Users() {
               {...register("email", { onChange: (e) => setEmail(e.target.value) })}
             />
             <p className='error'>{errors.email?.message}</p>
+
             <Label htmlFor='password'>New Password</Label>
             <input
               id='password'
@@ -141,6 +154,7 @@ function Users() {
               {...register("password", { onChange: (e) => setPassword(e.target.value) })}
             />
             <p className='error'>{errors.password?.message}</p>
+
             <Label htmlFor='confirm'>Confirm Password</Label>
             <input
               id='confirm'
@@ -152,7 +166,7 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" outline onClick={() => setEditModal(!editModal)}>
+            <Button color="secondary" outline onClick={() => setEditModal(false)}>
               Cancel
             </Button>
             <Button color="warning" type='submit'>
@@ -163,7 +177,7 @@ function Users() {
       </Modal>
 
       <div className='content-display'>
-        <Table>
+        <Table striped>
           <thead>
             <tr>
               <th>Name</th>
@@ -178,8 +192,8 @@ function Users() {
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td className='actions'>
-                    <Button color='warning' onClick={() => handleEdit(user)}>Edit</Button>
-                    {(user.username !== "admin") ? <Button color='danger' onClick={() => handleDelete(user._id)}>Delete</Button> : <></>}
+                    <Button color='warning' onClick={() => handleEdit(user)}><FaEdit /></Button>
+                    {(user.username !== "admin") ? <Button color='danger' onClick={() => handleDelete(user._id)}><FaTrashAlt /></Button> : <></>}
                   </td>
                 </tr>
               ))

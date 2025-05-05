@@ -3,6 +3,7 @@ import * as yup from "yup";
 export const addUserSchemaValidation = yup.object().shape({
   username: yup
     .string()
+    .notOneOf(["admin"], "This username is not allowed")
     .required("Username is required"),
   email: yup
     .string()
@@ -10,7 +11,11 @@ export const addUserSchemaValidation = yup.object().shape({
     .required("Email is required"),
   password: yup
     .string()
-    .min(4, "Password must be at least 4 characters")
+    .min(5)
     .max(20, "Password cannot exceed 20 characters")
+    .required("Password is required"),
+  confirm: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords Don't Match")
     .required("Password is required"),
 })

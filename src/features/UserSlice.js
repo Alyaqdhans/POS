@@ -127,7 +127,7 @@ export const userSlice = createSlice({
       })
       .addCase(addUser.fulfilled, (state, action) => {
         state.status = "success";
-        state.userList = [...state.userList, action.payload.addUser];
+        state.userList.push(action.payload.addUser);
       })
       .addCase(addUser.rejected, (state) => {
         state.status = "rejected";

@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom';
 import { Nav, Button } from 'reactstrap';
-import { logout } from '../features/UserSlice';
+import { getUsers, logout } from '../features/UserSlice';
 
 function Header() {
   const { userList } = useSelector((state) => state.users);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, []);
 
   const handleLogout = () => {
     dispatch(logout());

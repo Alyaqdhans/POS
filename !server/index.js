@@ -41,8 +41,9 @@ app.post("/addUser", async (request, response) => {
     const { username, email, password } = request.body;
     const addUser = UserModel({username, email, password});
     await addUser.save();
+    response.send({addUser: addUser});
   } catch (error) {
-    response.send({error: "Unxpected error oucerred"})
+    response.send({error: "Unxpected error oucerred"});
   }
 })
 
@@ -50,9 +51,9 @@ app.post("/addUser", async (request, response) => {
 app.get("/getUsers", async (request, response) => {
   try {
     const userList = await UserModel.find();
-    response.send({ userList: userList});
+    response.send({userList: userList});
   } catch (error) {
-    response.send({ error: "An error oucerred" });
+    response.send({error: "An error oucerred"});
   }
 });
 
@@ -61,9 +62,9 @@ app.delete("/deleteUser/:id", async (request, response) => {
   try {
     const userId = request.params.id;
     await UserModel.findByIdAndDelete(userId);
-    response.send({ msg: "User deleted successfully" });
+    response.send({msg: "User deleted successfully"});
   } catch (error) {
-    response.send({ error: "Faild to delete user" });
+    response.send({error: "Faild to delete user"});
   }
 })
 
