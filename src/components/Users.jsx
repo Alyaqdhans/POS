@@ -30,6 +30,12 @@ function Users() {
     dispatch(deleteUser(userId));
   }
 
+  const handleCloseModal = () => {
+    setAddModal(false);
+    setEditModal(false);
+    reset();
+  }
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -41,7 +47,7 @@ function Users() {
     dispatch(getUsers());
   }, []);
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(addModal ? addUserSchemaValidation : editUserSchemaValidation),
   });
 
@@ -120,7 +126,7 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" outline onClick={() => setAddModal(false)}>
+            <Button color="secondary" outline onClick={handleCloseModal}>
               Cancel
             </Button>
             <Button color="info" type='submit'>
@@ -166,7 +172,7 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" outline onClick={() => setEditModal(false)}>
+            <Button color="secondary" outline onClick={handleCloseModal}>
               Cancel
             </Button>
             <Button color="warning" type='submit'>
