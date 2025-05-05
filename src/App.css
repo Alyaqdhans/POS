@@ -138,13 +138,13 @@ hr {
   color: white;
 }
 
-.content-display thead th:first-child {
+/* .content-display thead th:first-child {
  border-radius: 1rem 0 0 0;
 }
 
 .content-display thead th:last-child {
  border-radius: 0 1rem 0 0;
-}
+} */
 
 /* .content-display tbody tr:nth-last-of-type(2n + 1) td {
   background: rgb(228, 228, 228);
