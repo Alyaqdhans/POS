@@ -20,6 +20,9 @@ function Users() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
+  const [search, setSearch] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
   const handleEdit = (user) => {
     setEditModal(true)
     setEditUser(user)
@@ -36,6 +39,14 @@ function Users() {
     reset();
   }
 
+  const handleSearch = (query) => {
+    setSearch(query);
+    const filtered = userList.filter((user) =>
+      user.username.includes(query)
+    );
+    setFilteredUsers(filtered);
+  }
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -46,6 +57,10 @@ function Users() {
   useEffect(() => {
     dispatch(getUsers());
   }, []);
+
+  useEffect(() => {
+    setFilteredUsers(userList);
+  }, [userList]);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(addModal ? addUserSchemaValidation : editUserSchemaValidation),
@@ -75,7 +90,7 @@ function Users() {
     <div className='content'>
       <div className='search-section'>
         <div className='search'>
-          <input type="search" placeholder='Search' className='form-control' />
+          <input type="search" placeholder='Search' className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
         </div>
         <Button color='info' onClick={() => setAddModal(true)}>Add User</Button>
@@ -193,13 +208,13 @@ function Users() {
           </thead>
           <tbody>
             {
-              userList?.map((user) => (
+              filteredUsers?.map((user) => (
                 <tr key={user._id}>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td className='actions'>
                     <Button color='warning' onClick={() => handleEdit(user)}><FaEdit /></Button>
-                    {(user.username !== "admin") ? <Button color='danger' onClick={() => handleDelete(user._id)}><FaTrashAlt /></Button> : <></>}
+                    {user.username !== "admin" && <Button color='danger' onClick={() => handleDelete(user._id)}><FaTrashAlt /></Button>}
                   </td>
                 </tr>
               ))
