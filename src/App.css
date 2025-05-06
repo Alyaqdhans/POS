@@ -16,6 +16,10 @@ main {
   overflow: hidden;
 }
 
+.btn {
+  text-wrap: nowrap;
+}
+
 .nav {
   display: flex;
   justify-content: center;
@@ -128,17 +132,31 @@ hr {
   overflow-y: auto;
 }
 
+.content-display .no-result {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-display .no-result h1 {
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  color: grey;
+}
+
 .content-display::-webkit-scrollbar {
-    width: 1rem;
+  width: 1rem;
 }
 
 .content-display::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 1rem;
+  background: #888;
+  border-radius: 1rem;
 }
 
 .content-display::-webkit-scrollbar-thumb:hover {
-    background: #666;
+  background: #666;
 }
 
 .content-display thead tr {

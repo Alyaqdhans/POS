@@ -20,6 +20,7 @@ function Users() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [search, setSearch] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   const navigate = useNavigate();
@@ -42,6 +43,7 @@ function Users() {
   }
 
   const handleSearch = (query) => {
+    setSearch(query);
     const filtered = userList.filter((user) =>
       user.username.includes(query)
     );
@@ -77,6 +79,7 @@ function Users() {
 
   useEffect(() => {
     setFilteredUsers(userList);
+    handleSearch(search);
   }, [userList]);
 
   return (
@@ -198,29 +201,35 @@ function Users() {
       </Modal>
 
       <div className='content-display'>
-        <Table striped>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              filteredUsers?.map((user) => (
-                <tr key={user._id}>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td className='actions'>
-                    <Button color='warning' onClick={() => handleEdit(user)}><FaEdit /></Button>
-                    {user.username !== "admin" && <Button color='danger' onClick={() => handleDelete(user._id)}><FaTrashAlt /></Button>}
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </Table>
+        {
+          filteredUsers.length ?
+          <Table striped>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                filteredUsers?.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                    <td className='actions'>
+                      <Button color='warning' onClick={() => handleEdit(user)}><FaEdit /></Button>
+                      {user.username !== "admin" && <Button color='danger' onClick={() => handleDelete(user._id)}><FaTrashAlt /></Button>}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </Table> :
+          <div className="no-result">
+            <h1><FaSearch /> No matching results</h1>
+          </div>
+        }
       </div>
     </div>
   )
