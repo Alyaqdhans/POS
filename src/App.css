@@ -25,16 +25,28 @@ main {
   padding-block: 1rem;
 }
 
-.logingroup {
-  margin-inline: 1rem;
+.nav > :last-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-header {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #3a7bd5, #3a6073);
+  color: white;
+  border-radius: 1rem 1rem 0 0;
 }
 
 .login {
-  padding: 1rem;
-  border: 2px solid rgb(176, 176, 176);
   border-radius: 1rem;
   background: rgb(235, 235, 235);
   min-width: 30rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.login-body {
+  margin: 1rem 2rem;
 }
 
 .error {
@@ -52,6 +64,7 @@ hr {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .login .alert {

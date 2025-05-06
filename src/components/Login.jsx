@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Label, Button, FormGroup, Spinner, Alert } from "reactstrap";
+import { Form, Label, Button, Spinner, Alert } from "reactstrap";
 import { useState } from 'react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchemaValidation } from "../validations/LoginValidation";
@@ -18,8 +18,7 @@ function Login() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user)
-      navigate("/")
+    if (user) navigate("/")
   }, [user]);
 
   const {register, handleSubmit, formState: { errors }} = useForm({
@@ -36,9 +35,10 @@ function Login() {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className='login'>
-      <h1>Login</h1>
-      <hr />
-      <FormGroup className='logingroup'>
+      <div className="login-header">
+        <h1>Welcome</h1>
+      </div>
+      <div className='login-body'>
         <Label htmlFor='email'>Email</Label>
         <input 
           id='email'
@@ -46,6 +46,7 @@ function Login() {
           placeholder='Enter Email'
           className={'form-control ' + (errors.email ? 'is-invalid' : '')}
           {...register("email", {onChange: (e) => setEmail(e.target.value)})}
+          readOnly={status === "pendingLogin"}
         />
         <p className='error'>{errors.email?.message}</p>
         <Label htmlFor='password'>Password</Label>
@@ -55,17 +56,17 @@ function Login() {
           placeholder='Enter Password'
           className={'form-control ' + (errors.password ? 'is-invalid' : '')}
           {...register("password", {onChange: (e) => setPassword(e.target.value)})}
+          readOnly={status === "pendingLogin"}
         />
         <p className='error'>{errors.password?.message}</p>
         <section>
           {msg ? <Alert color='danger' fade={false}>{msg}</Alert> : <></>}
           
-          <Button color='primary' type='submit' disabled={status === "pending"}>
-            {(status === "pending") ? <Spinner size='sm' /> : <></>}
-            Login
+          <Button color='primary' type='submit' disabled={status === "pendingLogin"}>
+            {(status === "pendingLogin") ? <Spinner size='sm' /> : <></>} Login
           </Button>
         </section>
-      </FormGroup>
+      </div>
     </Form>
   )
 }

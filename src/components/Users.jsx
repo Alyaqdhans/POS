@@ -3,24 +3,27 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table } from 'reactstrap';
+import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { addUser, deleteUser, getUsers } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 
 function Users() {
-  const { user, userList } = useSelector((state) => state.users);
+  const { user, userList, status } = useSelector((state) => state.users);
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [editUser, setEditUser] = useState();
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
 
   const [filteredUsers, setFilteredUsers] = useState([]);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleEdit = (user) => {
     setEditModal(true)
@@ -45,18 +48,6 @@ function Users() {
     setFilteredUsers(filtered);
   }
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!user) navigate("/login")
-  }, [user]);
-
-  useEffect(() => {
-    dispatch(getUsers());
-    setFilteredUsers(userList);
-  }, []);
-
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(addModal ? addUserSchemaValidation : editUserSchemaValidation),
   });
@@ -69,17 +60,24 @@ function Users() {
         password: password,
       }
       dispatch(addUser(userData));
-      setAddModal(false);
+      handleCloseModal();
     }
     // if (editModal) {
     //   const userData = {
-    //     email: email,
     //     password: password,
     //   }
     //   dispatch();
-    //   setEditModal(false);
+    //   handleCloseModal();
     // }
   };
+
+  useEffect(() => {
+    if (!user) navigate("/login")
+  }, [user]);
+
+  useEffect(() => {
+    setFilteredUsers(userList);
+  }, [userList]);
 
   return (
     <div className='content'>
@@ -91,7 +89,7 @@ function Users() {
         <Button color='info' onClick={() => setAddModal(true)}>Add User</Button>
       </div>
 
-      <Modal centered isOpen={addModal}>
+      <Modal centered isOpen={addModal} unmountOnClose>
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add User</ModalHeader>
           <ModalBody>
@@ -102,6 +100,7 @@ function Users() {
               placeholder='Enter Username'
               className={'form-control ' + (errors.username ? 'is-invalid' : '')}
               {...register("username", { onChange: (e) => setUsername(e.target.value) })}
+              readOnly={status === "pendingAddUser"}
             />
             <p className='error'>{errors.username?.message}</p>
 
@@ -112,6 +111,7 @@ function Users() {
               placeholder='Enter Email'
               className={'form-control ' + (errors.email ? 'is-invalid' : '')}
               {...register("email", { onChange: (e) => setEmail(e.target.value) })}
+              readOnly={status === "pendingAddUser"}
             />
             <p className='error'>{errors.email?.message}</p>
 
@@ -122,6 +122,7 @@ function Users() {
               placeholder='Enter Password'
               className={'form-control ' + (errors.password ? 'is-invalid' : '')}
               {...register("password", { onChange: (e) => setPassword(e.target.value) })}
+              readOnly={status === "pendingAddUser"}
             />
             <p className='error'>{errors.password?.message}</p>
 
@@ -132,15 +133,16 @@ function Users() {
               placeholder='Confirm New Password'
               className={'form-control ' + (errors.confirm ? 'is-invalid' : '')}
               {...register("confirm")}
+              readOnly={status === "pendingAddUser"}
             />
             <p className='error'>{errors.confirm?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" outline onClick={handleCloseModal}>
+            <Button color="secondary" outline onClick={handleCloseModal} disabled={status === "pendingAddUser"}>
               Cancel
             </Button>
-            <Button color="info" type='submit'>
-              Save
+            <Button color='info' type='submit' disabled={status === "pendingAddUser"}>
+              {(status === "pendingAddUser") ? <Spinner size='sm' /> : <></>} Save
             </Button>
           </ModalFooter>
         </form>
@@ -148,16 +150,17 @@ function Users() {
 
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit User ({editUser?.username})</ModalHeader>
+          <ModalHeader>Edit User</ModalHeader>
           <ModalBody>
-            <Label htmlFor='email'>Email</Label>
+            <Label htmlFor='username'>Username</Label>
             <input
-              id='email'
+              id='username'
               type='text'
-              placeholder='Enter Email'
-              value={editUser?.email}
-              className={'form-control ' + (errors.email ? 'is-invalid' : '')}
-              {...register("email", { onChange: (e) => setEmail(e.target.value) })}
+              placeholder='Enter Username'
+              value={editUser?.username}
+              className={'form-control ' + (errors.username ? 'is-invalid' : '')}
+              {...register("username", { onChange: (e) => setUsername(e.target.value) })}
+              readOnly
             />
             <p className='error'>{errors.email?.message}</p>
 
@@ -168,6 +171,7 @@ function Users() {
               placeholder='Enter New Password'
               className={'form-control ' + (errors.password ? 'is-invalid' : '')}
               {...register("password", { onChange: (e) => setPassword(e.target.value) })}
+              readOnly={status === "pendingEditUser"}
             />
             <p className='error'>{errors.password?.message}</p>
 
@@ -178,15 +182,16 @@ function Users() {
               placeholder='Confirm New Password'
               className={'form-control ' + (errors.confirm ? 'is-invalid' : '')}
               {...register("confirm")}
+              readOnly={status === "pendingEditUser"}
             />
             <p className='error'>{errors.confirm?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" outline onClick={handleCloseModal}>
+            <Button color="secondary" outline onClick={handleCloseModal} disabled={status === "pendingEditUser"}>
               Cancel
             </Button>
-            <Button color="warning" type='submit'>
-              Save
+            <Button color='warning' type='submit' disabled={status === "pendingEditUser"}>
+              {(status === "pendingEditUser") ? <Spinner size='sm' /> : <></>} Save
             </Button>
           </ModalFooter>
         </form>

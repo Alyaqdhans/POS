@@ -82,7 +82,7 @@ export const userSlice = createSlice({
     builder
       // login
       .addCase(login.pending, (state) => {
-        state.status = "pending";
+        state.status = "pendingLogin";
       })
       .addCase(login.fulfilled, (state, action) => {
         state.status = "success";
@@ -97,7 +97,7 @@ export const userSlice = createSlice({
 
       //logout
       .addCase(logout.pending, (state) => {
-        state.status = "pending";
+        state.status = "pendingLogout";
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.status = "success";
@@ -110,7 +110,7 @@ export const userSlice = createSlice({
 
       // getUsers
       .addCase(getUsers.pending, (state) => {
-        state.status = "pending";
+        state.status = "pendingGetUsers";
       })
       .addCase(getUsers.fulfilled, (state, action) => {
         state.status = "success";
@@ -123,7 +123,7 @@ export const userSlice = createSlice({
 
       // addUser
       .addCase(addUser.pending, (state) => {
-        state.status = "pending";
+        state.status = "pendingAddUser";
       })
       .addCase(addUser.fulfilled, (state, action) => {
         state.status = "success";
@@ -135,7 +135,7 @@ export const userSlice = createSlice({
 
       // deleteUser
       .addCase(deleteUser.pending, (state) => {
-        state.status = "pending";
+        state.status = "pendingDeleteUser";
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.userList = state.userList.filter(user => user._id !== action.payload.userId);
