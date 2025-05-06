@@ -14,7 +14,9 @@ function Users() {
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [editUser, setEditUser] = useState();
+  const [editUserData, setEditUserData] = useState();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteUserData, setDeleteUserData] = useState(false);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -27,18 +29,24 @@ function Users() {
   const dispatch = useDispatch();
 
   const handleEdit = (user) => {
-    setEditModal(true)
-    setEditUser(user)
+    setEditUserData(user);
+    setEditModal(true);
   }
 
   const handleDelete = (userId) => {
-    if (!confirm("Are you sure you want to delete?")) return;
-    dispatch(deleteUser(userId));
+    setDeleteUserData(userId);
+    setDeleteModal(true);
+  }
+
+  const performDelete = () => {
+    dispatch(deleteUser(deleteUserData));
+    setDeleteModal(false);
   }
 
   const handleCloseModal = () => {
     setAddModal(false);
     setEditModal(false);
+    setDeleteModal(false);
     reset();
   }
 
@@ -160,7 +168,7 @@ function Users() {
               id='username'
               type='text'
               placeholder='Enter Username'
-              value={editUser?.username}
+              value={editUserData?.username}
               className={'form-control ' + (errors.username ? 'is-invalid' : '')}
               {...register("username", { onChange: (e) => setUsername(e.target.value) })}
               readOnly
@@ -198,6 +206,19 @@ function Users() {
             </Button>
           </ModalFooter>
         </form>
+      </Modal>
+
+      <Modal centered isOpen={deleteModal}>
+        <ModalHeader>Delete User</ModalHeader>
+        <ModalBody>Are you sure you want to delete this user?</ModalBody>
+        <ModalFooter>
+          <Button color="secondary" outline onClick={handleCloseModal} disabled={status === "pendingDeleteUser"}>
+            Cancel
+          </Button>
+          <Button color='danger' onClick={performDelete} disabled={status === "pendingDeleteUser"}>
+            {(status === "pendingDeleteUser") ? <Spinner size='sm' /> : <></>} Permanently Delete
+          </Button>
+        </ModalFooter>
       </Modal>
 
       <div className='content-display'>

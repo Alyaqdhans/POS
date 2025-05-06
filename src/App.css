@@ -182,7 +182,7 @@ hr {
 } */
 
 .content-display td, .content-display th {
-  padding-left: 2rem;
+  padding-inline: 2rem;
   padding-top: 1rem;
 }
 
