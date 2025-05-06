@@ -66,6 +66,22 @@ app.delete("/deleteUser/:id", async (request, response) => {
   } catch (error) {
     response.send({error: "Faild to delete user"});
   }
-})
+});
+
+// Edit User
+app.put("/editUser/:id", async (request, response) => {
+  try {
+    const userId = request.params.id;
+    const {password} = request.body;
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { password },
+      { new: true }
+    );
+    response.send({msg: "User updated successfully", updatedUser});
+  } catch (error) {
+    response.send({error: "Failed to update user"});
+  }
+});
 
 app.listen(process.env.PORT, () => console.log(`server is connected to port ${process.env.PORT}`));

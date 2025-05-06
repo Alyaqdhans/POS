@@ -74,6 +74,20 @@ export const deleteUser = createAsyncThunk(
   }
 )
 
+export const editUser = createAsyncThunk(
+  "users/editUser",
+  async ({userId, password}, {rejectWithValue}) => {
+    try {
+      const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/editUser/${userId}`, {
+        password: password,
+      });
+      return { userId, updatedUser: response.data.updatedUser }; 
+    } catch (error) {
+      return rejectWithValue("Failed to edit user");
+    }
+  } 
+)
+
 export const userSlice = createSlice({
   name: "users",
   initialState,
@@ -138,9 +152,24 @@ export const userSlice = createSlice({
         state.status = "pendingDeleteUser";
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
+        state.status = "success";
         state.userList = state.userList.filter(user => user._id !== action.payload.userId);
       })      
       .addCase(deleteUser.rejected, (state) => {
+        state.status = "rejected";
+      })
+
+      // editUser
+      .addCase(editUser.pending, (state) => {
+        state.status = "pendingEditUser";
+      })
+      .addCase(editUser.fulfilled, (state, action) => {
+        state.status = "success";
+        state.userList = state.userList.map(user => 
+          user._id === action.payload.userId ? action.payload.updatedUser : user
+        );
+      })
+      .addCase(editUser.rejected, (state) => {
         state.status = "rejected";
       })
   }

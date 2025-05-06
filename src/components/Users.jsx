@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
-import { addUser, deleteUser, getUsers } from '../features/UserSlice';
+import { addUser, deleteUser, editUser, getUsers } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
@@ -72,13 +72,14 @@ function Users() {
       dispatch(addUser(userData));
       handleCloseModal();
     }
-    // if (editModal) {
-    //   const userData = {
-    //     password: password,
-    //   }
-    //   dispatch();
-    //   handleCloseModal();
-    // }
+    if (editModal) {
+      const userData = {
+        userId: editUserData._id,
+        password: password,
+      }
+      dispatch(editUser(userData));
+      handleCloseModal();
+    }
   };
 
   useEffect(() => {
