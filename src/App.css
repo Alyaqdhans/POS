@@ -3,7 +3,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 2rem);
+  height: calc(100vh);
 }
 
 .content {
@@ -33,6 +33,14 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+footer {
+  background: lightgrey;
+  width: 100%;
+  text-align: center;
+  padding-block: 0.3rem;
+  color: grey;
 }
 
 .login-header {
