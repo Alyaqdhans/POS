@@ -137,7 +137,6 @@ hr {
   width: min(50%, 40rem);
 }
 
-
 .form-control[multiple] {
   width: fit-content;
   padding: 5px;
@@ -146,6 +145,17 @@ hr {
 .form-control[multiple] option {
   padding: 5px 8px;
   border-radius: .3rem;
+}
+
+.form-control[multiple] option:checked::before {
+  content: "✓";
+  font-weight: bold;
+  color: green;
+  padding-right: 5px;
+}
+
+.form-control[multiple]:focus option:checked::before {
+  color: white;
 }
 
 .form-control[multiple] option:not(:last-child) {
