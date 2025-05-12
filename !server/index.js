@@ -35,18 +35,6 @@ app.post("/logout", async (request, response) => {
   response.send({msg: "Logged out successfully"});
 });
 
-// Add users
-app.post("/addUser", async (request, response) => {
-  try {
-    const { username, email, password } = request.body;
-    const addUser = UserModel({username, email, password});
-    await addUser.save();
-    response.send({addUser: addUser});
-  } catch (error) {
-    response.status(500).json({error: "Unxpected error oucerred"});
-  }
-})
-
 // Get Users
 app.get("/getUsers", async (request, response) => {
   try {
@@ -56,6 +44,18 @@ app.get("/getUsers", async (request, response) => {
     response.status(500).json({error: "Unexpected error oucerred"});
   }
 });
+
+// Add users
+app.post("/addUser", async (request, response) => {
+  try {
+    const { username, email, password } = request.body;
+    const addUser = UserModel({username, email, password});
+    await addUser.save();
+    response.send({msg: "User added successfully", addUser: addUser});
+  } catch (error) {
+    response.status(500).json({error: "Failed to add user"});
+  }
+})
 
 // Delete User
 app.delete("/deleteUser/:id", async (request, response) => {

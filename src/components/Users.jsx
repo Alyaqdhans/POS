@@ -8,9 +8,10 @@ import { addUser, deleteUser, editUser, getUsers } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 function Users() {
-  const { user, userList, status } = useSelector((state) => state.users);
+  const { user, userList, status, msg } = useSelector((state) => state.users);
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -83,13 +84,18 @@ function Users() {
   };
 
   useEffect(() => {
-    if (!user) navigate("/login")
-  }, [user]);
+    if (status === "success") toast.success(msg);
+    if (status === "rejected") toast.error(msg);
 
-  useEffect(() => {
+    if (!user) navigate("/login");
+
     setFilteredUsers(userList);
     handleSearch(search);
-  }, [userList]);
+  }, [user, userList]);
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, []);
 
   return (
     <div className='content'>

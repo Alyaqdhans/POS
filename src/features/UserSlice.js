@@ -35,7 +35,6 @@ export const logout = createAsyncThunk(
   }
 );
 
-
 export const getUsers = createAsyncThunk(
   "users/getUsers",
   async () => {
@@ -47,7 +46,7 @@ export const getUsers = createAsyncThunk(
 
 export const addUser = createAsyncThunk(
   "users/addUser",
-  async (userData) => {
+  async (userData, {rejectWithValue}) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/addUser`, {
         username: userData.username,
@@ -55,9 +54,11 @@ export const addUser = createAsyncThunk(
         password: userData.password,
       })
       const addUser = response.data.addUser
-      return {addUser}
+      const msg = response.data.msg;
+      return {addUser, msg}
     } catch (error) {
-      console.log(error)
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg})
     }
   }
 )
@@ -66,10 +67,12 @@ export const deleteUser = createAsyncThunk(
   "users/deleteUser",
   async (userId, {rejectWithValue}) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_SERVER_URL}/deleteUser/${userId}`);
-      return {userId};
+      const response = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/deleteUser/${userId}`);
+      const msg = response.data.msg;
+      return {userId, msg};
     } catch (error) {
-      return rejectWithValue("Failed to delete user");
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg})
     }
   }
 )
@@ -81,9 +84,12 @@ export const editUser = createAsyncThunk(
       const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/editUser/${userId}`, {
         password: password,
       });
-      return { userId, updatedUser: response.data.updatedUser }; 
+      const updatedUser = response.data.updatedUser;
+      const msg = response.data.msg;
+      return { userId, updatedUser, msg }; 
     } catch (error) {
-      return rejectWithValue("Failed to edit user");
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg})
     }
   } 
 )
@@ -142,9 +148,11 @@ export const userSlice = createSlice({
       .addCase(addUser.fulfilled, (state, action) => {
         state.status = "success";
         state.userList.push(action.payload.addUser);
+        state.msg = action.payload.msg;
       })
       .addCase(addUser.rejected, (state) => {
         state.status = "rejected";
+        state.msg = action.payload.msg;
       })
 
       // deleteUser
@@ -154,9 +162,11 @@ export const userSlice = createSlice({
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.status = "success";
         state.userList = state.userList.filter(user => user._id !== action.payload.userId);
-      })      
+        state.msg = action.payload.msg;
+      })
       .addCase(deleteUser.rejected, (state) => {
         state.status = "rejected";
+        state.msg = action.payload.msg;
       })
 
       // editUser
@@ -166,11 +176,13 @@ export const userSlice = createSlice({
       .addCase(editUser.fulfilled, (state, action) => {
         state.status = "success";
         state.userList = state.userList.map(user => 
-          user._id === action.payload.userId ? action.payload.updatedUser : user
+          (user._id === action.payload.userId) ? action.payload.updatedUser : user
         );
+        state.msg = action.payload.msg;
       })
       .addCase(editUser.rejected, (state) => {
         state.status = "rejected";
+        state.msg = action.payload.msg;
       })
   }
 })
