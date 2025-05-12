@@ -97,7 +97,11 @@ export const editUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    clearMsg: (state) => {
+      state.msg = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // login
@@ -135,7 +139,6 @@ export const userSlice = createSlice({
       .addCase(getUsers.fulfilled, (state, action) => {
         state.status = "success";
         state.userList = action.payload.userList;
-        state.msg = null;
       })
       .addCase(getUsers.rejected, (state) => {
         state.status = "rejected";
@@ -188,3 +191,4 @@ export const userSlice = createSlice({
 })
 
 export default userSlice.reducer;
+export const {clearMsg} = userSlice.actions;

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
-import { addUser, deleteUser, editUser, getUsers } from '../features/UserSlice';
+import { addUser, clearMsg, deleteUser, editUser, getUsers } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
@@ -86,16 +86,13 @@ function Users() {
   useEffect(() => {
     if (status === "success") toast.success(msg);
     if (status === "rejected") toast.error(msg);
+    dispatch(clearMsg());
 
     if (!user) navigate("/login");
 
     setFilteredUsers(userList);
     handleSearch(search);
   }, [user, userList]);
-
-  useEffect(() => {
-    dispatch(getUsers());
-  }, []);
 
   return (
     <div className='content'>
