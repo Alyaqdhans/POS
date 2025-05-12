@@ -18,15 +18,15 @@ app.post("/login", async (request, response) => {
     const { email, password } = request.body;
     const user = await UserModel.findOne({email: email});
     if (!user) {
-      response.send({msg: "Couldn't find the email"});
+      response.status(404).json({msg: "Couldn't find the email"});
     } else if (user.password !== password) {
-      response.send({msg: "Incorrect password"});
+      response.status(404).json({msg: "Incorrect password"});
     } else {
       response.send({email: user, msg: "Login successful"});
     }
   }
   catch (error) {
-    response.send({error: "Unxpected error oucerred"});
+    response.status(500).json({error: "Unxpected error oucerred"});
   }
 });
 
@@ -43,7 +43,7 @@ app.post("/addUser", async (request, response) => {
     await addUser.save();
     response.send({addUser: addUser});
   } catch (error) {
-    response.send({error: "Unxpected error oucerred"});
+    response.status(500).json({error: "Unxpected error oucerred"});
   }
 })
 
@@ -53,7 +53,7 @@ app.get("/getUsers", async (request, response) => {
     const userList = await UserModel.find();
     response.send({userList: userList});
   } catch (error) {
-    response.send({error: "An error oucerred"});
+    response.status(500).json({error: "Unexpected error oucerred"});
   }
 });
 
@@ -64,7 +64,7 @@ app.delete("/deleteUser/:id", async (request, response) => {
     await UserModel.findByIdAndDelete(userId);
     response.send({msg: "User deleted successfully"});
   } catch (error) {
-    response.send({error: "Faild to delete user"});
+    response.status(500).json({error: "Faild to delete user"});
   }
 });
 
@@ -80,7 +80,7 @@ app.put("/editUser/:id", async (request, response) => {
     );
     response.send({msg: "User updated successfully", updatedUser});
   } catch (error) {
-    response.send({error: "Failed to update user"});
+    response.status(500).json({error: "Failed to update user"});
   }
 });
 

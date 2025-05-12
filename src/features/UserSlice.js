@@ -116,7 +116,7 @@ export const userSlice = createSlice({
       .addCase(logout.fulfilled, (state, action) => {
         state.status = "success";
         state.user = null;
-        state.msg = null;
+        state.msg = action.payload.msg;
       })
       .addCase(logout.rejected, (state) => {
         state.status = "rejected";

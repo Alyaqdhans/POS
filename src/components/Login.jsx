@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Label, Button, Spinner, Alert } from "reactstrap";
+import { Form, Label, Button, Spinner } from "reactstrap";
 import { useState } from 'react';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchemaValidation } from "../validations/LoginValidation";
@@ -7,9 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../features/UserSlice';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 function Login() {
-  const {user, msg, status} = useSelector((state) => state.users);
+  const {user, status, msg} = useSelector((state) => state.users);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,8 +19,10 @@ function Login() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user) navigate("/")
-  }, [user]);
+    if (status === "success") toast.success(msg);
+    if (status === "rejected") toast.error(msg);
+    if (user) navigate("/");
+  }, [user, status]);
 
   const {register, handleSubmit, formState: { errors }} = useForm({
     resolver: yupResolver(loginSchemaValidation),
@@ -30,6 +33,7 @@ function Login() {
       email: email,
       password: password,
     }
+
     dispatch(login(userData));
   };
 
@@ -59,9 +63,8 @@ function Login() {
           readOnly={status === "pendingLogin"}
         />
         <p className='error'>{errors.password?.message}</p>
+
         <section>
-          {msg ? <Alert color='danger' fade={false}>{msg}</Alert> : <></>}
-          
           <Button color='primary' type='submit' disabled={status === "pendingLogin"}>
             {(status === "pendingLogin") ? <Spinner size='sm' /> : <></>} Login
           </Button>
