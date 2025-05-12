@@ -9,6 +9,7 @@ import Users from "./components/Users";
 import Header from "./components/Header";
 import Settings from "./components/Settings";
 import Footer from "./components/Footer";
+import NotFound from "./components/NotFound";
 
 function App() {
   const {user} = useSelector((state) => state.users);
@@ -22,6 +23,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/users" element={<Users />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       {user ? <Footer /> : <></>}
     </main>

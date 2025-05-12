@@ -3,7 +3,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(100vh);
+  height: calc(100dvh);
 }
 
 .content {
@@ -208,4 +208,21 @@ hr {
   justify-content: center;
   align-items: center;
   padding-block: 0.6rem;
+}
+
+.notfound {
+  text-align: center;
+  margin-bottom: 10rem;
+  background: rgb(53, 53, 53);
+  color: white;
+  padding: 0 2rem 2rem 2rem;
+  border-radius: 1rem;
+}
+
+.notfound header {
+  font-size: 150px;
+}
+
+.notfound h1 {
+  width: 25rem;
 }
