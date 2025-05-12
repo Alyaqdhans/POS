@@ -39,8 +39,12 @@ footer {
   background: lightgrey;
   width: 100%;
   text-align: center;
-  padding-block: 0.3rem;
+  padding-block: 0.5rem;
   color: grey;
+}
+
+footer h6 {
+  margin: 0;
 }
 
 .login-header {

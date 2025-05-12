@@ -27,7 +27,7 @@ function Footer() {
     <footer>
       {
         ip ?
-        <h6><FaLocationCrosshairs /> {ip} | {country}, {region}</h6> :
+        <h6><FaLocationCrosshairs style={{marginBottom: "0.1rem"}} /> {ip} | {country}, {region}</h6> :
         <><Spinner size="sm" /> Loading...</>
       }
     </footer>
