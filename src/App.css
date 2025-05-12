@@ -125,13 +125,44 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5%;
+  gap: 2rem;
 }
 
-.search-section > :first-child {
+/* .search-section > :first-child {
+  margin-left: 12%;
+} */
+
+.search-section .search {
   flex-grow: 0;
   width: min(50%, 40rem);
-  margin-left: 12%;
+}
+
+
+.form-control[multiple] {
+  width: fit-content;
+  padding: 5px;
+}
+
+.form-control[multiple] option {
+  padding: 5px 8px;
+  border-radius: .3rem;
+}
+
+.form-control[multiple] option:not(:last-child) {
+  margin-bottom: 3px;
+}
+
+.form-control[multiple]::-webkit-scrollbar {
+  width: .5rem;
+}
+
+.form-control[multiple]::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 1rem;
+}
+
+.form-control[multiple]::-webkit-scrollbar-thumb:hover {
+  background: #666;
 }
 
 .content-display {

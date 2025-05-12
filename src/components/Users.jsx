@@ -25,6 +25,7 @@ function Users() {
 
   const [search, setSearch] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filterType, setFilterType] = useState(['username']);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,7 +55,9 @@ function Users() {
   const handleSearch = (query) => {
     setSearch(query);
     const filtered = userList.filter((user) =>
-      user.username.includes(query)
+      filterType.some(type => 
+        user[type].toLowerCase().includes(query.toLowerCase())
+      )
     );
     setFilteredUsers(filtered);
   }
@@ -92,11 +95,21 @@ function Users() {
 
     setFilteredUsers(userList);
     handleSearch(search);
-  }, [user, userList]);
+  }, [user, userList, filterType]);
 
   return (
     <div className='content'>
       <div className='search-section'>
+        <select
+          className='form-control'
+          size={1}
+          multiple
+          value={filterType}
+          onChange={(e) => setFilterType([...e.target.selectedOptions].map(option => option.value))}
+        >
+          <option value="username">Username</option>
+          <option value="email">Email</option>
+        </select>
         <div className='search'>
           <input type="search" placeholder='Search' className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
