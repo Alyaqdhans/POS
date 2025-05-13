@@ -55,10 +55,13 @@ footer h6 {
 .login {
   border-radius: 1rem;
   background: rgb(235, 235, 235);
-  min-width: 30rem;
+  width: 30rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  margin: 6rem;
-  margin-block: auto;
+  margin: auto;
+}
+
+.login h1 {
+  font-size: 35px;
 }
 
 .login-body {
@@ -263,12 +266,12 @@ hr {
 
 .notfound {
   text-align: center;
-  margin: 5rem;
-  margin-block: auto;
+  margin: auto;
   background: rgb(53, 53, 53);
   color: white;
   padding: 0 2rem 2rem 2rem;
   border-radius: 1rem;
+  width: 30rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -280,6 +283,7 @@ hr {
 }
 
 .notfound h1 {
+  font-size: 30px;
   width: 25rem;
   margin-bottom: 1rem;
 }
