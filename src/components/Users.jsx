@@ -270,7 +270,7 @@ function Users() {
                     <td>
                       {
                         u.lastLogin ?
-                        <>{moment(u.lastLogin).format('D/M/yyyy, h:mm:ss A')} ({moment(u.lastLogin).toNow()})</> :
+                        <>{moment(u.lastLogin).format('D/M/yyyy, h:mm A')} ({moment(u.lastLogin).toNow()})</> :
                         'Never logged in'
                       }
                     </td>
