@@ -48,7 +48,7 @@ function Login() {
         <Label htmlFor='email'>Email</Label>
         <input 
           id='email'
-          type='text'
+          type='email'
           placeholder='Enter Email'
           className={'form-control ' + (errors.email ? 'is-invalid' : '')}
           {...register("email", {onChange: (e) => setEmail(e.target.value)})}
@@ -68,7 +68,7 @@ function Login() {
 
         <section>
           <Button color='primary' type='submit' disabled={status === "pendingLogin"}>
-            {(status === "pendingLogin") ? <Spinner size='sm' /> : <></>} Login
+            {(status === "pendingLogin") && <Spinner size='sm' />} Login
           </Button>
         </section>
       </div>

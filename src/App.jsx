@@ -17,8 +17,8 @@ function App() {
 
   return (
     <main>
-      {user ? <Header /> : <></>}
-      <ToastContainer theme="colored" position="top-center" pauseOnFocusLoss={false} />
+      {user && <Header />}
+      <ToastContainer theme="colored" position="bottom-center" pauseOnFocusLoss={false} />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
@@ -27,7 +27,7 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {user ? <Footer /> : <></>}
+      {user && <Footer />}
     </main>
   )
 }

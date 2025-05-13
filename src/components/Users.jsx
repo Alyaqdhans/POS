@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
+import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table, UncontrolledTooltip } from 'reactstrap';
 import { addUser, clearMsg, deleteUser, editUser, getUsers } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { MdHelp } from 'react-icons/md';
+import moment from 'moment';
 
 function Users() {
   const { user, userList, status, msg } = useSelector((state) => state.users);
@@ -100,24 +102,33 @@ function Users() {
   return (
     <div className='content'>
       <div className='search-section'>
-        <select
-          className='form-control'
-          size={1}
-          multiple
-          value={filterType}
-          onChange={(e) => setFilterType([...e.target.selectedOptions].map(option => option.value))}
-        >
-          <option value="username">Username</option>
-          <option value="email">Email</option>
-        </select>
+        <div className="filter">
+          <select
+            className='form-control'
+            size={1}
+            multiple
+            value={filterType}
+            onChange={(e) => setFilterType([...e.target.selectedOptions].map(option => option.value))}
+          >
+            <option value="username">Username</option>
+            <option value="email">Email</option>
+          </select>
+
+          <button id='filterhelp'><MdHelp /></button>
+          <UncontrolledTooltip target='filterhelp' trigger='click' placement='right' style={{width: "150px"}} fade>
+            Use <kbd>Ctrl</kbd> to select multiple filters
+          </UncontrolledTooltip>
+        </div>
+
         <div className='search'>
-          <input type="search" placeholder='Search' className='form-control' onChange={(e) => handleSearch(e.target.value)} />
+          <input type="search" placeholder={`Search ${filterType.join(', ')}`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
         </div>
+
         <Button color='info' onClick={() => setAddModal(true)}>Add User</Button>
       </div>
 
-      <Modal centered isOpen={addModal} unmountOnClose>
+      <Modal centered isOpen={addModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add User</ModalHeader>
           <ModalBody>
@@ -170,7 +181,7 @@ function Users() {
               Cancel
             </Button>
             <Button color='info' type='submit' disabled={status === "pendingAddUser"}>
-              {(status === "pendingAddUser") ? <Spinner size='sm' /> : <></>} Save
+              {(status === "pendingAddUser") && <Spinner size='sm' />} Save
             </Button>
           </ModalFooter>
         </form>
@@ -219,7 +230,7 @@ function Users() {
               Cancel
             </Button>
             <Button color='warning' type='submit' disabled={status === "pendingEditUser"}>
-              {(status === "pendingEditUser") ? <Spinner size='sm' /> : <></>} Save
+              {(status === "pendingEditUser") && <Spinner size='sm' />} Save
             </Button>
           </ModalFooter>
         </form>
@@ -233,7 +244,7 @@ function Users() {
             Cancel
           </Button>
           <Button color='danger' onClick={performDelete} disabled={status === "pendingDeleteUser"}>
-            {(status === "pendingDeleteUser") ? <Spinner size='sm' /> : <></>} Permanently Delete
+            {(status === "pendingDeleteUser") && <Spinner size='sm' />} Permanently Delete
           </Button>
         </ModalFooter>
       </Modal>
@@ -251,13 +262,19 @@ function Users() {
             </thead>
             <tbody>
               {
-                filteredUsers?.map((user) => (
-                  <tr key={user._id}>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
+                filteredUsers?.map((u) => (
+                  <tr key={u._id}>
+                    <td>{u.username}</td>
+                    <td>{u.email}</td>
                     <td className='actions'>
-                      <Button color='warning' onClick={() => handleEdit(user)}><FaEdit /></Button>
-                      {user.username !== "admin" && <Button color='danger' onClick={() => handleDelete(user._id)}><FaTrashAlt /></Button>}
+                      <div className="actionButtons">
+                        {(u.username !== "admin") && <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>}
+                        {(u.username !== "admin") && (u.username !== user?.username) && <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>}
+                      </div>
+                      
+                      <div className='dateInfo'>
+                        Created: {moment(u.createdAt).format('D/M/yyyy')} | Modified: {moment(u.updatedAt).fromNow()}
+                      </div>
                     </td>
                   </tr>
                 ))

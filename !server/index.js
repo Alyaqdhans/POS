@@ -22,7 +22,7 @@ app.post("/login", async (request, response) => {
     } else if (user.password !== password) {
       response.status(404).json({msg: "Incorrect password"});
     } else {
-      response.send({email: user, msg: "Login successful"});
+      response.send({email: user, msg: "Logged in successfully"});
     }
   }
   catch (error) {

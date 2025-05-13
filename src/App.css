@@ -1,9 +1,7 @@
 main {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: calc(100dvh);
+  height: 100dvh;
 }
 
 .content {
@@ -13,7 +11,6 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: hidden;
 }
 
 .btn {
@@ -41,6 +38,7 @@ footer {
   text-align: center;
   padding-block: 0.5rem;
   color: grey;
+  margin-top: 2rem;
 }
 
 footer h6 {
@@ -59,6 +57,8 @@ footer h6 {
   background: rgb(235, 235, 235);
   min-width: 30rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  margin: 6rem;
+  margin-block: auto;
 }
 
 .login-body {
@@ -175,6 +175,21 @@ hr {
   background: #666;
 }
 
+.filter {
+  position: relative;
+}
+
+.filter #filterhelp {
+  position: absolute;
+  left: -28px;
+  top: 0;
+  bottom: 0;
+  background: none;
+  border: none;
+  outline: none;
+  color: grey;
+}
+
 .content-display {
   background: lightgrey;
   width: 90%;
@@ -222,33 +237,28 @@ hr {
   color: white;
 }
 
-/* .content-display thead th:first-child {
- border-radius: 1rem 0 0 0;
-}
-
-.content-display thead th:last-child {
- border-radius: 0 1rem 0 0;
-} */
-
-/* .content-display tbody tr:nth-last-of-type(2n + 1) td {
-  background: rgb(228, 228, 228);
-} */
-
 .content-display td, .content-display th {
   padding-inline: 2rem;
   padding-top: 1rem;
 }
 
-.actions {
+.actionButtons {
   display: flex;
   gap: 0.5rem;
 }
 
-.actions > * {
+.actionButtons > * {
   display: flex;
   justify-content: center;
   align-items: center;
   padding-block: 0.6rem;
+}
+
+.actions .dateInfo {
+  margin-top: 5px;
+  font-size: 11px;
+  padding: 0;
+  text-wrap: nowrap;
 }
 
 .notfound {
