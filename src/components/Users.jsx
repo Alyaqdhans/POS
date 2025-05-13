@@ -93,7 +93,7 @@ function Users() {
 
     setFilteredUsers(userList);
     handleSearch(search);
-  }, [user, userList, filterType]);
+  }, [userList, filterType]);
 
   return (
     <div className='content'>
