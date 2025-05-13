@@ -257,6 +257,7 @@ function Users() {
               <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Last Login</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -266,14 +267,21 @@ function Users() {
                   <tr key={u._id}>
                     <td>{u.username}</td>
                     <td>{u.email}</td>
+                    <td>
+                      {
+                        u.lastLogin ?
+                        <>{moment(u.lastLogin).format('D/M/yyyy, h:mm:ss A')} ({moment(u.lastLogin).toNow()})</> :
+                        'Never logged in'
+                      }
+                    </td>
                     <td className='actions'>
                       <div className="actionButtons">
-                        {(u.username !== "admin") && <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>}
-                        {(u.username !== "admin") && (u.username !== user?.username) && <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>}
+                        {(u.username !== "admin" || user?.username === "admin") && <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>}
+                        {(u.username !== "admin" && u.username !== user?.username) && <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>}
                       </div>
                       
                       <div className='dateInfo'>
-                        Created: {moment(u.createdAt).format('D/M/yyyy')} | Modified: {moment(u.updatedAt).fromNow()}
+                        Created: {moment(u.createdAt).format('D/M/yyyy')} | Modified: {moment(u.updatedAt).format('D/M/yyyy')}
                       </div>
                     </td>
                   </tr>

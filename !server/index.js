@@ -1,4 +1,4 @@
-import express, { request, response } from "express";
+import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import UserModel from "./models/UserModel.js";
@@ -22,6 +22,12 @@ app.post("/login", async (request, response) => {
     } else if (user.password !== password) {
       response.status(404).json({msg: "Incorrect password"});
     } else {
+      // update lastLogin without changing timestamps
+      await UserModel.findByIdAndUpdate(
+        user._id, 
+        { lastLogin: new Date() },
+        { timestamps: false }
+      );
       response.send({email: user, msg: "Logged in successfully"});
     }
   }

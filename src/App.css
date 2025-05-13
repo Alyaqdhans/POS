@@ -240,6 +240,7 @@ hr {
 .content-display td, .content-display th {
   padding-inline: 2rem;
   padding-top: 1rem;
+  text-wrap: nowrap;
 }
 
 .actionButtons {
@@ -258,7 +259,6 @@ hr {
   margin-top: 5px;
   font-size: 11px;
   padding: 0;
-  text-wrap: nowrap;
 }
 
 .notfound {
