@@ -263,11 +263,16 @@ hr {
 
 .notfound {
   text-align: center;
-  margin-bottom: 10rem;
+  margin: 5rem;
+  margin-block: auto;
   background: rgb(53, 53, 53);
   color: white;
   padding: 0 2rem 2rem 2rem;
   border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .notfound header {
@@ -276,4 +281,5 @@ hr {
 
 .notfound h1 {
   width: 25rem;
+  margin-bottom: 1rem;
 }

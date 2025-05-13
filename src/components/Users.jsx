@@ -2,9 +2,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table, UncontrolledTooltip } from 'reactstrap';
-import { addUser, clearMsg, deleteUser, editUser, getUsers } from '../features/UserSlice';
+import { addUser, clearMsg, deleteUser, editUser } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
@@ -29,7 +28,6 @@ function Users() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [filterType, setFilterType] = useState(['username']);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleEdit = (user) => {
@@ -92,8 +90,6 @@ function Users() {
     if (status === "success") toast.success(msg);
     if (status === "rejected") toast.error(msg);
     dispatch(clearMsg());
-
-    if (!user) navigate("/login");
 
     setFilteredUsers(userList);
     handleSearch(search);
