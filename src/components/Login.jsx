@@ -48,7 +48,7 @@ function Login() {
         <Label htmlFor='email'>Email</Label>
         <input 
           id='email'
-          type='email'
+          type='text'
           placeholder='Enter Email'
           className={'form-control ' + (errors.email ? 'is-invalid' : '')}
           {...register("email", {onChange: (e) => setEmail(e.target.value)})}

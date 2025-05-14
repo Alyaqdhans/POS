@@ -19,7 +19,7 @@ function App() {
   return (
     <main>
       {user && <Header />}
-      <ToastContainer theme="colored" position="bottom-center" pauseOnFocusLoss={false} />
+      <ToastContainer theme="colored" position="bottom-center" pauseOnFocusLoss={false} draggable />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />

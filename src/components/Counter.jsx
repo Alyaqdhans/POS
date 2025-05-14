@@ -16,8 +16,8 @@ function Counter({ initialCount }) {
   }
 
   return (
-    <fieldset className='rounded px-3 pb-3 mt-5' style={{ border: "1px solid black" }}>
-      <legend className='text-center px-2' style={{ float: "none", width: "fit-content" }}>Counter</legend>
+    <fieldset className='mt-5'>
+      <legend className='text-center'>Counter</legend>
 
       <h3 data-testid="count" className='text-center'>{count}</h3>
 

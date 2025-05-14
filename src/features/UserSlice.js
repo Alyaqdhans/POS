@@ -52,6 +52,7 @@ export const addUser = createAsyncThunk(
         username: userData.username,
         email: userData.email,
         password: userData.password,
+        permissions: userData.permissions
       })
       const addUser = response.data.addUser
       const msg = response.data.msg;

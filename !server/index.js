@@ -54,8 +54,8 @@ app.get("/getUsers", async (request, response) => {
 // Add users
 app.post("/addUser", async (request, response) => {
   try {
-    const { username, email, password } = request.body;
-    const addUser = UserModel({username, email, password});
+    const { username, email, password, permissions } = request.body;
+    const addUser = UserModel({username, email, password, permissions});
     await addUser.save();
     response.send({msg: "User added successfully", addUser: addUser});
   } catch (error) {
