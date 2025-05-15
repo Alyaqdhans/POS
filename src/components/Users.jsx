@@ -2,13 +2,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table, UncontrolledTooltip } from 'reactstrap';
+import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { addUser, clearMsg, deleteUser, editUser } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { MdHelp } from 'react-icons/md';
 import moment from 'moment';
 
 function Users() {
@@ -39,6 +38,20 @@ function Users() {
   const [productsDelete, setProductsDelete] = useState(true);
 
   const dispatch = useDispatch();
+
+  const handleAdd = () => {
+    setUsersPage(false)
+    setUsersAdd(false)
+    setUsersEdit(false)
+    setUsersDelete(false)
+
+    setProductsPage(false)
+    setProductsAdd(false)
+    setProductsEdit(false)
+    setProductsDelete(false)
+
+    setAddModal(true)
+  }
 
   const handleEdit = (user) => {
     setEditUserData(user)
@@ -174,7 +187,7 @@ function Users() {
 
         {
           (user?.permissions.users.add) &&
-          <Button color='info' onClick={() => setAddModal(true)}>Add User</Button>
+          <Button color='info' onClick={handleAdd}>Add User</Button>
         }
       </div>
 
