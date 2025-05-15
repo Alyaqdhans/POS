@@ -523,22 +523,24 @@ function Users() {
                         'Never logged in'
                       }
                     </td>
-                    <td className='actions'>
-                      <div className="actionButtons">
-                        {
-                          // (user have permission to edit | allow user to change their details) & (dont't allow none admin to change admin | allow admin to do anything)
-                          (user?.permissions.users.edit || user?.email === u.email) && (u.username.toLowerCase() !== "admin" || user?.username.toLowerCase() === "admin") &&
-                          <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>
-                        }
-                        {
-                          // (user have permission to delete) & (dont't allow none admin to delete admin | don't allow user to delete themselves)
-                          (user?.permissions.users.delete) && (u.username.toLowerCase() !== "admin" && u.username !== user?.username) &&
-                          <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>
-                        }
-                      </div>
-                      
-                      <div className='dateInfo'>
-                        Created: {moment(u.createdAt).format('D/M/yyyy')} | Modified: {moment(u.updatedAt).format('D/M/yyyy')}
+                    <td>
+                      <div className='actions' style={{minHeight: "60px"}}>
+                        <div className="actionButtons">
+                          {
+                            // (user have permission to edit | allow user to change their details) & (dont't allow none admin to change admin | allow admin to do anything)
+                            (user?.permissions.users.edit || user?._id === u._id) && (u.username.toLowerCase() !== "admin" || user?.username.toLowerCase() === "admin") &&
+                            <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>
+                          }
+                          {
+                            // (user have permission to delete) & (dont't allow none admin to delete admin | don't allow user to delete themselves)
+                            (user?.permissions.users.delete) && (u.username.toLowerCase() !== "admin" && u.username !== user?.username) &&
+                            <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>
+                          }
+                        </div>
+                        
+                        <div className='dateInfo'>
+                          Created: {moment(u.createdAt).format('D/M/yyyy')} | Modified: {moment(u.updatedAt).format('D/M/yyyy')}
+                        </div>
                       </div>
                     </td>
                   </tr>
