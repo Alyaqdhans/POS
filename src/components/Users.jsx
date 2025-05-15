@@ -87,6 +87,9 @@ function Users() {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(addModal ? addUserSchemaValidation : editUserSchemaValidation),
+    context: { 
+      isAdmin: editUserData?.username.toLowerCase() === "admin" 
+    }
   });
 
   const onSubmit = () => {
@@ -116,7 +119,7 @@ function Users() {
     if (editModal) {
       const userData = {
         userId: editUserData._id,
-        username: username,
+        username: editUserData?.username.toLowerCase() === "admin" ? "Admin" : username,
         password: password || editUserData?.password,
         permissions: {
           users: {
@@ -343,9 +346,10 @@ function Users() {
               placeholder='Enter Username'
               value={username}
               className={'form-control ' + (errors.username ? 'is-invalid' : '')}
+              disabled={editUserData?.username.toLowerCase() === "admin"}
               {...register("username", { onChange: (e) => setUsername(e.target.value) })}
             />
-            <p className='error'>{errors.email?.message}</p>
+            <p className='error'>{errors.username?.message}</p>
 
             <Label htmlFor='password'>New Password</Label>
             <input
@@ -371,7 +375,7 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
 
             {
-              (editUserData?.username !== "admin" && user?.permissions.users.edit) &&
+              (editUserData?.username.toLowerCase() !== "admin" && user?.username.toLowerCase() === "admin") &&
               <fieldset>
                 <legend>Permissions</legend>
 
@@ -523,12 +527,12 @@ function Users() {
                       <div className="actionButtons">
                         {
                           // (user have permission to edit | allow user to change their details) & (dont't allow none admin to change admin | allow admin to do anything)
-                          (user?.permissions.users.edit || user?.email === u.email) && (u.username !== "admin" || user?.username === "admin") &&
+                          (user?.permissions.users.edit || user?.email === u.email) && (u.username.toLowerCase() !== "admin" || user?.username.toLowerCase() === "admin") &&
                           <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>
                         }
                         {
-                          // (user have permission to delete) & (dont't allow none admin to change admin | allow admin to do anything)
-                          (user?.permissions.users.delete) && (u.username !== "admin" && u.username !== user?.username) &&
+                          // (user have permission to delete) & (dont't allow none admin to delete admin | don't allow user to delete themselves)
+                          (user?.permissions.users.delete) && (u.username.toLowerCase() !== "admin" && u.username !== user?.username) &&
                           <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>
                         }
                       </div>

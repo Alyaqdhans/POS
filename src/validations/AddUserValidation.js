@@ -3,6 +3,7 @@ import * as yup from "yup";
 export const addUserSchemaValidation = yup.object().shape({
   username: yup
     .string()
+    .transform(value => value?.toLowerCase())
     .notOneOf(["admin"], "This username is not allowed")
     .required("Username is required"),
   email: yup

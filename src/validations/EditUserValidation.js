@@ -3,7 +3,14 @@ import * as yup from "yup";
 export const editUserSchemaValidation = yup.object().shape({
   username: yup
     .string()
-    .notOneOf(["admin"], "This username is not allowed")
+    .transform(value => value?.toLowerCase())
+    .when('$isAdmin', {
+      is: true,
+      then: (schema) => schema,
+      otherwise: (schema) => schema
+        .notOneOf(["admin"], "This username is not allowed")
+        .required("Username is required"),
+    })
     .required("Username is required"),
   password: yup
     .string()
