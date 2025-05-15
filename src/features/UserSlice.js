@@ -108,7 +108,7 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // login
-      .addCase(login.pending, (state) => {
+      .addCase(login.pending, (state, action) => {
         state.status = "pendingLogin";
       })
       .addCase(login.fulfilled, (state, action) => {
@@ -123,7 +123,7 @@ export const userSlice = createSlice({
       })
 
       //logout
-      .addCase(logout.pending, (state) => {
+      .addCase(logout.pending, (state, action) => {
         state.status = "pendingLogout";
       })
       .addCase(logout.fulfilled, (state, action) => {
@@ -131,24 +131,24 @@ export const userSlice = createSlice({
         state.user = null;
         state.msg = action.payload.msg;
       })
-      .addCase(logout.rejected, (state) => {
+      .addCase(logout.rejected, (state, action) => {
         state.status = "rejected";
       })
 
       // getUsers
-      .addCase(getUsers.pending, (state) => {
+      .addCase(getUsers.pending, (state, action) => {
         state.status = "pendingGetUsers";
       })
       .addCase(getUsers.fulfilled, (state, action) => {
         state.status = "success";
         state.userList = action.payload.userList;
       })
-      .addCase(getUsers.rejected, (state) => {
+      .addCase(getUsers.rejected, (state, action) => {
         state.status = "rejected";
       })
 
       // addUser
-      .addCase(addUser.pending, (state) => {
+      .addCase(addUser.pending, (state, action) => {
         state.status = "pendingAddUser";
       })
       .addCase(addUser.fulfilled, (state, action) => {
@@ -156,13 +156,13 @@ export const userSlice = createSlice({
         state.userList.push(action.payload.addUser);
         state.msg = action.payload.msg;
       })
-      .addCase(addUser.rejected, (state) => {
+      .addCase(addUser.rejected, (state, action) => {
         state.status = "rejected";
         state.msg = action.payload.msg;
       })
 
       // deleteUser
-      .addCase(deleteUser.pending, (state) => {
+      .addCase(deleteUser.pending, (state, action) => {
         state.status = "pendingDeleteUser";
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
@@ -170,13 +170,13 @@ export const userSlice = createSlice({
         state.userList = state.userList.filter(user => user._id !== action.payload.userId);
         state.msg = action.payload.msg;
       })
-      .addCase(deleteUser.rejected, (state) => {
+      .addCase(deleteUser.rejected, (state, action) => {
         state.status = "rejected";
         state.msg = action.payload.msg;
       })
 
       // editUser
-      .addCase(editUser.pending, (state) => {
+      .addCase(editUser.pending, (state, action) => {
         state.status = "pendingEditUser";
       })
       .addCase(editUser.fulfilled, (state, action) => {
@@ -189,7 +189,7 @@ export const userSlice = createSlice({
         );
         state.msg = action.payload.msg;
       })
-      .addCase(editUser.rejected, (state) => {
+      .addCase(editUser.rejected, (state, action) => {
         state.status = "rejected";
         state.msg = action.payload.msg;
       })

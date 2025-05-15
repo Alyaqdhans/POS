@@ -162,7 +162,7 @@ function Users() {
 
     setFilteredUsers(userList);
     handleSearch(search);
-  }, [userList, filterType]);
+  }, [userList, filterType, status]);
 
   return (
     <div className='content'>
