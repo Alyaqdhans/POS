@@ -35,9 +35,12 @@ function Header() {
 
       <NavLink to="/settings" className={dynamicLink}>Settings</NavLink>
 
-      <Button color='danger' onClick={handleLogout} disabled={status === "pendingLogout"}>
-        {(status === "pendingLogout") ? <Spinner size='sm' /> : <MdLogout size={22} />}
-      </Button>
+      <span className='userInfo'>
+        <Button disabled>{user?.username}</Button>
+        <Button color='danger' onClick={handleLogout} disabled={status === "pendingLogout"}>
+          {(status === "pendingLogout") ? <Spinner size='sm' /> : <MdLogout size={22} />}
+        </Button>
+      </span>
     </Nav>
   )
 }

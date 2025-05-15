@@ -32,6 +32,19 @@ main {
   justify-content: center;
 }
 
+.nav .userInfo > * {
+  height: 38px;
+  opacity: 1;
+}
+
+.nav .userInfo > :first-child {
+  border-radius: .5rem 0 0 .5rem;
+}
+
+.nav .userInfo > :last-child {
+  border-radius: 0 .5rem .5rem 0;
+}
+
 footer {
   background: lightgrey;
   width: 100%;

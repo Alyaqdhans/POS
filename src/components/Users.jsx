@@ -162,11 +162,6 @@ function Users() {
             <option value="username">Username</option>
             <option value="email">Email</option>
           </select>
-
-          <button id='filterhelp'><MdHelp /></button>
-          <UncontrolledTooltip target='filterhelp' trigger='click' placement='right' style={{width: "150px"}} fade>
-            Use <kbd>Ctrl</kbd> to select multiple filters
-          </UncontrolledTooltip>
         </div>
 
         <div className='search'>
