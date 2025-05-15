@@ -371,7 +371,7 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
 
             {
-              (editUserData?.username !== "admin") &&
+              (editUserData?.username !== "admin" && user?.permissions.users.edit) &&
               <fieldset>
                 <legend>Permissions</legend>
 
@@ -522,12 +522,12 @@ function Users() {
                     <td className='actions'>
                       <div className="actionButtons">
                         {
-                          // (user have permission to edit) & (the selected user is not an admin | allow admin to do anything)
-                          (user?.permissions.users.edit) && (u.username !== "admin" || user?.username === "admin") &&
+                          // (user have permission to edit | allow user to change their details) & (dont't allow none admin to change admin | allow admin to do anything)
+                          (user?.permissions.users.edit || user?.email === u.email) && (u.username !== "admin" || user?.username === "admin") &&
                           <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>
                         }
                         {
-                          // (user have permission to delete) & (the selected user is not an admin | allow admin to do anything)
+                          // (user have permission to delete) & (dont't allow none admin to change admin | allow admin to do anything)
                           (user?.permissions.users.delete) && (u.username !== "admin" && u.username !== user?.username) &&
                           <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>
                         }
