@@ -41,8 +41,21 @@ function Users() {
   const dispatch = useDispatch();
 
   const handleEdit = (user) => {
-    setEditUserData(user);
-    setEditModal(true);
+    setEditUserData(user)
+    setUsername(user.username)
+    setPassword("")
+
+    setUsersPage(user.permissions.users.read)
+    setUsersAdd(user.permissions.users.add)
+    setUsersEdit(user.permissions.users.edit)
+    setUsersDelete(user.permissions.users.delete)
+
+    setProductsPage(user.permissions.products.read)
+    setProductsAdd(user.permissions.products.add)
+    setProductsEdit(user.permissions.products.edit)
+    setProductsDelete(user.permissions.products.delete)
+
+    setEditModal(true)
   }
 
   const handleDelete = (userId) => {
@@ -98,17 +111,32 @@ function Users() {
         }
       }
       dispatch(addUser(userData));
-      handleCloseModal();
     }
 
     if (editModal) {
       const userData = {
         userId: editUserData._id,
-        password: password,
+        username: username,
+        password: password || editUserData?.password,
+        permissions: {
+          users: {
+            read: usersPage,
+            add: usersAdd,
+            edit: usersEdit,
+            delete: usersDelete
+          },
+          products: {
+            read: productsPage,
+            add: productsAdd,
+            edit: productsEdit,
+            delete: productsDelete
+          }
+        }
       }
       dispatch(editUser(userData));
-      handleCloseModal();
     }
+
+    handleCloseModal();
   };
 
   useEffect(() => {
@@ -146,9 +174,13 @@ function Users() {
           <FaSearch size={20} />
         </div>
 
-        <Button color='info' onClick={() => setAddModal(true)}>Add User</Button>
+        {
+          (user?.permissions.users.add) &&
+          <Button color='info' onClick={() => setAddModal(true)}>Add User</Button>
+        }
       </div>
 
+      {/* Add Modal */}
       <Modal centered isOpen={addModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add User</ModalHeader>
@@ -205,52 +237,6 @@ function Users() {
                   <span className='checkbox'>
                     <input
                       className='form-check-input'
-                      type="checkbox"
-                      id='users'
-                      checked={usersPage}
-                      onChange={() => setUsersPage(!usersPage)}
-                    /><Label htmlFor='users'>Users Page</Label>
-                  </span>
-                </summary>
-                <ul>
-                  <li className='checkbox'>
-                    <input
-                      className='form-check-input'
-                      type="checkbox"
-                      id='usersAdd'
-                      checked={usersAdd}
-                      onChange={() => setUsersAdd(!usersAdd)}
-                      disabled={!usersPage}
-                    /><Label htmlFor='usersAdd'>Add</Label>
-                  </li>
-                  <li className='checkbox'>
-                    <input
-                      className='form-check-input'
-                      type="checkbox"
-                      id='usersEdit'
-                      checked={usersEdit}
-                      onChange={() => setUsersEdit(!usersEdit)}
-                      disabled={!usersPage}
-                    /><Label htmlFor='usersEdit'>Edit</Label>
-                  </li>
-                  <li className='checkbox'>
-                    <input
-                      className='form-check-input'
-                      type="checkbox"
-                      id='usersDelete'
-                      checked={usersDelete}
-                      onChange={() => setUsersDelete(!usersDelete)}
-                      disabled={!usersPage}
-                    /><Label htmlFor='usersDelete'>Delete</Label>
-                  </li>
-                </ul>
-              </details>
-
-              <details>
-                <summary>
-                  <span className='checkbox'>
-                    <input
-                      className='form-check-input'
                       type="checkbox" 
                       id='products'
                       checked={productsPage}
@@ -291,6 +277,52 @@ function Users() {
                   </li>
                 </ul>
               </details>
+
+              <details>
+                <summary>
+                  <span className='checkbox'>
+                    <input
+                      className='form-check-input'
+                      type="checkbox"
+                      id='users'
+                      checked={usersPage}
+                      onChange={() => setUsersPage(!usersPage)}
+                    /><Label htmlFor='users'>Users Page</Label>
+                  </span>
+                </summary>
+                <ul>
+                  <li className='checkbox'>
+                    <input
+                      className='form-check-input'
+                      type="checkbox"
+                      id='usersAdd'
+                      checked={usersAdd}
+                      onChange={() => setUsersAdd(!usersAdd)}
+                      disabled={!usersPage}
+                    /><Label htmlFor='usersAdd'>Add</Label>
+                  </li>
+                  <li className='checkbox'>
+                    <input
+                      className='form-check-input'
+                      type="checkbox"
+                      id='usersEdit'
+                      checked={usersEdit}
+                      onChange={() => setUsersEdit(!usersEdit)}
+                      disabled={!usersPage}
+                    /><Label htmlFor='usersEdit'>Edit</Label>
+                  </li>
+                  <li className='checkbox'>
+                    <input
+                      className='form-check-input'
+                      type="checkbox"
+                      id='usersDelete'
+                      checked={usersDelete}
+                      onChange={() => setUsersDelete(!usersDelete)}
+                      disabled={!usersPage}
+                    /><Label htmlFor='usersDelete'>Delete</Label>
+                  </li>
+                </ul>
+              </details>
             </fieldset>
           </ModalBody>
           <ModalFooter>
@@ -304,19 +336,19 @@ function Users() {
         </form>
       </Modal>
 
+      {/* Edit Modal */}
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit User</ModalHeader>
+          <ModalHeader>Edit User ({editUserData?.email})</ModalHeader>
           <ModalBody>
             <Label htmlFor='username'>Username</Label>
             <input
               id='username'
               type='text'
               placeholder='Enter Username'
-              value={editUserData?.username}
+              value={username}
               className={'form-control ' + (errors.username ? 'is-invalid' : '')}
               {...register("username", { onChange: (e) => setUsername(e.target.value) })}
-              readOnly
             />
             <p className='error'>{errors.email?.message}</p>
 
@@ -325,6 +357,7 @@ function Users() {
               id='password'
               type='password'
               placeholder='Enter New Password'
+              value={password}
               className={'form-control ' + (errors.password ? 'is-invalid' : '')}
               {...register("password", { onChange: (e) => setPassword(e.target.value) })}
               readOnly={status === "pendingEditUser"}
@@ -341,6 +374,105 @@ function Users() {
               readOnly={status === "pendingEditUser"}
             />
             <p className='error'>{errors.confirm?.message}</p>
+
+            {
+              (editUserData?.username !== "admin") &&
+              <fieldset>
+                <legend>Permissions</legend>
+
+                <details>
+                  <summary>
+                    <span className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox" 
+                        id='products'
+                        checked={productsPage}
+                        onChange={() => setProductsPage(!productsPage)}
+                      /><Label htmlFor='products'>Products Page</Label>
+                    </span>
+                  </summary>
+                  <ul>
+                    <li className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='productsAdd'
+                        checked={productsAdd}
+                        onChange={() => setProductsAdd(!productsAdd)}
+                        disabled={!productsPage}
+                      /><Label htmlFor='productsAdd'>Add</Label>
+                    </li>
+                    <li className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='productsEdit'
+                        checked={productsEdit}
+                        onChange={() => setProductsEdit(!productsEdit)}
+                        disabled={!productsPage}
+                      /><Label htmlFor='productsEdit'>Edit</Label>
+                    </li>
+                    <li className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='productsDelete'
+                        checked={productsDelete}
+                        onChange={() => setProductsDelete(!productsDelete)}
+                        disabled={!productsPage}
+                      /><Label htmlFor='productsDelete'>Delete</Label>
+                    </li>
+                  </ul>
+                </details>
+
+                <details>
+                  <summary>
+                    <span className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='users'
+                        checked={usersPage}
+                        onChange={() => setUsersPage(!usersPage)}
+                      /><Label htmlFor='users'>Users Page</Label>
+                    </span>
+                  </summary>
+                  <ul>
+                    <li className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='usersAdd'
+                        checked={usersAdd}
+                        onChange={() => setUsersAdd(!usersAdd)}
+                        disabled={!usersPage}
+                      /><Label htmlFor='usersAdd'>Add</Label>
+                    </li>
+                    <li className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='usersEdit'
+                        checked={usersEdit}
+                        onChange={() => setUsersEdit(!usersEdit)}
+                        disabled={!usersPage}
+                      /><Label htmlFor='usersEdit'>Edit</Label>
+                    </li>
+                    <li className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='usersDelete'
+                        checked={usersDelete}
+                        onChange={() => setUsersDelete(!usersDelete)}
+                        disabled={!usersPage}
+                      /><Label htmlFor='usersDelete'>Delete</Label>
+                    </li>
+                  </ul>
+                </details>
+              </fieldset>
+            }
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" outline onClick={handleCloseModal} disabled={status === "pendingEditUser"}>
@@ -353,6 +485,7 @@ function Users() {
         </form>
       </Modal>
 
+      {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete User</ModalHeader>
         <ModalBody>Are you sure you want to delete this user?</ModalBody>
@@ -393,8 +526,16 @@ function Users() {
                     </td>
                     <td className='actions'>
                       <div className="actionButtons">
-                        {(u.username !== "admin" || user?.username === "admin") && <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>}
-                        {(u.username !== "admin" && u.username !== user?.username) && <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>}
+                        {
+                          // (user have permission to edit) & (the selected user is not an admin | allow admin to do anything)
+                          (user?.permissions.users.edit) && (u.username !== "admin" || user?.username === "admin") &&
+                          <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>
+                        }
+                        {
+                          // (user have permission to delete) & (the selected user is not an admin | allow admin to do anything)
+                          (user?.permissions.users.delete) && (u.username !== "admin" && u.username !== user?.username) &&
+                          <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>
+                        }
                       </div>
                       
                       <div className='dateInfo'>

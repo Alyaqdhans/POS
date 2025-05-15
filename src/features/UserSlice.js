@@ -80,10 +80,12 @@ export const deleteUser = createAsyncThunk(
 
 export const editUser = createAsyncThunk(
   "users/editUser",
-  async ({userId, password}, {rejectWithValue}) => {
+  async ({userId, username, password, permissions}, {rejectWithValue}) => {
     try {
       const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/editUser/${userId}`, {
+        username: username,
         password: password,
+        permissions: permissions
       });
       const updatedUser = response.data.updatedUser;
       const msg = response.data.msg;

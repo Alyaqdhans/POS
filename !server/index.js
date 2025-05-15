@@ -78,10 +78,10 @@ app.delete("/deleteUser/:id", async (request, response) => {
 app.put("/editUser/:id", async (request, response) => {
   try {
     const userId = request.params.id;
-    const {password} = request.body;
+    const {username, password, permissions} = request.body;
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
-      { password },
+      { username, password, permissions },
       { new: true }
     );
     response.send({msg: "User updated successfully", updatedUser});
