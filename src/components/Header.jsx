@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Nav, Button, Spinner } from 'reactstrap';
 import { getUsers, logout } from '../features/UserSlice';
 import { MdLogout } from 'react-icons/md';
@@ -8,10 +8,11 @@ import { MdLogout } from 'react-icons/md';
 function Header() {
   const { user, userList, status } = useSelector((state) => state.users);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(getUsers());
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     dispatch(logout());
