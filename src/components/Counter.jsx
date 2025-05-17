@@ -16,7 +16,7 @@ function Counter({ initialCount }) {
   }
 
   return (
-    <fieldset className='mt-5'>
+    <fieldset className='m-auto'>
       <legend className='text-center'>Counter</legend>
 
       <h3 data-testid="count" className='text-center'>{count}</h3>

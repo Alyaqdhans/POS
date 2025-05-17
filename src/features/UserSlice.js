@@ -142,6 +142,10 @@ export const userSlice = createSlice({
       .addCase(getUsers.fulfilled, (state, action) => {
         state.status = "success";
         state.userList = action.payload.userList;
+        const userIndex = action.payload.userList.findIndex((user) => user._id === state.user._id);
+        if (userIndex) {
+          state.user = action.payload.userList[userIndex];
+        }
       })
       .addCase(getUsers.rejected, (state, action) => {
         state.status = "rejected";
