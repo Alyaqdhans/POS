@@ -246,7 +246,7 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
 
             {
-              (editUserData?.username.toLowerCase() !== "admin" && user?.permissions.users.permission) &&
+              (user?.permissions.users.permission) &&
               <fieldset>
                 <legend>Permissions</legend>
 

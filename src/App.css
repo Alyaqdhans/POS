@@ -379,6 +379,18 @@ summary .checkbox label {
 .checkbox :is(label, input):hover ~ label::after {
   background: color-mix(in srgb, var(--color) 0%, var(--color) var(--percent)) !important;
 }
+.checkbox #usersPermission:checked {
+  background-color: #b02a37;
+  border-color: #b02a37;
+}
+
+.checkbox #usersPermission:focus {
+  box-shadow: 0 0 0 4px rgba(176, 42, 55, 0.5);
+}
+
+.checkbox #usersPermission:focus {
+  border-color: rgba(176, 42, 55, 0.7);
+}
 
 fieldset ul {
   margin: 0;
