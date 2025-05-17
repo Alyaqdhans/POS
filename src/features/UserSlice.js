@@ -182,7 +182,7 @@ export const userSlice = createSlice({
       .addCase(editUser.fulfilled, (state, action) => {
         state.status = "success";
         if (action.payload.updatedUser._id === state.user._id) {
-          state.user.username = action.payload.updatedUser.username;
+          state.user = action.payload.updatedUser;
         }
         state.userList = state.userList.map(user => 
           (user._id === action.payload.userId) ? action.payload.updatedUser : user

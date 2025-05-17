@@ -357,16 +357,27 @@ summary .checkbox label {
   cursor: default;
 }
 
-.checkbox :is(label, input):hover ~ label::after {
+.checkbox :is(label, input) ~ label::after {
   content: '';
   position: absolute;
   width: var(--hover-width);
   height: 100%;
   left: var(--hover-offset);
   top: 0;
-  background: rgba(0, 0, 0, 0.1);
   border-radius: 0.25rem;
   z-index: -1;
+  --color: black;
+  --percent: 10%;
+}
+
+.checkbox #warn::after {
+  background: rgba(255, 0, 0, 0.1);
+  --color: red;
+  --percent: 20%;
+}
+
+.checkbox :is(label, input):hover ~ label::after {
+  background: color-mix(in srgb, var(--color) 0%, var(--color) var(--percent)) !important;
 }
 
 fieldset ul {

@@ -10,7 +10,8 @@ const UserSchema = mongoose.Schema({
       read: {type: Boolean},
       add: {type: Boolean},
       edit: {type: Boolean},
-      delete: {type: Boolean}
+      delete: {type: Boolean},
+      permission: {type: Boolean}
     },
     products: {
       read: {type: Boolean},

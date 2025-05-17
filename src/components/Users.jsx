@@ -31,6 +31,7 @@ function Users() {
   const [usersAdd, setUsersAdd] = useState(true);
   const [usersEdit, setUsersEdit] = useState(true);
   const [usersDelete, setUsersDelete] = useState(true);
+  const [usersPermission, setUsersPermission] = useState(true);
 
   const [productsPage, setProductsPage] = useState(true);
   const [productsAdd, setProductsAdd] = useState(true);
@@ -44,6 +45,7 @@ function Users() {
     setUsersAdd(false)
     setUsersEdit(false)
     setUsersDelete(false)
+    setUsersPermission(false)
 
     setProductsPage(false)
     setProductsAdd(false)
@@ -62,6 +64,7 @@ function Users() {
     setUsersAdd(user.permissions.users.add)
     setUsersEdit(user.permissions.users.edit)
     setUsersDelete(user.permissions.users.delete)
+    setUsersPermission(user.permissions.users.permission)
 
     setProductsPage(user.permissions.products.read)
     setProductsAdd(user.permissions.products.add)
@@ -116,7 +119,8 @@ function Users() {
             read: usersPage,
             add: usersAdd,
             edit: usersEdit,
-            delete: usersDelete
+            delete: usersDelete,
+            permission: usersPermission
           },
           products: {
             read: productsPage,
@@ -139,7 +143,8 @@ function Users() {
             read: usersPage,
             add: usersAdd,
             edit: usersEdit,
-            delete: usersDelete
+            delete: usersDelete,
+            permission: usersPermission
           },
           products: {
             read: productsPage,
@@ -241,7 +246,7 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
 
             {
-              (editUserData?.username.toLowerCase() !== "admin" && user?.username.toLowerCase() === "admin") &&
+              (editUserData?.username.toLowerCase() !== "admin" && user?.permissions.users.permission) &&
               <fieldset>
                 <legend>Permissions</legend>
 
@@ -334,6 +339,19 @@ function Users() {
                         disabled={!usersPage}
                       /><Label htmlFor='usersDelete'>Delete</Label>
                     </li>
+                    {
+                      (user?.username.toLowerCase() === "admin") &&
+                      <li className='checkbox'>
+                        <input
+                          className='form-check-input'
+                          type="checkbox"
+                          id='usersPermission'
+                          checked={usersPermission}
+                          onChange={() => setUsersPermission(!usersPermission)}
+                          disabled={!usersPage}
+                        /><Label htmlFor='usersPermission' id='warn'>Permission</Label>
+                      </li>
+                    }
                   </ul>
                 </details>
               </fieldset>
@@ -391,7 +409,7 @@ function Users() {
             <p className='error'>{errors.confirm?.message}</p>
 
             {
-              (editUserData?.username.toLowerCase() !== "admin" && user?.username.toLowerCase() === "admin") &&
+              (editUserData?.username.toLowerCase() !== "admin" && user?.permissions.users.permission) &&
               <fieldset>
                 <legend>Permissions</legend>
 
@@ -484,6 +502,19 @@ function Users() {
                         disabled={!usersPage}
                       /><Label htmlFor='usersDelete'>Delete</Label>
                     </li>
+                    {
+                      (user?.username.toLowerCase() === "admin") &&
+                      <li className='checkbox'>
+                        <input
+                          className='form-check-input'
+                          type="checkbox"
+                          id='usersPermission'
+                          checked={usersPermission}
+                          onChange={() => setUsersPermission(!usersPermission)}
+                          disabled={!usersPage}
+                        /><Label htmlFor='usersPermission' id='warn'>Permission</Label>
+                      </li>
+                    }
                   </ul>
                 </details>
               </fieldset>
