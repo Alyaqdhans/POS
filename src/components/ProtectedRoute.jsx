@@ -17,21 +17,15 @@ function ProtectedRoute({children}) {
 
     switch (currentPath) {
       case 'products':
-        if (!user.permissions.products.read) {
-          setDeny(true);
-        } else {
-          setDeny(false);
-        }
+        if (!user?.permissions.products.read) setDeny(true)
+        else setDeny(false)
         break;
       case 'users':
-        if (!user.permissions.users.read) {
-          setDeny(true);
-        } else {
-          setDeny(false);
-        }
+        if (!user?.permissions.users.read) setDeny(true)
+        else setDeny(false)
         break;
       default:
-        setDeny(false);
+        setDeny(false)
         break;
     }
   }, [user]);
