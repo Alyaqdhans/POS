@@ -21,7 +21,7 @@ function Header() {
   const dynamicLink = (e) => (e.isActive ? 'btn btn-primary' : 'btn btn-light')
 
   return (
-    <Nav>
+    <Nav className='Nav'>
       <NavLink to="/" className={dynamicLink}>Home</NavLink>
 
       {
