@@ -250,7 +250,7 @@ function Users() {
                     </span>
                   </summary>
                   <ul>
-                    <li className='checkbox'>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -259,8 +259,8 @@ function Users() {
                         onChange={() => setProductsAdd(!productsAdd)}
                         disabled={!productsPage}
                       /><Label htmlFor='productsAdd'>Add</Label>
-                    </li>
-                    <li className='checkbox'>
+                    </dd>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -269,8 +269,8 @@ function Users() {
                         onChange={() => setProductsEdit(!productsEdit)}
                         disabled={!productsPage}
                       /><Label htmlFor='productsEdit'>Edit</Label>
-                    </li>
-                    <li className='checkbox'>
+                    </dd>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -279,7 +279,7 @@ function Users() {
                         onChange={() => setProductsDelete(!productsDelete)}
                         disabled={!productsPage}
                       /><Label htmlFor='productsDelete'>Delete</Label>
-                    </li>
+                    </dd>
                   </ul>
                 </details>
 
@@ -296,7 +296,7 @@ function Users() {
                     </span>
                   </summary>
                   <ul>
-                    <li className='checkbox'>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -305,8 +305,8 @@ function Users() {
                         onChange={() => setUsersAdd(!usersAdd)}
                         disabled={!usersPage}
                       /><Label htmlFor='usersAdd'>Add</Label>
-                    </li>
-                    <li className='checkbox'>
+                    </dd>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -315,8 +315,8 @@ function Users() {
                         onChange={() => setUsersEdit(!usersEdit)}
                         disabled={!usersPage}
                       /><Label htmlFor='usersEdit'>Edit</Label>
-                    </li>
-                    <li className='checkbox'>
+                    </dd>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -325,10 +325,10 @@ function Users() {
                         onChange={() => setUsersDelete(!usersDelete)}
                         disabled={!usersPage}
                       /><Label htmlFor='usersDelete'>Delete</Label>
-                    </li>
+                    </dd>
                     {
                       (user?.username.toLowerCase() === "admin") &&
-                      <li className='checkbox'>
+                      <dd className='checkbox'>
                         <input
                           className='form-check-input'
                           type="checkbox"
@@ -337,7 +337,7 @@ function Users() {
                           onChange={() => setUsersPermission(!usersPermission)}
                           disabled={!usersPage}
                         /><Label htmlFor='usersPermission' id='warn'>Permission</Label>
-                      </li>
+                      </dd>
                     }
                   </ul>
                 </details>
@@ -413,7 +413,7 @@ function Users() {
                     </span>
                   </summary>
                   <ul>
-                    <li className='checkbox'>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -422,8 +422,8 @@ function Users() {
                         onChange={() => setProductsAdd(!productsAdd)}
                         disabled={!productsPage}
                       /><Label htmlFor='productsAdd'>Add</Label>
-                    </li>
-                    <li className='checkbox'>
+                    </dd>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -432,8 +432,8 @@ function Users() {
                         onChange={() => setProductsEdit(!productsEdit)}
                         disabled={!productsPage}
                       /><Label htmlFor='productsEdit'>Edit</Label>
-                    </li>
-                    <li className='checkbox'>
+                    </dd>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -442,7 +442,7 @@ function Users() {
                         onChange={() => setProductsDelete(!productsDelete)}
                         disabled={!productsPage}
                       /><Label htmlFor='productsDelete'>Delete</Label>
-                    </li>
+                    </dd>
                   </ul>
                 </details>
 
@@ -459,7 +459,7 @@ function Users() {
                     </span>
                   </summary>
                   <ul>
-                    <li className='checkbox'>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -468,8 +468,8 @@ function Users() {
                         onChange={() => setUsersAdd(!usersAdd)}
                         disabled={!usersPage}
                       /><Label htmlFor='usersAdd'>Add</Label>
-                    </li>
-                    <li className='checkbox'>
+                    </dd>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -478,8 +478,8 @@ function Users() {
                         onChange={() => setUsersEdit(!usersEdit)}
                         disabled={!usersPage}
                       /><Label htmlFor='usersEdit'>Edit</Label>
-                    </li>
-                    <li className='checkbox'>
+                    </dd>
+                    <dd className='checkbox'>
                       <input
                         className='form-check-input'
                         type="checkbox"
@@ -488,10 +488,10 @@ function Users() {
                         onChange={() => setUsersDelete(!usersDelete)}
                         disabled={!usersPage}
                       /><Label htmlFor='usersDelete'>Delete</Label>
-                    </li>
+                    </dd>
                     {
                       (user?.username.toLowerCase() === "admin") &&
-                      <li className='checkbox'>
+                      <dd className='checkbox'>
                         <input
                           className='form-check-input'
                           type="checkbox"
@@ -500,7 +500,7 @@ function Users() {
                           onChange={() => setUsersPermission(!usersPermission)}
                           disabled={!usersPage}
                         /><Label htmlFor='usersPermission' id='warn'>Permission</Label>
-                      </li>
+                      </dd>
                     }
                   </ul>
                 </details>

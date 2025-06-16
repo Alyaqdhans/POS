@@ -15,16 +15,16 @@ function Settings() {
     <div className='content'>
       <Nav tabs className='Tabs mt-5'>
         <NL active={location.pathname === '/settings'}>
-          <Link className='link' to='/settings'>Settings</Link>
+          <Link className='link' to='/settings'>System</Link>
         </NL>
         <NL active={location.pathname === '/settings/categories'}>
           <Link className='link' to='/settings/categories'>Categories</Link>
         </NL>
-        <NL active={location.pathname === '/settings/suppliers'}>
-          <Link className='link' to='/settings/suppliers'>Suppliers</Link>
-        </NL>
         <NL active={location.pathname === '/settings/customers'}>
           <Link className='link' to='/settings/customers'>Customers</Link>
+        </NL>
+        <NL active={location.pathname === '/settings/suppliers'}>
+          <Link className='link' to='/settings/suppliers'>Suppliers</Link>
         </NL>
         <NL active={location.pathname === '/settings/payments'}>
           <Link className='link' to='/settings/payments'>Payments</Link>
@@ -37,8 +37,8 @@ function Settings() {
       <Routes>
         <Route path="/" element={<SettingsIndex />} />
         <Route path="/categories" element={<Categories />} />
-        <Route path="/suppliers" element={<Suppliers />} />
         <Route path="/customers" element={<Customers />} />
+        <Route path="/suppliers" element={<Suppliers />} />
         <Route path="/Payments" element={<Payments />} />
         <Route path="/Outlets" element={<Outlets />} />
       </Routes>
