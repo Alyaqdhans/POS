@@ -24,8 +24,8 @@ function Header() {
 
   return (
     <Nav className='Nav'>
-      <NavLink to="/dashboard" className={dynamicLink}><MdDashboard/> Dashboard</NavLink>
       <NavLink to="/" className={dynamicLink}><FaHome/> Home</NavLink>
+      <NavLink to="/dashboard" className={dynamicLink}><MdDashboard/> Dashboard</NavLink>
       {
         (user.permissions.products.read == true) &&
         <NavLink to="/products" className={dynamicLink}><BiSolidPackage/> Products</NavLink>
