@@ -45,6 +45,14 @@ main {
   border-radius: 0 .5rem .5rem 0;
 }
 
+.Nav > *:not(:last-child),
+.Tabs .link > * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .4rem;
+}
+
 .Tabs .link {
   text-decoration: none;
   color: inherit;

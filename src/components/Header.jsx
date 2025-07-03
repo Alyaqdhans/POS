@@ -4,6 +4,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Nav, Button, Spinner } from 'reactstrap';
 import { getUsers, logout } from '../features/UserSlice';
 import { MdLogout } from 'react-icons/md';
+import { FaCog, FaHome, FaUsers } from "react-icons/fa";
+import { BiSolidPackage } from "react-icons/bi";
 
 function Header() {
   const { user, userList, status } = useSelector((state) => state.users);
@@ -22,19 +24,19 @@ function Header() {
 
   return (
     <Nav className='Nav'>
-      <NavLink to="/" className={dynamicLink}>Home</NavLink>
+      <NavLink to="/" className={dynamicLink}><FaHome/> Home</NavLink>
 
       {
         (user.permissions.products.read == true) &&
-        <NavLink to="/products" className={dynamicLink}>Products</NavLink>
+        <NavLink to="/products" className={dynamicLink}><BiSolidPackage/> Products</NavLink>
       }
 
       {
         (user.permissions.users.read == true) &&
-        <NavLink to="/users" className={dynamicLink}> Users ({userList.length})</NavLink>
+        <NavLink to="/users" className={dynamicLink}><FaUsers/> Users ({userList.length})</NavLink>
       }
 
-      <NavLink to="/settings" className={dynamicLink}>Settings</NavLink>
+      <NavLink to="/settings" className={dynamicLink}><FaCog/> Settings</NavLink>
 
       <span className='userInfo'>
         <Button disabled>{user?.username}</Button>
