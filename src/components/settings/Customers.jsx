@@ -1,8 +1,191 @@
-import React from 'react'
+import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form';
+import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
+import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
+import { addCustomerSchemaValidation } from '../../validations/AddCustomerValidation';
+import { editCustomerSchemaValidation } from '../../validations/EditCustomerValidation';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCustomer, clearMsg } from '../../features/CustomerSlice';
+import moment from 'moment';
+import { toast } from 'react-toastify';
 
 function Customers() {
+  const { status, msg, user, customerList } = useSelector((state) => state.customers);
+
+  const [addModal, setAddModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [editCustomerData, setEditCustomerData] = useState();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [dleteCustomerData, setDeleteCustomerData] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobile, setMobile] = useState("");
+
+  const [search, setSearch] = useState("");
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const filterTypes = ['name', 'email', 'mobile'];
+
+  const dispatch = useDispatch();
+
+  const handleAdd = () => {
+    setAddModal(true)
+  }
+
+  const handleEdit = (customer) => {
+    setEditModal(true)
+  }
+
+  const handleDelete = () => {
+    setDeleteModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setAddModal(false);
+    setEditModal(false);
+    setDeleteModal(false);
+    reset();
+  }
+
+  const handleSearch = (query) => {
+    setSearch(query);
+    const filtered = customerList.filter((customer) =>
+      filterTypes.some(type => 
+        customer[type].toLowerCase().includes(query.toLowerCase())
+      )
+    );
+    setFilteredCustomers(filtered);
+  };
+
+  const {register, handleSubmit, formState: {errors}, reset} = useForm({
+    resolver: yupResolver(addModal ? addCustomerSchemaValidation : editCustomerSchemaValidation),
+  })
+
+  const onSubmit = () => {
+    if (addModal) {
+      const customerData = {
+        name: name,
+        email: email,
+        mobile: mobile,
+      }
+      dispatch(addCustomer(customerData));
+    }
+    handleCloseModal();
+  };
+
+  useEffect(() => {
+    if (status === "success") toast.success(msg);
+    if (status === "rejected") toast.error(msg);
+    dispatch(clearMsg());
+    
+    setFilteredCustomers(customerList);
+    handleSearch(search);
+  }, [status]);
+
   return (
-    <div>Customers</div>
+    <div className='content'>
+      <div className='search-section'>
+        <div className='search'>
+          <input type='search' placeholder={`search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
+          <FaSearch size={20}/>
+        </div>
+        <Button color='info' onClick={handleAdd}>Add Customer</Button>
+      </div>
+      {/* Add Modal */}
+      <Modal centered isOpen={addModal}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <ModalHeader>Add Customer</ModalHeader>
+          <ModalBody>
+            <Label htmlFor='name'>Name</Label>
+            <input
+              id='name'
+              type='text'
+              placeholder='Enter Name'
+              className={'form-control' + (errors.name ? 'is-invalid' : '')}
+              {...register("name", {onChange: (e) => setName(e.target.value)})}
+              readOnly={status === "pendingAddCustomer"}
+            />
+            <p className='error'>{errors.name?.message}</p>
+
+            <Label htmlFor='email'>Email</Label>
+            <input
+              id='email'
+              type='text'
+              placeholder='Enter Email'
+              className={'form-control' + (errors.email ? 'is-invalid' : '')}
+              {...register("email", {onChange: (e) => setEmail(e.target.value)})}
+              readOnly={status === "pendingAddCustomer"}
+            />
+            <p className='error'>{errors.email?.message}</p>
+
+            <Label htmlFor='mobile'>Phone Number</Label>
+            <input
+              id='mobile'
+              type='number'
+              placeholder='Enter Phone Number'
+              className={'form-control' + (errors.mobile ? 'in-invalid' : '')}
+              {...register("mobile", {onChange: (e) => setMobile(e.target.value)})}
+              readOnly={status === "pendingAddCustomer"}
+            />
+            <p className='error'>{errors.mobile?.message}</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingAddCustomer"}>
+              Cancel
+            </Button>
+            <Button color='info' type='submit' disabled={status === "pendingAddCustomer"}>
+              {(status === "pendingAddCustomer") && <Spinner size='sm' />}Save
+            </Button>
+          </ModalFooter>
+        </form>
+      </Modal>
+
+      <div className='content-display'>
+        {
+          filteredCustomers.length ?
+          <Table striped>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                filteredCustomers?.map((c) => (
+                  <tr key={c._id}>
+                    <td>{c.name}</td>
+                    <td>{c.email}</td>
+                    <td>{c.mobile}</td>
+                    <td className='actions'>
+                      <div className='actionButtons' style={{minHeight: "37px"}}>
+                        {
+                          // perminssion
+                          <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
+                        }
+                        {
+                          // permission
+                          <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
+                        }
+                      </div>
+
+                      <div className='dateInfo'>
+                        Created: {moment(c.createdAt).format('D/M/yyy')} | Modified: {moment(c.updatedAt).format('D/M/yyy')}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </Table> :
+          <div className='no-result'>
+            <h1><FaSearch />No matching results</h1>
+          </div>
+        }
+      </div>
+    </div>
   )
 }
 

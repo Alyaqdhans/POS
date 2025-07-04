@@ -1,8 +1,9 @@
-import express from "express";
+import express, { request, response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import UserModel from "./models/UserModel.js";
 import dotenv from "dotenv";
+import CustomerModel from "./models/CustomerModel.js";
 
 dotenv.config()
 
@@ -92,6 +93,33 @@ app.put("/editUser/:id", async (request, response) => {
     response.send({msg: "User updated successfully", updatedUser});
   } catch (error) {
     response.status(500).json({error: "Failed to update user"});
+  }
+});
+
+// Add Customer
+app.post("/addCustomer", async (request, response) => {
+  try {
+    const { name, email, mobile } = request.body;
+    const customer = await CustomerModel.findOne({email: email});
+    if (customer) {
+      response.status(409).json({msg: "Email used already exists"});
+    } else {
+      const addCustomer = CustomerModel({name, email, mobile});
+      await addCustomer.save();
+      response.send({msg: "Customer addes successfully", addCustomer: addCustomer});
+    }
+  } catch (error) {
+    response.status(500).json({error: "Failed to add customer"});
+  }
+});
+
+// Get Customers
+app.get("/getCustomers", async (request, response) => {
+  try {
+    const customerList = await CustomerModel.find();
+    response.send({customerList: customerList});
+  } catch (error) {
+    response.status(500).json({error: "Unexpected error oucerred"});
   }
 });
 
