@@ -5,7 +5,7 @@ import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { addCustomerSchemaValidation } from '../../validations/AddCustomerValidation';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCustomer, clearMsg } from '../../features/CustomerSlice';
+import { addCustomer, clearMsg, getCustomers } from '../../features/CustomerSlice';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { editUserSchemaValidation } from '../../validations/EditCustomerValidation';
@@ -50,16 +50,15 @@ function Customers() {
     reset();
   }
 
-const handleSearch = (query) => {
-  setSearch(query);
-  const filtered = customerList.filter(customer =>
-    filterTypes.some(type => {
-      const value = customer[type];
-      return value?.toString().toLowerCase().includes(query.toLowerCase());
-    })
-  );
-  setFilteredCustomers(filtered);
-};
+  const handleSearch = (query) => {
+    setSearch(query);
+    const filtered = customerList.filter(customer =>
+      filterTypes.some(type => 
+        customer[type]?.toLowerCase().includes(query.toLowerCase())
+      )
+    );
+    setFilteredCustomers(filtered);
+  };
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
     resolver: yupResolver(addModal ? addCustomerSchemaValidation : editUserSchemaValidation),
@@ -82,6 +81,7 @@ const handleSearch = (query) => {
     if (status === "rejected") toast.error(msg);
     dispatch(clearMsg());
     
+    dispatch(getCustomers());
     setFilteredCustomers(customerList);
     handleSearch(search);
   }, [status]);
@@ -105,7 +105,7 @@ const handleSearch = (query) => {
               id='name'
               type='text'
               placeholder='Enter Name'
-              className={'form-control' + (errors.name ? 'is-invalid' : '')}
+              className={'form-control' + (errors.name ? ' is-invalid' : '')}
               {...register("name", {onChange: (e) => setName(e.target.value)})}
               readOnly={status === "pendingAddCustomer"}
             />
@@ -116,7 +116,7 @@ const handleSearch = (query) => {
               id='email'
               type='text'
               placeholder='Enter Email'
-              className={'form-control' + (errors.email ? 'is-invalid' : '')}
+              className={'form-control' + (errors.email ? ' is-invalid' : '')}
               {...register("email", {onChange: (e) => setEmail(e.target.value)})}
               readOnly={status === "pendingAddCustomer"}
             />
@@ -127,7 +127,7 @@ const handleSearch = (query) => {
               id='mobile'
               type='text'
               placeholder='Enter Phone Number'
-              className={'form-control' + (errors.mobile ? 'is-invalid' : '')}
+              className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
               {...register("mobile", {onChange: (e) => setMobile(e.target.value)})}
               readOnly={status === "pendingAddCustomer"}
             />
@@ -153,6 +153,7 @@ const handleSearch = (query) => {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Mobile</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -164,14 +165,8 @@ const handleSearch = (query) => {
                     <td>{c.mobile}</td>
                     <td className='actions'>
                       <div className='actionButtons' style={{minHeight: "37px"}}>
-                        {
-                          // perminssion
-                          <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
-                        }
-                        {
-                          // permission
-                          <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
-                        }
+                        <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
+                        <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
                       </div>
 
                       <div className='dateInfo'>

@@ -193,7 +193,7 @@ function Users() {
               id='username'
               type='text'
               placeholder='Enter Username'
-              className={'form-control ' + (errors.username ? 'is-invalid' : '')}
+              className={'form-control' + (errors.username ? ' is-invalid' : '')}
               {...register("username", { onChange: (e) => setUsername(e.target.value) })}
               readOnly={status === "pendingAddUser"}
             />
@@ -204,7 +204,7 @@ function Users() {
               id='email'
               type='text'
               placeholder='Enter Email'
-              className={'form-control ' + (errors.email ? 'is-invalid' : '')}
+              className={'form-control' + (errors.email ? ' is-invalid' : '')}
               {...register("email", { onChange: (e) => setEmail(e.target.value) })}
               readOnly={status === "pendingAddUser"}
             />
@@ -215,7 +215,7 @@ function Users() {
               id='password'
               type='password'
               placeholder='Enter Password'
-              className={'form-control ' + (errors.password ? 'is-invalid' : '')}
+              className={'form-control' + (errors.password ? ' is-invalid' : '')}
               {...register("password", { onChange: (e) => setPassword(e.target.value) })}
               readOnly={status === "pendingAddUser"}
             />
@@ -366,7 +366,7 @@ function Users() {
               type='text'
               placeholder='Enter Username'
               value={username}
-              className={'form-control ' + (errors.username ? 'is-invalid' : '')}
+              className={'form-control' + (errors.username ? ' is-invalid' : '')}
               disabled={editUserData?.username.toLowerCase() === "admin"}
               {...register("username", { onChange: (e) => setUsername(e.target.value) })}
             />
@@ -378,7 +378,7 @@ function Users() {
               type='password'
               placeholder='Enter New Password'
               value={password}
-              className={'form-control ' + (errors.password ? 'is-invalid' : '')}
+              className={'form-control' + (errors.password ? ' is-invalid' : '')}
               {...register("password", { onChange: (e) => setPassword(e.target.value) })}
               readOnly={status === "pendingEditUser"}
             />
@@ -389,7 +389,7 @@ function Users() {
               id='confirm'
               type='password'
               placeholder='Confirm New Password'
-              className={'form-control ' + (errors.confirm ? 'is-invalid' : '')}
+              className={'form-control' + (errors.confirm ? ' is-invalid' : '')}
               {...register("confirm")}
               readOnly={status === "pendingEditUser"}
             />
