@@ -14,11 +14,12 @@ export const addCustomer = createAsyncThunk(
         try {
             const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/addCustomer`, {
                 name: customerData.name,
-                email: customerData.name,
-                mobile: customerData.name,
+                email: customerData.email,
+                mobile: customerData.mobile,
             });
         const msg = response.data.msg;
-        return msg;
+        const addCustomer = response.data;
+        return { msg, addCustomer };
         } catch (error) {
             const msg = error.response.data.msg;
             return rejectWithValue({msg});
@@ -67,7 +68,7 @@ export const customerSlice = createSlice({
             state.status = "success";
             state.customerList = action.payload.customerList;
             const customerIndex = action.payload.customerList.findIndex((customer) => customer._id === state.customer._id);
-            if (customerIndex) {
+            if (customerIndex !== -1) {
                 state.customer = action.payload.customerList[customerIndex];
             }
         })

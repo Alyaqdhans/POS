@@ -106,7 +106,7 @@ app.post("/addCustomer", async (request, response) => {
     } else {
       const addCustomer = CustomerModel({name, email, mobile});
       await addCustomer.save();
-      response.send({msg: "Customer addes successfully", addCustomer: addCustomer});
+      response.send({msg: "Customer addes successfully", addCustomer});
     }
   } catch (error) {
     response.status(500).json({error: "Failed to add customer"});

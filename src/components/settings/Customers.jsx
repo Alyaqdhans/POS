@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { addCustomerSchemaValidation } from '../../validations/AddCustomerValidation';
-import { editCustomerSchemaValidation } from '../../validations/EditCustomerValidation';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCustomer, clearMsg } from '../../features/CustomerSlice';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { editUserSchemaValidation } from '../../validations/EditCustomerValidation';
 
 function Customers() {
   const { status, msg, user, customerList } = useSelector((state) => state.customers);
@@ -34,10 +34,12 @@ function Customers() {
   }
 
   const handleEdit = (customer) => {
+    setEditCustomerData(customer)
     setEditModal(true)
   }
 
-  const handleDelete = () => {
+  const handleDelete = (custumerId) => {
+    setDeleteCustomerData(custumerId)
     setDeleteModal(true)
   }
 
@@ -48,18 +50,19 @@ function Customers() {
     reset();
   }
 
-  const handleSearch = (query) => {
-    setSearch(query);
-    const filtered = customerList.filter((customer) =>
-      filterTypes.some(type => 
-        customer[type].toLowerCase().includes(query.toLowerCase())
-      )
-    );
-    setFilteredCustomers(filtered);
-  };
+const handleSearch = (query) => {
+  setSearch(query);
+  const filtered = customerList.filter(customer =>
+    filterTypes.some(type => {
+      const value = customer[type];
+      return value?.toString().toLowerCase().includes(query.toLowerCase());
+    })
+  );
+  setFilteredCustomers(filtered);
+};
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
-    resolver: yupResolver(addModal ? addCustomerSchemaValidation : editCustomerSchemaValidation),
+    resolver: yupResolver(addModal ? addCustomerSchemaValidation : editUserSchemaValidation),
   })
 
   const onSubmit = () => {
@@ -122,9 +125,9 @@ function Customers() {
             <Label htmlFor='mobile'>Phone Number</Label>
             <input
               id='mobile'
-              type='number'
+              type='text'
               placeholder='Enter Phone Number'
-              className={'form-control' + (errors.mobile ? 'in-invalid' : '')}
+              className={'form-control' + (errors.mobile ? 'is-invalid' : '')}
               {...register("mobile", {onChange: (e) => setMobile(e.target.value)})}
               readOnly={status === "pendingAddCustomer"}
             />
@@ -172,7 +175,7 @@ function Customers() {
                       </div>
 
                       <div className='dateInfo'>
-                        Created: {moment(c.createdAt).format('D/M/yyy')} | Modified: {moment(c.updatedAt).format('D/M/yyy')}
+                        Created: {moment(c.createdAt).format('D/M/yyyy')} | Modified: {moment(c.updatedAt).format('D/M/yyyy')}
                       </div>
                     </td>
                   </tr>
