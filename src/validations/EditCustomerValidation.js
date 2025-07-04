@@ -5,6 +5,6 @@ export const editUserSchemaValidation = yup.object().shape({
         .string()
         .required("Name is required"),
     mobile: yup
-        .string()
+        .number("Must be a number")
         .required("Phone number is required"),
 })

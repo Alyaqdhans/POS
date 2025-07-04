@@ -123,4 +123,32 @@ app.get("/getCustomers", async (request, response) => {
   }
 });
 
+// Delete Customer
+app.delete("/deleteCustomer/:id", async (request, response) => {
+  try {
+    const customerId = request.params.id;
+    await CustomerModel.findByIdAndDelete(customerId);
+    response.send({msg: "Customer delete successfully"});
+  } catch (error) {
+    response.status(500).json({error: "Faild to delete customer"});
+  }
+});
+
+// Edit Customer
+app.put("/editCustomer/:id", async (request, response) => {
+  try {
+    const customerId = request.params.id;
+    const {name, mobile} = request.body;
+    const updatedCustomer = await CustomerModel.findByIdAndUpdate(
+      customerId,
+      { name, mobile },
+      { new: true }
+    );
+    response.send({msg: "Customer updated successfully", updatedCustomer});
+    console.log(updatedCustomer);
+  } catch (error) {
+    response.status(500).json({error: "Failed to update customer"});
+  }
+});
+
 app.listen(process.env.PORT, () => console.log(`server is connected to port ${process.env.PORT}`));

@@ -5,7 +5,7 @@ import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { addCustomerSchemaValidation } from '../../validations/AddCustomerValidation';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCustomer, clearMsg, getCustomers } from '../../features/CustomerSlice';
+import { addCustomer, clearMsg, deleteCustomr, editCustomer, getCustomers } from '../../features/CustomerSlice';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { editUserSchemaValidation } from '../../validations/EditCustomerValidation';
@@ -17,7 +17,7 @@ function Customers() {
   const [editModal, setEditModal] = useState(false);
   const [editCustomerData, setEditCustomerData] = useState();
   const [deleteModal, setDeleteModal] = useState(false);
-  const [dleteCustomerData, setDeleteCustomerData] = useState(false);
+  const [deleteCustomerData, setDeleteCustomerData] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,12 +35,20 @@ function Customers() {
 
   const handleEdit = (customer) => {
     setEditCustomerData(customer)
+    setName(customer.name)
+    setEmail(customer.email)
+    setMobile(customer.mobile)
     setEditModal(true)
   }
 
   const handleDelete = (custumerId) => {
     setDeleteCustomerData(custumerId)
     setDeleteModal(true)
+  }
+
+  const performDelete = () => {
+    dispatch(deleteCustomr(deleteCustomerData));
+    setDeleteModal(false);
   }
 
   const handleCloseModal = () => {
@@ -73,6 +81,15 @@ function Customers() {
       }
       dispatch(addCustomer(customerData));
     }
+
+    if (editModal) {
+      const customerData = {
+        customerId: editCustomerData._id,
+        name: name,
+        mobile: mobile,
+      }
+      dispatch(editCustomer(customerData));
+    }
     handleCloseModal();
   };
 
@@ -81,10 +98,13 @@ function Customers() {
     if (status === "rejected") toast.error(msg);
     dispatch(clearMsg());
     
-    dispatch(getCustomers());
     setFilteredCustomers(customerList);
     handleSearch(search);
   }, [status]);
+
+  useEffect(() => {
+    dispatch(getCustomers());
+  }, [customerList]);
 
   return (
     <div className='content'>
@@ -142,6 +162,58 @@ function Customers() {
             </Button>
           </ModalFooter>
         </form>
+      </Modal>
+
+      {/* Edit Modal */}
+      <Modal centered isOpen={editModal}>
+        <form onSubmit={handleSubmit(onSubmit)}> 
+          <ModalHeader>Edit Customer ({editCustomerData?.email})</ModalHeader>
+          <ModalBody>
+            <Label htmlFor='name'>Name</Label>
+            <input
+              id='name'
+              type='text'
+              placeholder='Enter Name'
+              value={name}
+              className={'form-control' + (errors.name ? ' is-invalid' : '')}
+              {...register("name", { onChange: (e) => setName(e.target.value) })}
+            />
+            <p className='error'>{errors.name?.message}</p>
+
+            <Label htmlFor='nobile'>Phone Number</Label>
+            <input
+              id='mobile'
+              type='text'
+              placeholder='Enter Phone Number'
+              value={mobile}
+              className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
+              {...register("mobile", { onChange: (e) => setMobile(e.target.value) })}
+            />
+            <p className='error'>{errors.mobile?.message}</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingEditCustomer"}>
+              Cancel
+            </Button>
+            <Button color='warning' type='submit' disabled={status === "pendingEditCustomer"}>
+              {(status === "pendingEditCustomer") && <Spinner size='sm' />} Save
+            </Button>
+          </ModalFooter>
+        </form>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal centered isOpen={deleteModal}>
+        <ModalHeader>Delete Customer</ModalHeader>
+        <ModalBody>Are you sure you want to delete this Customer?</ModalBody>
+        <ModalFooter>
+          <Button color="secondary" outline onClick={handleCloseModal} disabled={status === "pendingDeleteCustomer"}>
+            Cancel
+          </Button>
+          <Button color='danger' onClick={performDelete} disabled={status === "pendingDeleteCustomer"}>
+            {(status === "pendingDeleteCustomer") && <Spinner size='sm' />} Permanently Delete
+          </Button>
+        </ModalFooter>
       </Modal>
 
       <div className='content-display'>
