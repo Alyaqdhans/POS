@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
-import { Nav, NavLink as NL } from 'reactstrap'
+import { Nav, NavLink } from 'reactstrap'
 import System from "./settings/System";
 import Categories from "./settings/Categories";
 import Suppliers from "./settings/Suppliers";
@@ -17,24 +17,24 @@ function Settings() {
   return (
     <div className='content'>
       <Nav tabs className='Tabs mt-5'>
-        <Link className='link' to='/settings'>
-          <NL active={location.pathname === '/settings'}><LuWrench/> System</NL>
-        </Link>
-        <Link className='link' to='/settings/categories'>
-          <NL active={location.pathname === '/settings/categories'}><MdLabelOutline/> Categories</NL>
-        </Link>
-        <Link className='link' to='/settings/customers'>
-          <NL active={location.pathname === '/settings/customers'}><LuUsersRound/> Customers</NL>
-        </Link>
-        <Link className='link' to='/settings/suppliers'>
-          <NL active={location.pathname === '/settings/suppliers'}><LuPackageOpen/> Suppliers</NL>
-        </Link>
-        <Link className='link' to='/settings/payments'>
-          <NL active={location.pathname === '/settings/payments'}><FaRegCreditCard/> Payments</NL>
-        </Link>
-        <Link className='link' to='/settings/outlets'>
-          <NL active={location.pathname === '/settings/outlets'}><FaCodeBranch/> Outlets</NL>
-        </Link>
+        <NavLink tag={Link} className='link' to='/settings' active={location.pathname === '/settings'}>
+          <LuWrench/> System
+        </NavLink>
+        <NavLink tag={Link} className='link' to='/settings/categories' active={location.pathname === '/settings/categories'}>
+          <MdLabelOutline/> Categories
+        </NavLink>
+        <NavLink tag={Link} className='link' to='/settings/customers' active={location.pathname === '/settings/customers'}>
+          <LuUsersRound/> Customers
+        </NavLink>
+        <NavLink tag={Link} className='link' to='/settings/suppliers' active={location.pathname === '/settings/suppliers'}>
+          <LuPackageOpen/> Suppliers
+        </NavLink>
+        <NavLink tag={Link} className='link' to='/settings/payments' active={location.pathname === '/settings/payments'}>
+          <FaRegCreditCard/> Payments
+        </NavLink>
+        <NavLink tag={Link} className='link' to='/settings/outlets' active={location.pathname === '/settings/outlets'}>
+          <FaCodeBranch/> Outlets
+        </NavLink>
       </Nav>
 
       <Routes>

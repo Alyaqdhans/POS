@@ -46,7 +46,7 @@ main {
 }
 
 .Nav > *:not(:last-child),
-.Tabs .link > * {
+.Tabs .link {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,6 +55,9 @@ main {
 
 .Tabs .link {
   text-decoration: none;
+}
+
+.Tabs .link:disabled {
   color: inherit;
 }
 
