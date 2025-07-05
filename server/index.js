@@ -4,6 +4,7 @@ import cors from "cors";
 import UserModel from "./models/UserModel.js";
 import dotenv from "dotenv";
 import CustomerModel from "./models/CustomerModel.js";
+import SupplierModel from "./models/SupplierModel.js";
 
 dotenv.config()
 
@@ -106,7 +107,7 @@ app.post("/addCustomer", async (request, response) => {
     } else {
       const addCustomer = CustomerModel({name, email, mobile});
       await addCustomer.save();
-      response.send({msg: "Customer addes successfully", addCustomer});
+      response.send({msg: "Customer added successfully", addCustomer});
     }
   } catch (error) {
     response.status(500).json({error: "Failed to add customer"});
@@ -148,6 +149,23 @@ app.put("/editCustomer/:id", async (request, response) => {
     console.log(updatedCustomer);
   } catch (error) {
     response.status(500).json({error: "Failed to update customer"});
+  }
+});
+
+// Add Supplier
+app.post("/addSupplier", async (request, response) => {
+  try {
+    const { name, email, mobile, fax, address, tax } = request.body;
+    const supplier = await SupplierModel.findOne({email: email});
+    if (supplier) {
+      response.status(409).json({msg: "Email used already exists"});
+    } else {
+      const addSupplier = SupplierModel({name, email, mobile, fax, address, tax});
+      await addSupplier.save();
+      response.send({msg: "Supplier added successfully"});
+    }
+  } catch (error) {
+    response.status(500).json({msg: "Failed to add supplier"});
   }
 });
 

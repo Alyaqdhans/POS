@@ -6,7 +6,8 @@ export const addCustomerSchemaValidation = yup.object().shape({
         .required("Name is required"),
     email: yup
         .string()
-        .email("Not valid email format"),
+        .email("Not valid email format")
+        .required("Email is required"),
     mobile: yup
         .number("Must be a number")
         .required("phone number is required"),
