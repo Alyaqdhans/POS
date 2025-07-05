@@ -5,7 +5,7 @@ import System from "./settings/System";
 import Categories from "./settings/Categories";
 import Suppliers from "./settings/Suppliers";
 import Customers from "./settings/Customers";
-import Outlets from "./settings/Outlets";
+import Branches from "./settings/Branches";
 import Payments from "./settings/Payments";
 import { LuPackageOpen, LuUsersRound, LuWrench } from "react-icons/lu";
 import { MdLabelOutline } from 'react-icons/md';
@@ -16,7 +16,7 @@ function Settings() {
 
   return (
     <div className='content'>
-      <Nav tabs className='Tabs mt-5'>
+      <Nav tabs className='Tabs'>
         <NavLink tag={Link} className='link' to='/settings' active={location.pathname === '/settings'}>
           <LuWrench/> System
         </NavLink>
@@ -32,8 +32,8 @@ function Settings() {
         <NavLink tag={Link} className='link' to='/settings/payments' active={location.pathname === '/settings/payments'}>
           <FaRegCreditCard/> Payments
         </NavLink>
-        <NavLink tag={Link} className='link' to='/settings/outlets' active={location.pathname === '/settings/outlets'}>
-          <FaCodeBranch/> Outlets
+        <NavLink tag={Link} className='link' to='/settings/branches' active={location.pathname === '/settings/branches'}>
+          <FaCodeBranch/> Branches
         </NavLink>
       </Nav>
 
@@ -42,8 +42,8 @@ function Settings() {
         <Route path="/categories" element={<Categories />} />
         <Route path="/customers" element={<Customers />} />
         <Route path="/suppliers" element={<Suppliers />} />
-        <Route path="/Payments" element={<Payments />} />
-        <Route path="/Outlets" element={<Outlets />} />
+        <Route path="/payments" element={<Payments />} />
+        <Route path="/branches" element={<Branches />} />
       </Routes>
     </div>
   )

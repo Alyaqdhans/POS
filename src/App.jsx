@@ -30,7 +30,7 @@ function App() {
         <Route path="/settings/*" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {user && <Footer />}
+      {/* {user && <Footer />} */}
     </main>
   )
 }

@@ -110,7 +110,7 @@ function Customers() {
     <div className='content'>
       <div className='search-section'>
         <div className='search'>
-          <input type='search' placeholder={`search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
+          <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20}/>
         </div>
         <Button color='info' onClick={handleAdd}>Add Customer</Button>
@@ -216,7 +216,7 @@ function Customers() {
         </ModalFooter>
       </Modal>
 
-      <div className='content-display'>
+      <div className='content-display settings'>
         {
           filteredCustomers.length ?
           <Table striped>

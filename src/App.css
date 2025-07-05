@@ -23,7 +23,7 @@ main {
   width: 100%;
   background: lightgray;
   gap: 0.5rem;
-  padding-block: 1rem;
+  padding: 1rem;
 }
 
 .Nav > :last-child {
@@ -45,6 +45,11 @@ main {
   border-radius: 0 .5rem .5rem 0;
 }
 
+.Tabs {
+  margin-top: 2rem;
+  margin-inline: 2rem;
+}
+
 .Nav > *:not(:last-child),
 .Tabs .link {
   display: flex;
@@ -53,21 +58,12 @@ main {
   gap: .3rem;
 }
 
-.Tabs .link {
-  text-decoration: none;
-}
-
-.Tabs .link:disabled {
-  color: inherit;
-}
-
 footer {
   background: lightgrey;
   width: 100%;
   text-align: center;
   padding-block: 0.5rem;
   color: grey;
-  margin-top: 4rem;
 }
 
 footer h6 {
@@ -225,11 +221,14 @@ hr {
 .content-display {
   background: lightgrey;
   width: 90%;
-  margin-inline: 1rem;
   border-radius: 0.5rem;
   padding: 1rem;
-  height: 40rem;
   overflow-y: auto;
+  margin-bottom: 2rem;
+  flex: 1 1 0;
+  min-height: 200px;
+  min-width: 300px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .content-display .no-result {
@@ -244,6 +243,13 @@ hr {
   padding: 1rem;
   border-radius: 1rem;
   color: grey;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.content-display .no-result h1 :first-child {
+  font-size: 27px;
 }
 
 .content-display::-webkit-scrollbar {

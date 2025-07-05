@@ -62,7 +62,7 @@ app.post("/addUser", async (request, response) => {
     } else {
       const addUser = UserModel({username, email, password, permissions});
       await addUser.save();
-      response.send({msg: "User added successfully", addUser: addUser});
+      response.send({msg: "User added successfully", addUser});
     }
   } catch (error) {
     response.status(500).json({error: "Failed to add user"});
