@@ -1,14 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { FaSearch } from 'react-icons/fa';
+import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from 'reactstrap';
+import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { addSupplierSchemaValidation } from '../../validations/AddSupplierValidation';
 import { editSupplierSchemaValidation } from '../../validations/EditSupplierValidation';
-import { addSupplier } from '../../features/SupplierSlice';
+import { addSupplier, deleteSupplier, editSupplier, getSuppliers, clearMsg } from '../../features/SupplierSlice';
 import { toast } from 'react-toastify';
-import { clearMsg } from '../../features/CustomerSlice';
+import moment from 'moment';
 
 function Suppliers() {
   const { status, msg, supplierList } = useSelector((state) => state.suppliers);
@@ -34,6 +34,27 @@ function Suppliers() {
 
   const handleAdd = () => {
     setAddModal(true)
+  }
+
+  const handleEdit = (supplier) => {
+    setEditSupplierData(supplier)
+    setName(supplier.name)
+    setEmail(supplier.email)
+    setMobile(supplier.mobile)
+    setFax(supplier.fax)
+    setAddress(supplier.address)
+    setTax(supplier.tax)
+    setEditModal(true)
+  }
+
+  const handleDelete = (supplierId) => {
+    setDeleteSupplierData(supplierId)
+    setDeleteModal(true)
+  }
+
+  const performDelete = () => {
+    dispatch(deleteSupplier(deleteSupplierData));
+    setDeleteModal(false);
   }
 
   const handleCloseModal = () => {
@@ -71,14 +92,22 @@ function Suppliers() {
     }
 
     if (editModal) {
-
+      const supplierData = {
+        supplierId: editSupplierData._id,
+        name: name,
+        mobile: mobile,
+        fax: fax,
+        address: address,
+        tax: tax,
+      }
+      dispatch(editSupplier(supplierData));
     }
     handleCloseModal();
   }
 
   useEffect(() => {
     if (status === "success") toast.success(msg);
-    if (status === "rejected") toast.success(msg);
+    if (status === "rejected") toast.error(msg);
     dispatch(clearMsg());
 
     setFilteredSuppliers(supplierList);
@@ -86,7 +115,7 @@ function Suppliers() {
   }, [status]);
 
   useEffect(() => {
-
+    dispatch(getSuppliers());
   }, [supplierList]);
 
   return (
@@ -180,7 +209,136 @@ function Suppliers() {
         </form>
       </Modal>
 
+      {/* Edit Modal */}
+      <Modal centered isOpen={editModal}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <ModalHeader>Edit Supplier ({editSupplierData?.email}) </ModalHeader>
+          <ModalBody>
+            <Label htmlFor='name'>Name</Label>
+            <input
+              id='name'
+              type='text'
+              placeholder='Enter Name'
+              value={name}
+              className={'form-control' + (errors.name ? ' is-invalid' : '')}
+              {...register("name", { onChange: (e) => setName(e.target.value) })}
+            />
+            <p className='error'>{errors.name?.message}</p>
 
+            <Label htmlFor='mobile'>Phone Number</Label>
+            <input
+              id='mobile'
+              type='text'
+              placeholder='Enter Phone Number'
+              value={mobile}
+              className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
+              {...register("mobile", { onChange: (e) => setMobile(e.target.value) })}
+            />
+            <p className='error'>{errors.mobile?.message}</p>
+
+            <Label htmlFor='fax'></Label>
+            <input
+              id='fax'
+              type='text'
+              placeholder='Enter Tax'
+              value={tax}
+              className={'form-control' + (errors.fax ? ' is-invalid' : '')}
+              {...register("fax", { onChange: (e) => setFax(e.target.value) })}
+            />
+            <p className='error'>{errors.fax?.message}</p>
+
+            <Label htmlFor='address'>Address</Label>
+            <input
+              id='address'
+              type='text'
+              placeholder='Enter Address'
+              value={address}
+              className={'form-control' + (errors.address ? ' is-invalid' : '')}
+              {...register("address", { onChange: (e) => setAddress(e.target.value) })}
+            />
+            <p className='error'>{errors.address?.message}</p>
+
+            <Label htmlFor='tax'></Label>
+            <input
+              id='tax'
+              type='text'
+              placeholder='Enter Address'
+              value={tax}
+              className={'form-control' + (errors.tax ? ' is-invalid' : '')}
+              {...register("tax", { onChange: (e) => setTax(e.target.value) })}
+            />
+            <p className='error'>{errors.tax?.message}</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingEditSupplier"}>
+              Cancel
+            </Button>
+            <Button color='warning' type='submit' disabled={status === "pendingEditSupplier"}>
+              {(status === "pendingEditSupplier") && <Spinner size='sm' />} Save
+            </Button>
+          </ModalFooter>
+        </form>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal centered isOpen={deleteModal}>
+        <ModalHeader>Delete Supplier</ModalHeader>
+        <ModalBody>Are you sure you want to delete this Aupplier?</ModalBody>
+        <ModalFooter>
+          <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteSupplier"}>
+            Cancel
+          </Button>
+          <Button color='danger' onClick={performDelete} disabled={status === "pendingDeleteSupplier"}>
+            {(status === "pendingDeleteSupplier") && <Spinner size='sm' />} Permanently Delete
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <div className='content-display settings'>
+        {
+          filteredSuppliers.length ?
+          <Table striped>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Fax</th>
+                <th>Address</th>
+                <th>Tax</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                filteredSuppliers?.map((s) => (
+                  <tr key={s._id}>
+                    <td>{s.name}</td>
+                    <td>{s.email}</td>
+                    <td>{s.mobile}</td>
+                    <td>{s.fax}</td>
+                    <td>{s.address}</td>
+                    <td>{s.tax}</td>
+                    <td className='actions'>
+                      <div className='actionButtons' style={{minHeight: "37xp"}}>
+                        <Button color='warning' onClick={() => handleEdit(s)}><FaEdit /></Button>
+                        <Button color='danger' onClick={() => handleDelete(s._id)}><FaTrashAlt /></Button>
+                      </div>
+
+                      <div className='dateInfo'>
+                        Created: {moment(s.createdAt).format('D/M/yyyy')} | Modified: {moment(s.updatedAt).format('D/M/yyyy')}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </Table> : 
+          <div className='no-result'>
+            <h1><FaSearch />No matching results</h1>
+          </div>
+        }
+      </div>
     </div>
   )
 }

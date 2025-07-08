@@ -146,7 +146,6 @@ app.put("/editCustomer/:id", async (request, response) => {
       { new: true }
     );
     response.send({msg: "Customer updated successfully", updatedCustomer});
-    console.log(updatedCustomer);
   } catch (error) {
     response.status(500).json({error: "Failed to update customer"});
   }
@@ -166,6 +165,43 @@ app.post("/addSupplier", async (request, response) => {
     }
   } catch (error) {
     response.status(500).json({msg: "Failed to add supplier"});
+  }
+});
+
+// Get Suppliers
+app.get("/getSuppliers", async (request, response) => {
+  try {
+    const supplierList = await SupplierModel.find();
+    response.send({supplierList: supplierList});
+  } catch (error) {
+    response.status(500).json({error: "Unexpected error oucerred"});
+  }
+});
+
+// Edit Supplier
+app.put("/editSupplier/:id", async (request, response) => {
+  try {
+    const supplierId = request.params.id;
+    const { name, mobile, fax, address, tax } = request.body;
+    const updatedSupplier = await SupplierModel.findByIdAndUpdate(
+      supplierId,
+      { name, mobile, fax, address, tax },
+      { new: true }
+    );
+    response.send({msg: "Supplier updated successfully", updatedSupplier});
+  } catch (error) {
+    response.status(500).json({error: "Failed to update supplier"})
+  }
+});
+
+// Delete Supplier
+app.delete("/deleteSupplier/:id", async (request, response) => {
+  try {
+    const supplierId = request.params.id;
+    await SupplierModel.findByIdAndDelete(supplierId);
+    response.send({msg: "Supplier deleted successfully"});
+  } catch (error) {
+    response.status(500).json({error: "Failed to delete supplier"});
   }
 });
 
