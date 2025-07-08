@@ -1,8 +1,216 @@
-import React from 'react'
+import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form';
+import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
+import { addCategorieSchemaValidation } from '../../validations/AddCategorieValidation';
+import { editCategorieSchemaValidation } from '../../validations/EditCategorieValidation';
+import { addCategorie, clearMsg, deleteCategorie, editCategorie, getCategories } from '../../features/CategorieSlice';
+import { toast } from 'react-toastify';
+import moment from 'moment';
 
 function Categories() {
+
+  const { status, msg, categorieList } = useSelector((state) => state.categories);
+
+  const [addModal, setAddModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [editCategorieData, setEditCategorieData] = useState();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteCategorieData, setDeleteCategorieData] = useState(false);
+
+  const [name, setName] = useState("");
+
+  const [search, setSearch] = useState("");
+  const [filteredCatrgories, setFilteredCategories] = useState([]);
+  const filterTypes = ['name'];
+
+  const dispatch = useDispatch();
+
+  const handleAdd = () => {
+    setAddModal(true)
+  };
+
+  const handleEdit = (categorie) => {
+    setEditCategorieData(categorie)
+    setName(categorie.name)
+    setEditModal(true)
+  }
+
+  const handleDelete = (categorieId) => {
+    setDeleteCategorieData(categorieId);
+    setDeleteModal(true);
+  }
+
+  const perfomDelete = () => {
+    dispatch(deleteCategorie(deleteCategorieData));
+    setDeleteModal(false);
+  }
+
+  const handleCloseModal = () => {
+    setAddModal(false);
+    setEditModal(false);
+    setDeleteModal(false);
+    reset();
+  }
+
+  const handleSearch = (query) => {
+    setSearch(query);
+    const filtered = categorieList.filter(categorie => 
+      filterTypes.some(type =>
+        categorie[type]?.toLowerCase().includes(query.toLowerCase())
+      )
+    );
+    setFilteredCategories(filtered);
+  };
+
+  const {register, handleSubmit, formState: {errors}, reset} = useForm({
+    resolver: yupResolver(addModal ? addCategorieSchemaValidation : editCategorieSchemaValidation),
+  });
+
+  const onSubmit = () => {
+    if (addModal) {
+      const categorieData = {
+        name: name,
+      }
+      dispatch(addCategorie(categorieData));
+    }
+    if (editModal) {
+      const categorieData = {
+        categorieId: editCategorieData._id,
+        name: name,
+      }
+      dispatch(editCategorie(categorieData));
+    }
+    handleCloseModal();
+  };
+
+  useEffect(() => {
+    if (status === "success") toast.success(msg);
+    if (status === "rejected") toast.error(msg);
+    dispatch(clearMsg());
+
+    setFilteredCategories(categorieList);
+    handleSearch(search);
+  }, [status]);
+
+  useEffect(() => {
+    dispatch(getCategories())
+  }, [categorieList]);
+
   return (
-    <div>Categories</div>
+    <div className='content'>
+      <div className='search-section'>
+        <div className='search'>
+          <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
+          <FaSearch size={20} />
+        </div>
+        <Button color='info' onClick={handleAdd}>Add Catrgories</Button>
+      </div>
+      {/* Add Modal */}
+      <Modal centered isOpen={addModal}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <ModalHeader>Add Categorie</ModalHeader>
+          <ModalBody>
+            <Label htmlFor='name'>Name</Label>
+            <input
+              id='name'
+              type='text'
+              placeholder='Enter Name'
+              className={'form-control' + (errors.name ? ' is-invalid': '')}
+              {...register("name", {onChange: (e) => setName(e.target.value)})}
+            />
+            <p className='error'>{errors.name?.message}</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingAddCategorie"}>
+              Cancel
+            </Button>
+            <Button color='info' type='submit' disabled={status === "pendingAddCategorie"}>
+              {(status === "pendingAddCategorie") && <Spinner size='sm' />}Save
+            </Button>
+          </ModalFooter>
+        </form>
+      </Modal>
+
+      {/* Edit Modal */}
+      <Modal centered isOpen={editModal}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <ModalHeader>Edit Categorie ({editCategorieData?.name})</ModalHeader>
+          <ModalBody>
+            <Label htmlFor='name'>Name</Label>
+            <input
+              id='name'
+              type='text'
+              placeholder='Enter Name'
+              value={name}
+              className={'form-control' + (errors.name ? ' is-invalid' : '')}
+              {...register("name", {onChange: (e) => setName(e.target.value)})}
+            />
+            <p className='error'>{errors.name?.message}</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingEditCategorie"}>
+              Cancel
+            </Button>
+            <Button color='warning' type='submit' disabled={status === "pendingEditCategorie"}>
+              {(status === "pendingEditCategorie") && <Spinner size='sm' />}Save
+            </Button>
+          </ModalFooter>
+        </form>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal centered isOpen={deleteModal}>
+        <ModalHeader>Delete Categorie</ModalHeader>
+        <ModalBody>Are you sure you want to delete this Categorie?</ModalBody>
+        <ModalFooter>
+          <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteCategorie"}>
+            Cancel
+          </Button>
+          <Button color='danger' onClick={perfomDelete} disabled={status === "pendingDeleteCategorie"}>
+            {(status === "pendingDeleteCategorie") && <Spinner size='sm' />}Permanently Delete
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <div className='content-display settings'>
+        {
+          filteredCatrgories.length ?
+          <Table striped>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                filteredCatrgories?.map((c) => (
+                  <tr key={c._id}>
+                    <td>{c.name}</td>
+                    <td className='actions'>
+                      <div className='actionButtons' style={{minHeight: "37xp"}}>
+                        <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
+                        <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
+                      </div>
+
+                      <div className='dateInfo'>
+                        Created: {moment(c.createdAt).format('D/M/yyyy')} | Modified: {moment(c.updatedAt).format('D/M/yyyy')}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </Table> :
+          <div className='no-result'>
+            <h1><FaSearch />No matching results</h1>
+          </div>
+        }
+      </div>
+    </div>
   )
 }
 

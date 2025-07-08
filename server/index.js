@@ -5,6 +5,7 @@ import UserModel from "./models/UserModel.js";
 import dotenv from "dotenv";
 import CustomerModel from "./models/CustomerModel.js";
 import SupplierModel from "./models/SupplierModel.js";
+import CategorieModel from "./models/CategorieModel.js";
 
 dotenv.config()
 
@@ -202,6 +203,60 @@ app.delete("/deleteSupplier/:id", async (request, response) => {
     response.send({msg: "Supplier deleted successfully"});
   } catch (error) {
     response.status(500).json({error: "Failed to delete supplier"});
+  }
+});
+
+// Add Categorie
+app.post("/addCategorie", async (request, response) => {
+  try {
+    const { name } = request.body;
+    const categorie = await CategorieModel.findOne({name: name});
+    if (categorie) {
+      response.status(409).json({msg: "Name used already exists"});
+    } else {
+      const addCategorie = CategorieModel({name});
+      await addCategorie.save();
+      response.send({msg: "Categorie added successfully"});
+    }
+  } catch (error) {
+    response.status(500).json({msg: "Failed to add categorie"});
+  }
+});
+
+// Get Categories
+app.get("/getCategories", async (request, response) => {
+  try {
+    const categorieList = await CategorieModel.find();
+    response.send({categorieList: categorieList});
+  } catch (error) {
+    response.status(500).json({error: "Unexpected error ouccerred"});
+  }
+});
+
+// Edit Categorie
+app.put("/editCategorie/:id", async (request, response) => {
+  try {
+    const categorieId = request.params.id;
+    const { name } = request.body;
+    const updatedCategorie = await CategorieModel.findByIdAndUpdate(
+      categorieId,
+      { name },
+      { name: true }
+    );
+    response.send({msg: "Categorie updated successfully", updatedCategorie});
+  } catch (error) {
+    response.status(500).json({error: "Failed to update categorie"});
+  }
+});
+
+// Delete Categorie
+app.delete("/deleteCategorie/:id", async (request, response) => {
+  try {
+    const categorieId = request.params.id;
+    await CategorieModel.findByIdAndDelete(categorieId);
+    response.send({msg: "Categorie deleted successfully"});
+  } catch (error) {
+    response.status(500).json({error: "Failed to delete categorie"});
   }
 });
 
