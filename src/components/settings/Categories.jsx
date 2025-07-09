@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { addCategorySchemaValidation } from '../../validations/AddCategoryValidation';
 import { editCategorySchemaValidation } from '../../validations/EditCategoryValidation';
-import { addCategory, clearMsg, deleteCategory, editCategory, getCategories } from '../../features/CategorySlice';
+import { addCategory, clearMsg, deleteCategory, editCategory } from '../../features/CategorySlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -95,10 +95,6 @@ function Categories() {
     handleSearch(search);
   }, [status]);
 
-  useEffect(() => {
-    dispatch(getCategories())
-  }, [categoryList]);
-
   return (
     <div className='content'>
       <div className='search-section'>
@@ -106,14 +102,14 @@ function Categories() {
           <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
         </div>
-        <Button color='info' onClick={handleAdd}>Add Catrgory</Button>
+        <Button color='info' onClick={handleAdd}>Add Category</Button>
       </div>
       {/* Add Modal */}
       <Modal centered isOpen={addModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Category</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name</Label>
+            <Label htmlFor='name'>Name*</Label>
             <input
               id='name'
               type='text'
@@ -139,7 +135,7 @@ function Categories() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit Category ({editCategoryData?.name})</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name</Label>
+            <Label htmlFor='name'>Name*</Label>
             <input
               id='name'
               type='text'

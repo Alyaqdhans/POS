@@ -23,7 +23,7 @@ export const addSupplier = createAsyncThunk(
         }
       );
       const msg = response.data.msg;
-      const addSupplier = response.data;
+      const addSupplier = response.data.addSupplier;
       return { msg, addSupplier };
     } catch (error) {
       const msg = error.response.data.msg;

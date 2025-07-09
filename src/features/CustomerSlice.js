@@ -5,7 +5,6 @@ const initialState = {
 	status: null,
 	msg: null,
 	customerList: [],
-	user: null,
 }
 
 export const addCustomer = createAsyncThunk(
@@ -18,7 +17,7 @@ export const addCustomer = createAsyncThunk(
 				mobile: customerData.mobile,
 			});
 			const msg = response.data.msg;
-			const addCustomer = response.data;
+			const addCustomer = response.data.addCustomer;
 			return { msg, addCustomer };
 		} catch (error) {
 			const msg = error.response.data.msg;

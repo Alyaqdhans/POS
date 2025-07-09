@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { addSupplierSchemaValidation } from '../../validations/AddSupplierValidation';
 import { editSupplierSchemaValidation } from '../../validations/EditSupplierValidation';
-import { addSupplier, deleteSupplier, editSupplier, getSuppliers, clearMsg } from '../../features/SupplierSlice';
+import { addSupplier, deleteSupplier, editSupplier, clearMsg } from '../../features/SupplierSlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -114,10 +114,6 @@ function Suppliers() {
     handleSearch(search);
   }, [status]);
 
-  useEffect(() => {
-    dispatch(getSuppliers());
-  }, [supplierList]);
-
   return (
     <div className='content'>
       <div className='search-section'>
@@ -132,7 +128,7 @@ function Suppliers() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Supplier</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name</Label>
+            <Label htmlFor='name'>Name*</Label>
             <input
               id='name'
               type='text'
@@ -214,7 +210,7 @@ function Suppliers() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit Supplier ({editSupplierData?.email}) </ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name</Label>
+            <Label htmlFor='name'>Name*</Label>
             <input
               id='name'
               type='text'

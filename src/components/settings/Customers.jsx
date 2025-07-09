@@ -5,13 +5,13 @@ import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { addCustomerSchemaValidation } from '../../validations/AddCustomerValidation';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCustomer, clearMsg, deleteCustomr, editCustomer, getCustomers } from '../../features/CustomerSlice';
+import { addCustomer, clearMsg, deleteCustomr, editCustomer } from '../../features/CustomerSlice';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { editUserSchemaValidation } from '../../validations/EditCustomerValidation';
 
 function Customers() {
-  const { status, msg, user, customerList } = useSelector((state) => state.customers);
+  const { status, msg, customerList } = useSelector((state) => state.customers);
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -102,10 +102,6 @@ function Customers() {
     handleSearch(search);
   }, [status]);
 
-  useEffect(() => {
-    dispatch(getCustomers());
-  }, [customerList]);
-
   return (
     <div className='content'>
       <div className='search-section'>
@@ -120,7 +116,7 @@ function Customers() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Customer</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name</Label>
+            <Label htmlFor='name'>Name*</Label>
             <input
               id='name'
               type='text'
@@ -169,7 +165,7 @@ function Customers() {
         <form onSubmit={handleSubmit(onSubmit)}> 
           <ModalHeader>Edit Customer ({editCustomerData?.email})</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name</Label>
+            <Label htmlFor='name'>Name*</Label>
             <input
               id='name'
               type='text'

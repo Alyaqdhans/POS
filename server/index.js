@@ -102,9 +102,9 @@ app.put("/editUser/:id", async (request, response) => {
 app.post("/addCustomer", async (request, response) => {
   try {
     const { name, email, mobile } = request.body;
-    const customer = await CustomerModel.findOne({email: email});
+    const customer = await CustomerModel.findOne({name: name});
     if (customer) {
-      response.status(409).json({msg: "Email used already exists"});
+      response.status(409).json({msg: "Customer already exists"});
     } else {
       const addCustomer = CustomerModel({name, email, mobile});
       await addCustomer.save();
@@ -130,7 +130,7 @@ app.delete("/deleteCustomer/:id", async (request, response) => {
   try {
     const customerId = request.params.id;
     await CustomerModel.findByIdAndDelete(customerId);
-    response.send({msg: "Customer delete successfully"});
+    response.send({msg: "Customer deleted successfully"});
   } catch (error) {
     response.status(500).json({error: "Faild to delete customer"});
   }
@@ -156,13 +156,13 @@ app.put("/editCustomer/:id", async (request, response) => {
 app.post("/addSupplier", async (request, response) => {
   try {
     const { name, email, mobile, fax, address, tax } = request.body;
-    const supplier = await SupplierModel.findOne({email: email});
+    const supplier = await SupplierModel.findOne({name: name});
     if (supplier) {
-      response.status(409).json({msg: "Email used already exists"});
+      response.status(409).json({msg: "Supplier already exists"});
     } else {
       const addSupplier = SupplierModel({name, email, mobile, fax, address, tax});
       await addSupplier.save();
-      response.send({msg: "Supplier added successfully"});
+      response.send({msg: "Supplier added successfully", addSupplier});
     }
   } catch (error) {
     response.status(500).json({msg: "Failed to add supplier"});
@@ -212,11 +212,11 @@ app.post("/addCategory", async (request, response) => {
     const { name } = request.body;
     const category = await CategoryModel.findOne({name: name});
     if (category) {
-      response.status(409).json({msg: "Name used already exists"});
+      response.status(409).json({msg: "Category already exists"});
     } else {
       const addCategory = CategoryModel({name});
       await addCategory.save();
-      response.send({msg: "Category added successfully"});
+      response.send({msg: "Category added successfully", addCategory});
     }
   } catch (error) {
     response.status(500).json({msg: "Failed to add category"});

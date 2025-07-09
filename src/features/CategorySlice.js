@@ -15,7 +15,7 @@ export const addCategory = createAsyncThunk(
         name: categoryData.name,
       });
       const msg = response.data.msg;
-      const addCategory = response.data;
+      const addCategory = response.data.addCategory;
       return { msg, addCategory };
     } catch (error) {
       const msg = error.response.data.msg;
@@ -74,6 +74,7 @@ export const categorySlice = createSlice({
   },
   extraReducers: (builder) => (
     builder
+    // add Category
     .addCase(addCategory.pending, (state, action) => {
       state.status = "pendingAddCategory";
     })

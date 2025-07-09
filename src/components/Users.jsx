@@ -188,7 +188,7 @@ function Users() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add User</ModalHeader>
           <ModalBody>
-            <Label htmlFor='username'>Username</Label>
+            <Label htmlFor='username'>Username*</Label>
             <input
               id='username'
               type='text'
@@ -199,7 +199,7 @@ function Users() {
             />
             <p className='error'>{errors.username?.message}</p>
 
-            <Label htmlFor='email'>Email</Label>
+            <Label htmlFor='email'>Email*</Label>
             <input
               id='email'
               type='text'
@@ -210,7 +210,7 @@ function Users() {
             />
             <p className='error'>{errors.email?.message}</p>
 
-            <Label htmlFor='password'>Password</Label>
+            <Label htmlFor='password'>Password*</Label>
             <input
               id='password'
               type='password'
@@ -221,7 +221,7 @@ function Users() {
             />
             <p className='error'>{errors.password?.message}</p>
 
-            <Label htmlFor='confirm'>Confirm Password</Label>
+            <Label htmlFor='confirm'>Confirm Password*</Label>
             <input
               id='confirm'
               type='password'
@@ -360,7 +360,7 @@ function Users() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit User ({editUserData?.email})</ModalHeader>
           <ModalBody>
-            <Label htmlFor='username'>Username</Label>
+            <Label htmlFor='username'>Username*</Label>
             <input
               id='username'
               type='text'
