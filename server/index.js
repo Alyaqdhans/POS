@@ -5,7 +5,7 @@ import UserModel from "./models/UserModel.js";
 import dotenv from "dotenv";
 import CustomerModel from "./models/CustomerModel.js";
 import SupplierModel from "./models/SupplierModel.js";
-import CategorieModel from "./models/CategorieModel.js";
+import CategoryModel from "./models/CategoryModel.js";
 
 dotenv.config()
 
@@ -206,55 +206,55 @@ app.delete("/deleteSupplier/:id", async (request, response) => {
   }
 });
 
-// Add Categorie
-app.post("/addCategorie", async (request, response) => {
+// Add Category
+app.post("/addCategory", async (request, response) => {
   try {
     const { name } = request.body;
-    const categorie = await CategorieModel.findOne({name: name});
-    if (categorie) {
+    const category = await CategoryModel.findOne({name: name});
+    if (category) {
       response.status(409).json({msg: "Name used already exists"});
     } else {
-      const addCategorie = CategorieModel({name});
-      await addCategorie.save();
-      response.send({msg: "Categorie added successfully"});
+      const addCategory = CategoryModel({name});
+      await addCategory.save();
+      response.send({msg: "Category added successfully"});
     }
   } catch (error) {
-    response.status(500).json({msg: "Failed to add categorie"});
+    response.status(500).json({msg: "Failed to add category"});
   }
 });
 
 // Get Categories
 app.get("/getCategories", async (request, response) => {
   try {
-    const categorieList = await CategorieModel.find();
-    response.send({categorieList: categorieList});
+    const categoryList = await CategoryModel.find();
+    response.send({categoryList: categoryList});
   } catch (error) {
     response.status(500).json({error: "Unexpected error ouccerred"});
   }
 });
 
-// Edit Categorie
-app.put("/editCategorie/:id", async (request, response) => {
+// Edit Category
+app.put("/editCategory/:id", async (request, response) => {
   try {
-    const categorieId = request.params.id;
+    const categoryId = request.params.id;
     const { name } = request.body;
-    const updatedCategorie = await CategorieModel.findByIdAndUpdate(
-      categorieId,
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(
+      categoryId,
       { name },
       { name: true }
     );
-    response.send({msg: "Categorie updated successfully", updatedCategorie});
+    response.send({msg: "Category updated successfully", updatedCategory});
   } catch (error) {
-    response.status(500).json({error: "Failed to update categorie"});
+    response.status(500).json({error: "Failed to update category"});
   }
 });
 
-// Delete Categorie
-app.delete("/deleteCategorie/:id", async (request, response) => {
+// Delete Category
+app.delete("/deleteCategory/:id", async (request, response) => {
   try {
-    const categorieId = request.params.id;
-    await CategorieModel.findByIdAndDelete(categorieId);
-    response.send({msg: "Categorie deleted successfully"});
+    const categoryId = request.params.id;
+    await CategoryModel.findByIdAndDelete(categoryId);
+    response.send({msg: "Category deleted successfully"});
   } catch (error) {
     response.status(500).json({error: "Failed to delete categorie"});
   }

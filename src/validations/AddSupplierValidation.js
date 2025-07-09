@@ -6,16 +6,16 @@ export const addSupplierSchemaValidation = yup.object().shape({
     .required("Name is required"),
   email: yup
     .string()
-    .email("Not valid email format")
-    .required("Email is required"),
+    .email("Not valid email format"),
   mobile: yup
-    .number()
-    .required("Phone number is required"),
+    .string("Must be a number")
+    .matches(/^\d*$/, "Must be a valid number"),
   fax: yup
-    .number(),
+    .string("Must be a number")
+    .matches(/^\d*$/, "Must be a valid number"),
   address: yup
-    .string()
-    .required("Address is required"),
+    .string(),
   tax: yup
-    .number(),
+    .string("Must be a number")
+    .matches(/^\d*$/, "Must be a valid number"),
 })

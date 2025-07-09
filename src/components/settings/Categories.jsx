@@ -4,21 +4,21 @@ import { useForm } from 'react-hook-form';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
-import { addCategorieSchemaValidation } from '../../validations/AddCategorieValidation';
-import { editCategorieSchemaValidation } from '../../validations/EditCategorieValidation';
-import { addCategorie, clearMsg, deleteCategorie, editCategorie, getCategories } from '../../features/CategorieSlice';
+import { addCategorySchemaValidation } from '../../validations/AddCategoryValidation';
+import { editCategorySchemaValidation } from '../../validations/EditCategoryValidation';
+import { addCategory, clearMsg, deleteCategory, editCategory, getCategories } from '../../features/CategorySlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
 function Categories() {
 
-  const { status, msg, categorieList } = useSelector((state) => state.categories);
+  const { status, msg, categoryList } = useSelector((state) => state.categories);
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [editCategorieData, setEditCategorieData] = useState();
+  const [editCategoryData, setEditCategoryData] = useState();
   const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteCategorieData, setDeleteCategorieData] = useState(false);
+  const [deleteCategoryData, setDeleteCategoryData] = useState(false);
 
   const [name, setName] = useState("");
 
@@ -32,19 +32,19 @@ function Categories() {
     setAddModal(true)
   };
 
-  const handleEdit = (categorie) => {
-    setEditCategorieData(categorie)
-    setName(categorie.name)
+  const handleEdit = (category) => {
+    setEditCategoryData(category)
+    setName(category.name)
     setEditModal(true)
   }
 
-  const handleDelete = (categorieId) => {
-    setDeleteCategorieData(categorieId);
+  const handleDelete = (categoryId) => {
+    setDeleteCategoryData(categoryId);
     setDeleteModal(true);
   }
 
   const perfomDelete = () => {
-    dispatch(deleteCategorie(deleteCategorieData));
+    dispatch(deleteCategory(deleteCategoryData));
     setDeleteModal(false);
   }
 
@@ -57,31 +57,31 @@ function Categories() {
 
   const handleSearch = (query) => {
     setSearch(query);
-    const filtered = categorieList.filter(categorie => 
+    const filtered = categoryList.filter(category => 
       filterTypes.some(type =>
-        categorie[type]?.toLowerCase().includes(query.toLowerCase())
+        category[type]?.toLowerCase().includes(query.toLowerCase())
       )
     );
     setFilteredCategories(filtered);
   };
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
-    resolver: yupResolver(addModal ? addCategorieSchemaValidation : editCategorieSchemaValidation),
+    resolver: yupResolver(addModal ? addCategorySchemaValidation : editCategorySchemaValidation),
   });
 
   const onSubmit = () => {
     if (addModal) {
-      const categorieData = {
+      const categoryData = {
         name: name,
       }
-      dispatch(addCategorie(categorieData));
+      dispatch(addCategory(categoryData));
     }
     if (editModal) {
-      const categorieData = {
-        categorieId: editCategorieData._id,
+      const categoryData = {
+        categoryId: editCategoryData._id,
         name: name,
       }
-      dispatch(editCategorie(categorieData));
+      dispatch(editCategory(categoryData));
     }
     handleCloseModal();
   };
@@ -91,13 +91,13 @@ function Categories() {
     if (status === "rejected") toast.error(msg);
     dispatch(clearMsg());
 
-    setFilteredCategories(categorieList);
+    setFilteredCategories(categoryList);
     handleSearch(search);
   }, [status]);
 
   useEffect(() => {
     dispatch(getCategories())
-  }, [categorieList]);
+  }, [categoryList]);
 
   return (
     <div className='content'>
@@ -106,12 +106,12 @@ function Categories() {
           <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
         </div>
-        <Button color='info' onClick={handleAdd}>Add Catrgories</Button>
+        <Button color='info' onClick={handleAdd}>Add Catrgory</Button>
       </div>
       {/* Add Modal */}
       <Modal centered isOpen={addModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Add Categorie</ModalHeader>
+          <ModalHeader>Add Category</ModalHeader>
           <ModalBody>
             <Label htmlFor='name'>Name</Label>
             <input
@@ -124,11 +124,11 @@ function Categories() {
             <p className='error'>{errors.name?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingAddCategorie"}>
+            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingAddCategory"}>
               Cancel
             </Button>
-            <Button color='info' type='submit' disabled={status === "pendingAddCategorie"}>
-              {(status === "pendingAddCategorie") && <Spinner size='sm' />}Save
+            <Button color='info' type='submit' disabled={status === "pendingAddCategory"}>
+              {(status === "pendingAddCategory") && <Spinner size='sm' />}Save
             </Button>
           </ModalFooter>
         </form>
@@ -137,7 +137,7 @@ function Categories() {
       {/* Edit Modal */}
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Categorie ({editCategorieData?.name})</ModalHeader>
+          <ModalHeader>Edit Category ({editCategoryData?.name})</ModalHeader>
           <ModalBody>
             <Label htmlFor='name'>Name</Label>
             <input
@@ -151,11 +151,11 @@ function Categories() {
             <p className='error'>{errors.name?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingEditCategorie"}>
+            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingEditCategory"}>
               Cancel
             </Button>
-            <Button color='warning' type='submit' disabled={status === "pendingEditCategorie"}>
-              {(status === "pendingEditCategorie") && <Spinner size='sm' />}Save
+            <Button color='warning' type='submit' disabled={status === "pendingEditCategory"}>
+              {(status === "pendingEditCategory") && <Spinner size='sm' />}Save
             </Button>
           </ModalFooter>
         </form>
@@ -163,14 +163,14 @@ function Categories() {
 
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
-        <ModalHeader>Delete Categorie</ModalHeader>
-        <ModalBody>Are you sure you want to delete this Categorie?</ModalBody>
+        <ModalHeader>Delete Category</ModalHeader>
+        <ModalBody>Are you sure you want to delete this Category?</ModalBody>
         <ModalFooter>
-          <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteCategorie"}>
+          <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteCategory"}>
             Cancel
           </Button>
-          <Button color='danger' onClick={perfomDelete} disabled={status === "pendingDeleteCategorie"}>
-            {(status === "pendingDeleteCategorie") && <Spinner size='sm' />}Permanently Delete
+          <Button color='danger' onClick={perfomDelete} disabled={status === "pendingDeleteCategory"}>
+            {(status === "pendingDeleteCategory") && <Spinner size='sm' />}Permanently Delete
           </Button>
         </ModalFooter>
       </Modal>

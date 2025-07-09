@@ -293,6 +293,10 @@ hr {
   padding-block: 0.6rem;
 }
 
+.actions {
+  width: 250px;
+}
+
 .actions .dateInfo {
   margin-top: 5px;
   font-size: 11px;
