@@ -12,6 +12,8 @@ import moment from 'moment';
 
 function Users() {
   const { user, userList, status, msg } = useSelector((state) => state.users);
+  
+  const [loading, setLoading] = useState(true);
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -167,6 +169,10 @@ function Users() {
 
     setFilteredUsers(userList);
     handleSearch(search);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   }, [status]);
 
   return (
@@ -369,6 +375,7 @@ function Users() {
               className={'form-control' + (errors.username ? ' is-invalid' : '')}
               disabled={editUserData?.username.toLowerCase() === "admin"}
               {...register("username", { onChange: (e) => setUsername(e.target.value) })}
+              readOnly={status === "pendingEditUser"}
             />
             <p className='error'>{errors.username?.message}</p>
 
@@ -534,6 +541,10 @@ function Users() {
 
       <div className='content-display'>
         {
+          (loading || (status === "pendingGetCategories")) ?
+          <center>
+            <Spinner className='large' type='grow' />
+          </center> :
           filteredUsers.length ?
           <Table striped>
             <thead>

@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const addSupplierSchemaValidation = yup.object().shape({
+export const supplierSchemaValidation = yup.object().shape({
   name: yup
     .string()
     .required("Name is required"),

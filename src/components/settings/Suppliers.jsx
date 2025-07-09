@@ -4,14 +4,15 @@ import { useForm } from 'react-hook-form';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
-import { addSupplierSchemaValidation } from '../../validations/AddSupplierValidation';
-import { editSupplierSchemaValidation } from '../../validations/EditSupplierValidation';
+import { supplierSchemaValidation } from '../../validations/SupplierValidation';
 import { addSupplier, deleteSupplier, editSupplier, clearMsg } from '../../features/SupplierSlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
 function Suppliers() {
   const { status, msg, supplierList } = useSelector((state) => state.suppliers);
+
+  const [loading, setLoading] = useState(true);
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -75,7 +76,7 @@ function Suppliers() {
   }
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
-    resolver: yupResolver(addModal ? addSupplierSchemaValidation : editSupplierSchemaValidation), 
+    resolver: yupResolver(supplierSchemaValidation), 
   });
 
   const onSubmit = () => {
@@ -112,6 +113,10 @@ function Suppliers() {
 
     setFilteredSuppliers(supplierList);
     handleSearch(search);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   }, [status]);
 
   return (
@@ -195,7 +200,7 @@ function Suppliers() {
             <p className='error'>{errors.tax?.message}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color='secondry' outline onClick={handleCloseModal} disabled={status === "pendingAddSupplier"}>
+            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingAddSupplier"}>
               Cancel
             </Button>
             <Button color='info' type='submit' disabled={status === "pendingAddSupplier"}>
@@ -218,8 +223,21 @@ function Suppliers() {
               value={name}
               className={'form-control' + (errors.name ? ' is-invalid' : '')}
               {...register("name", { onChange: (e) => setName(e.target.value) })}
+              readOnly={status === "pendingEditSupplier"}
             />
             <p className='error'>{errors.name?.message}</p>
+
+            <Label htmlFor='email'>Email</Label>
+            <input
+              id='email'
+              type='text'
+              placeholder='Enter Email'
+              value={email}
+              className={'form-control' + (errors.email ? ' is-invalid' : '')}
+              {...register("email", {onChange: (e) => setEmail(e.target.value)})}
+              readOnly={status === "pendingAddSupplier"}
+            />
+            <p className='error'>{errors.email?.message}</p>
 
             <Label htmlFor='mobile'>Phone Number</Label>
             <input
@@ -229,6 +247,7 @@ function Suppliers() {
               value={mobile}
               className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
               {...register("mobile", { onChange: (e) => setMobile(e.target.value) })}
+              readOnly={status === "pendingEditSupplier"}
             />
             <p className='error'>{errors.mobile?.message}</p>
 
@@ -240,6 +259,7 @@ function Suppliers() {
               value={tax}
               className={'form-control' + (errors.fax ? ' is-invalid' : '')}
               {...register("fax", { onChange: (e) => setFax(e.target.value) })}
+              readOnly={status === "pendingEditSupplier"}
             />
             <p className='error'>{errors.fax?.message}</p>
 
@@ -251,6 +271,7 @@ function Suppliers() {
               value={address}
               className={'form-control' + (errors.address ? ' is-invalid' : '')}
               {...register("address", { onChange: (e) => setAddress(e.target.value) })}
+              readOnly={status === "pendingEditSupplier"}
             />
             <p className='error'>{errors.address?.message}</p>
 
@@ -262,6 +283,7 @@ function Suppliers() {
               value={tax}
               className={'form-control' + (errors.tax ? ' is-invalid' : '')}
               {...register("tax", { onChange: (e) => setTax(e.target.value) })}
+              readOnly={status === "pendingEditSupplier"}
             />
             <p className='error'>{errors.tax?.message}</p>
           </ModalBody>
@@ -292,6 +314,10 @@ function Suppliers() {
 
       <div className='content-display settings'>
         {
+          (loading || (status === "pendingGetCategories")) ?
+          <center>
+            <Spinner className='large' type='grow' />
+          </center> :
           filteredSuppliers.length ?
           <Table striped>
             <thead>

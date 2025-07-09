@@ -3,15 +3,16 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
-import { addCustomerSchemaValidation } from '../../validations/AddCustomerValidation';
+import { customerSchemaValidation } from '../../validations/CustomerValidation';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCustomer, clearMsg, deleteCustomr, editCustomer } from '../../features/CustomerSlice';
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import { editUserSchemaValidation } from '../../validations/EditCustomerValidation';
 
 function Customers() {
   const { status, msg, customerList } = useSelector((state) => state.customers);
+
+  const [loading, setLoading] = useState(true);
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -69,7 +70,7 @@ function Customers() {
   };
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
-    resolver: yupResolver(addModal ? addCustomerSchemaValidation : editUserSchemaValidation),
+    resolver: yupResolver(customerSchemaValidation),
   })
 
   const onSubmit = () => {
@@ -100,6 +101,10 @@ function Customers() {
     
     setFilteredCustomers(customerList);
     handleSearch(search);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   }, [status]);
 
   return (
@@ -173,8 +178,21 @@ function Customers() {
               value={name}
               className={'form-control' + (errors.name ? ' is-invalid' : '')}
               {...register("name", { onChange: (e) => setName(e.target.value) })}
+              readOnly={status === "pendingEditCustomer"}
             />
             <p className='error'>{errors.name?.message}</p>
+
+            <Label htmlFor='email'>Email</Label>
+            <input
+              id='email'
+              type='text'
+              placeholder='Enter Email'
+              value={email}
+              className={'form-control' + (errors.email ? ' is-invalid' : '')}
+              {...register("email", {onChange: (e) => setEmail(e.target.value)})}
+              readOnly={status === "pendingEditCustomer"}
+            />
+            <p className='error'>{errors.email?.message}</p>
 
             <Label htmlFor='nobile'>Phone Number</Label>
             <input
@@ -184,6 +202,7 @@ function Customers() {
               value={mobile}
               className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
               {...register("mobile", { onChange: (e) => setMobile(e.target.value) })}
+              readOnly={status === "pendingEditCustomer"}
             />
             <p className='error'>{errors.mobile?.message}</p>
           </ModalBody>
@@ -214,6 +233,10 @@ function Customers() {
 
       <div className='content-display settings'>
         {
+          (loading || (status === "pendingGetCategories")) ?
+          <center>
+            <Spinner className='large' type='grow' />
+          </center> :
           filteredCustomers.length ?
           <Table striped>
             <thead>

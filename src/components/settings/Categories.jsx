@@ -4,8 +4,7 @@ import { useForm } from 'react-hook-form';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
-import { addCategorySchemaValidation } from '../../validations/AddCategoryValidation';
-import { editCategorySchemaValidation } from '../../validations/EditCategoryValidation';
+import { categorySchemaValidation } from '../../validations/CategoryValidation';
 import { addCategory, clearMsg, deleteCategory, editCategory } from '../../features/CategorySlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
@@ -13,6 +12,8 @@ import moment from 'moment';
 function Categories() {
 
   const { status, msg, categoryList } = useSelector((state) => state.categories);
+
+  const [loading, setLoading] = useState(true);
 
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -66,7 +67,7 @@ function Categories() {
   };
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
-    resolver: yupResolver(addModal ? addCategorySchemaValidation : editCategorySchemaValidation),
+    resolver: yupResolver(categorySchemaValidation),
   });
 
   const onSubmit = () => {
@@ -93,6 +94,10 @@ function Categories() {
 
     setFilteredCategories(categoryList);
     handleSearch(search);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   }, [status]);
 
   return (
@@ -116,6 +121,7 @@ function Categories() {
               placeholder='Enter Name'
               className={'form-control' + (errors.name ? ' is-invalid': '')}
               {...register("name", {onChange: (e) => setName(e.target.value)})}
+              readOnly={status === "pendingAddCategory"}
             />
             <p className='error'>{errors.name?.message}</p>
           </ModalBody>
@@ -143,6 +149,7 @@ function Categories() {
               value={name}
               className={'form-control' + (errors.name ? ' is-invalid' : '')}
               {...register("name", {onChange: (e) => setName(e.target.value)})}
+              readOnly={status === "pendingAddCategory"}
             />
             <p className='error'>{errors.name?.message}</p>
           </ModalBody>
@@ -173,6 +180,10 @@ function Categories() {
 
       <div className='content-display settings'>
         {
+          (loading || (status === "pendingGetCategories")) ?
+          <center>
+            <Spinner className='large' type='grow' />
+          </center> :
           filteredCatrgories.length ?
           <Table striped>
             <thead>
