@@ -130,7 +130,7 @@ function Categories() {
               Cancel
             </Button>
             <Button color='info' type='submit' disabled={status === "pendingAddCategory"}>
-              {(status === "pendingAddCategory") && <Spinner size='sm' />}Save
+              {(status === "pendingAddCategory") && <Spinner size='sm' />} Save
             </Button>
           </ModalFooter>
         </form>
@@ -158,7 +158,7 @@ function Categories() {
               Cancel
             </Button>
             <Button color='warning' type='submit' disabled={status === "pendingEditCategory"}>
-              {(status === "pendingEditCategory") && <Spinner size='sm' />}Save
+              {(status === "pendingEditCategory") && <Spinner size='sm' />} Save
             </Button>
           </ModalFooter>
         </form>
@@ -173,7 +173,7 @@ function Categories() {
             Cancel
           </Button>
           <Button color='danger' onClick={perfomDelete} disabled={status === "pendingDeleteCategory"}>
-            {(status === "pendingDeleteCategory") && <Spinner size='sm' />}Permanently Delete
+            {(status === "pendingDeleteCategory") && <Spinner size='sm' />} Permanently Delete
           </Button>
         </ModalFooter>
       </Modal>

@@ -159,7 +159,7 @@ function Customers() {
               Cancel
             </Button>
             <Button color='info' type='submit' disabled={status === "pendingAddCustomer"}>
-              {(status === "pendingAddCustomer") && <Spinner size='sm' />}Save
+              {(status === "pendingAddCustomer") && <Spinner size='sm' />} Save
             </Button>
           </ModalFooter>
         </form>

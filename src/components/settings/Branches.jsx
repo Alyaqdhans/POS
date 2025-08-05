@@ -144,7 +144,7 @@ function Branches() {
               Cancel
             </Button>
             <Button color='info' type='submit' disabled={status === "pendingAddBranch"}>
-              {(status === "pendingAddBranch") && <Spinner size='sm' />}Save
+              {(status === "pendingAddBranch") && <Spinner size='sm' />} Save
             </Button>
           </ModalFooter>
         </form>
@@ -183,7 +183,7 @@ function Branches() {
               Cancel
             </Button>
             <Button color='warning' type='submit' disabled={status === "pendingEditBranch"}>
-              {(status === "pendingEditBranch") && <Spinner size='sm' />}Save
+              {(status === "pendingEditBranch") && <Spinner size='sm' />} Save
             </Button>
           </ModalFooter>
         </form>
@@ -198,7 +198,7 @@ function Branches() {
             Cancel
           </Button>
           <Button color='danger' onClick={performDelete} disabled={status === "pendingDeleteBranch"}>
-            {(status === "pendingDeleteBranch") && <Spinner size='sm' />}Perfomanently Delete
+            {(status === "pendingDeleteBranch") && <Spinner size='sm' />} Perfomanently Delete
           </Button> 
         </ModalFooter>
       </Modal>

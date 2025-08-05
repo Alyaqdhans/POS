@@ -204,7 +204,7 @@ function Suppliers() {
               Cancel
             </Button>
             <Button color='info' type='submit' disabled={status === "pendingAddSupplier"}>
-              {(status === "pendingAddSupplier") && <Spinner size='sm' />}Save
+              {(status === "pendingAddSupplier") && <Spinner size='sm' />} Save
             </Button>
           </ModalFooter>
         </form>
