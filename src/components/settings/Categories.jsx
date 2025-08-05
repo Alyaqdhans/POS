@@ -149,7 +149,7 @@ function Categories() {
               value={name}
               className={'form-control' + (errors.name ? ' is-invalid' : '')}
               {...register("name", {onChange: (e) => setName(e.target.value)})}
-              readOnly={status === "pendingAddCategory"}
+              readOnly={status === "pendingEditCategory"}
             />
             <p className='error'>{errors.name?.message}</p>
           </ModalBody>

@@ -25,6 +25,47 @@ export const addBranch = createAsyncThunk(
   }
 );
 
+export const getBranches = createAsyncThunk(
+  "branches/getBranches",
+  async () => {
+    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getBranches`);
+    const branchList = response.data.branchList;
+    return {branchList}
+  }
+);
+
+export const editBranch = createAsyncThunk(
+  "branches/editBranch",
+  async ({branchId, name, mobile}, {rejectWithValue}) => {
+    try {
+      const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}/editBranch/${branchId}`, {
+        name: name,
+        mobile: mobile,
+      });
+      const updatedBranch = response.data.updatedBranch;
+      const msg = response.data.msg;
+      return { branchId, updatedBranch, msg };
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
+  }
+);
+
+export const deleteBranch = createAsyncThunk(
+  "branches/deleteBranch",
+  async (branchId, {rejectWithValue}) => {
+    try {
+      const response = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/deleteBranch/${branchId}`);
+      const msg = response.data.msg;
+      return { branchId, msg };
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
+  }
+);
+
 export const branchSlise = createSlice({
   name: 'branches',
   initialState,
@@ -45,6 +86,48 @@ export const branchSlise = createSlice({
       state.msg = action.payload.msg;
     })
     .addCase(addBranch.rejected, (state, action) => {
+      state.status = "rejected";
+      state.msg = action.payload.msg;
+    })
+
+    // getBranches
+    .addCase(getBranches.pending, (state, action) => {
+      state.status = "pendingGetBranches";
+    })
+    .addCase(getBranches.fulfilled, (state, action) => {
+      state.status = "success";
+      state.branchList = action.payload.branchList;
+    })
+    .addCase(getBranches.rejected, (state, action) => {
+      state.status = "rejected";
+    })
+
+    // editBranch
+    .addCase(editBranch.pending, (state, action) => {
+      state.status = "pendingEditBranch";
+    })
+    .addCase(editBranch.fulfilled, (state, action) => {
+      state.status = "success";
+      state.branchList = state.branchList.map(branch =>
+        (branch._id === action.payload.branchId) ? action.payload.updatedBranch : branch
+      );
+      state.msg = action.payload.msg;
+    })
+    .addCase(editBranch.rejected, (state, action) => {
+      state.status = "rejected";
+      state.msg = action.payload.msg;
+    })
+
+    // deleteBranch
+    .addCase(deleteBranch.pending, (state, action) => {
+      state.status = "pendingDeleteBranch";
+    })
+    .addCase(deleteBranch.fulfilled, (state, action) => {
+      state.status = "success";
+      state.branchList = state.branchList.filter(branch => branch._id !== action.payload.branchId);
+      state.msg = action.payload.msg;
+    })
+    .addCase(deleteBranch.rejected, (state, action) => {
       state.status = "rejected";
       state.msg = action.payload.msg;
     })

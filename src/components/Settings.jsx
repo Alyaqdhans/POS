@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/CategorySlice';
 import { getCustomers } from '../features/CustomerSlice';
 import { getSuppliers } from '../features/SupplierSlice';
+import { getBranches } from '../features/BranchSlice';
 
 function Settings() {
   const location = useLocation();
@@ -23,11 +24,13 @@ function Settings() {
   const { categoryList } = useSelector((state) => state.categories);
   const { customerList } = useSelector((state) => state.customers);
   const { supplierList } = useSelector((state) => state.suppliers);
+  const { branchList } = useSelector((state) => state.branches);
 
   useEffect(() => {
     dispatch(getCategories())
     dispatch(getCustomers());
     dispatch(getSuppliers());
+    dispatch(getBranches());
   }, [navigate]);
 
   return (
@@ -49,7 +52,7 @@ function Settings() {
           <FaRegCreditCard/> Payments
         </NavLink>
         <NavLink tag={Link} className='link' to='/settings/branches' active={location.pathname === '/settings/branches'}>
-          <FaCodeBranch/> Branches
+          <FaCodeBranch/> Branches ({branchList.length})
         </NavLink>
       </Nav>
 
