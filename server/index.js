@@ -277,19 +277,6 @@ app.delete("/deleteCategory/:id", async (request, response) => {
   }
 });
 
-// Get System
-app.get("/getSystem", async (request, response) => {
-  try {
-    const systemData = await SystemModel.findOne();
-    if (systemData) {
-      const logo = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
-      response.send({systemData, logo});
-    }
-  } catch(error) {
-    response.status(500).json({msg: error.message});
-  }
-});
-
 // Add Branch
 app.post("/addBranch", async (request, response) => {
   try {
@@ -303,7 +290,7 @@ app.post("/addBranch", async (request, response) => {
       response.send({msg: "Branch added successfully", addBranch});
     }
   } catch (error) {
-    response.status(500).json({msg: "Failed to add branch"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -313,7 +300,7 @@ app.get("/getBranches", async (request, response) => {
     const branchList = await BranchModel.find();
     response.send({branchList: branchList});
   } catch (error) {
-    response.status(500).json({error: "Unexpected error ouccerred"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -329,7 +316,7 @@ app.put("/editBranch/:id", async (request, response) => {
     );
     response.send({msg: "Branch updated successfully", updatedBranch});
   } catch (error) {
-    response.status(500).json({error: "Failed to update branch"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -340,7 +327,20 @@ app.delete("/deleteBranch/:id", async (request, response) => {
     await BranchModel.findByIdAndDelete(branchId);
     response.send({msg: "Branch deleted successfully"});
   } catch (error) {
-    response.status(500).json({error: "Failed to delete branch"});
+    response.status(500).json({msg: error.message});
+  }
+});
+
+// Get System
+app.get("/getSystem", async (request, response) => {
+  try {
+    const systemData = await SystemModel.findOne();
+    if (systemData) {
+      const logo = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
+      response.send({systemData, logo});
+    }
+  } catch(error) {
+    response.status(500).json({msg: error.message});
   }
 });
 
