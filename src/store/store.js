@@ -3,6 +3,7 @@ import userReducer from "../features/UserSlice";
 import customerReducer  from "../features/CustomerSlice";
 import supplierReducer from '../features/SupplierSlice';
 import categoryReducer from '../features/CategorySlice';
+import branchReducer from '../features/BranchSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
     customers: customerReducer,
     suppliers: supplierReducer,
     categories: categoryReducer,
+    branches: branchReducer,
   },
 })

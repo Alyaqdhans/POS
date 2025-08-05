@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import CustomerModel from "./models/CustomerModel.js";
 import SupplierModel from "./models/SupplierModel.js";
 import CategoryModel from "./models/CategoryModel.js";
+import BranchModel from "./models/BranchModel.js";
 
 dotenv.config()
 
@@ -257,6 +258,22 @@ app.delete("/deleteCategory/:id", async (request, response) => {
     response.send({msg: "Category deleted successfully"});
   } catch (error) {
     response.status(500).json({error: "Failed to delete categorie"});
+  }
+});
+
+app.post("/addBranch", async (request, response) => {
+  try {
+    const { name, mobile } = request.body;
+    const branch = await BranchModel.findOne({name: name, mobile: mobile});
+    if (branch) {
+      response.status(409).json({msg: "Branch already exists"});
+    } else {
+      const addBranch = BranchModel({name});
+      await addBranch.save();
+      response.send({msg: "Branch added successfully", addBranch});
+    }
+  } catch (error) {
+    response.status(500).json({msg: "Failed to add branch"});
   }
 });
 
