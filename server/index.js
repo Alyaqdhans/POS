@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import CustomerModel from "./models/CustomerModel.js";
 import SupplierModel from "./models/SupplierModel.js";
 import CategoryModel from "./models/CategoryModel.js";
+import BranchModel from "./models/BranchModel.js";
 import SystemModel from "./models/SystemModel.js";
 import multer from "multer";
 import fs from "fs";
@@ -286,6 +287,60 @@ app.get("/getSystem", async (request, response) => {
     }
   } catch(error) {
     response.status(500).json({msg: error.message});
+  }
+});
+
+// Add Branch
+app.post("/addBranch", async (request, response) => {
+  try {
+    const { name, mobile } = request.body;
+    const branch = await BranchModel.findOne({name: name, mobile: mobile});
+    if (branch) {
+      response.status(409).json({msg: "Branch already exists"});
+    } else {
+      const addBranch = BranchModel({name, mobile});
+      await addBranch.save();
+      response.send({msg: "Branch added successfully", addBranch});
+    }
+  } catch (error) {
+    response.status(500).json({msg: "Failed to add branch"});
+  }
+});
+
+// Get Branches
+app.get("/getBranches", async (request, response) => {
+  try {
+    const branchList = await BranchModel.find();
+    response.send({branchList: branchList});
+  } catch (error) {
+    response.status(500).json({error: "Unexpected error ouccerred"});
+  }
+});
+
+// Edit Branch
+app.put("/editBranch/:id", async (request, response) => {
+  try {
+    const branchId = request.params.id;
+    const { name, mobile } = request.body;
+    const updatedBranch = await BranchModel.findByIdAndUpdate(
+      branchId,
+      { name, mobile },
+      { new: true }
+    );
+    response.send({msg: "Branch updated successfully", updatedBranch});
+  } catch (error) {
+    response.status(500).json({error: "Failed to update branch"});
+  }
+});
+
+// Delete Branch
+app.delete("/deleteBranch/:id", async (request, response) => {
+  try {
+    const branchId = request.params.id;
+    await BranchModel.findByIdAndDelete(branchId);
+    response.send({msg: "Branch deleted successfully"});
+  } catch (error) {
+    response.status(500).json({error: "Failed to delete branch"});
   }
 });
 
