@@ -10,6 +10,7 @@ import BranchModel from "./models/BranchModel.js";
 import SystemModel from "./models/SystemModel.js";
 import multer from "multer";
 import fs from "fs";
+import PaymentModel from "./models/PaymentModel.js";
 
 dotenv.config()
 
@@ -370,5 +371,59 @@ app.post("/saveSystem", upload.single('logo'), async (request, response) => {
     response.send({msg: "Settings saved successfully"})
   } catch(error) {
     response.status(500).json({msg: error.message})
+  }
+});
+
+// Add Payment
+app.post("/addPayment", async (request, response) => {
+  try {
+    const { name } = request.body;
+    const payment = await PaymentModel.findOne({name: name});
+    if (payment) {
+      response.status(409).json({msg: "Payment already exists"});
+    } else {
+      const addPayment = PaymentModel({name});
+      await addPayment.save();
+      response.send({msg: "Payment added successfully", addPayment});
+    }
+  } catch (error) {
+    response.status(500).json({msg: error.message});
+  }
+});
+
+// Get Payments
+app.get("/getPayments", async (request, response) => {
+  try {
+    const paymentList = await PaymentModel.find();
+    response.send({paymentList: paymentList});
+  } catch (error) {
+    response.status(500).json({msg: error.message});
+  }
+});
+
+// Edit Payment
+app.put("/editPayment/:id", async (request, response) => {
+  try {
+    const paymentId = request.params.id;
+    const { name } = request.body;
+    const updatedPayment = await PaymentModel.findByIdAndUpdate(
+      paymentId,
+      { name },
+      { new: true }
+    );
+    response.send({msg: "payment updated successfully", updatedPayment});
+  } catch (error) {
+    response.status(500).json({msg: error.message});
+  }
+});
+
+// Delete Payment
+app.delete("/deletePayment/:id", async (request, response) => {
+  try {
+    const paymentId = request.params.id;
+    await PaymentModel.findByIdAndDelete(paymentId);
+    response.send({msg: "Payment deleted successfully"});
+  } catch (error) {
+    response.status(500).json({msg: error.message});
   }
 });

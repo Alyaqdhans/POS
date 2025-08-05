@@ -16,6 +16,7 @@ import { getCustomers } from '../features/CustomerSlice';
 import { getSuppliers } from '../features/SupplierSlice';
 import { getBranches } from '../features/BranchSlice';
 import { getSystem } from '../features/SystemSlice';
+import { getPayments } from '../features/PaymentSlice';
 
 function Settings() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function Settings() {
   const { customerList } = useSelector((state) => state.customers);
   const { supplierList } = useSelector((state) => state.suppliers);
   const { branchList } = useSelector((state) => state.branches);
+  const { paymentList } = useSelector((state) => state.payments);
 
   useEffect(() => {
     dispatch(getSystem());
@@ -33,6 +35,7 @@ function Settings() {
     dispatch(getCustomers());
     dispatch(getSuppliers());
     dispatch(getBranches());
+    dispatch(getPayments());
   }, [navigate]);
 
   return (
@@ -51,7 +54,7 @@ function Settings() {
           <LuPackageOpen/> Suppliers ({supplierList.length})
         </NavLink>
         <NavLink tag={Link} className='link' to='/settings/payments' active={location.pathname === '/settings/payments'}>
-          <FaRegCreditCard/> Payments
+          <FaRegCreditCard/> Payments ({paymentList.length})
         </NavLink>
         <NavLink tag={Link} className='link' to='/settings/branches' active={location.pathname === '/settings/branches'}>
           <FaCodeBranch/> Branches ({branchList.length})
