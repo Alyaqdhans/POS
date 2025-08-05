@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/CategorySlice';
 import { getCustomers } from '../features/CustomerSlice';
 import { getSuppliers } from '../features/SupplierSlice';
+import { getSystem } from '../features/SystemSlice';
 
 function Settings() {
   const location = useLocation();
@@ -25,6 +26,7 @@ function Settings() {
   const { supplierList } = useSelector((state) => state.suppliers);
 
   useEffect(() => {
+    dispatch(getSystem());
     dispatch(getCategories())
     dispatch(getCustomers());
     dispatch(getSuppliers());

@@ -6,14 +6,30 @@ import dotenv from "dotenv";
 import CustomerModel from "./models/CustomerModel.js";
 import SupplierModel from "./models/SupplierModel.js";
 import CategoryModel from "./models/CategoryModel.js";
+import SystemModel from "./models/SystemModel.js";
+import multer from "multer";
+import fs from "fs";
 
 dotenv.config()
 
 const app = express()
 app.use(express.json())
 app.use(cors())
+app.use('/assets', express.static('assets'))
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster`);
+app.listen(process.env.PORT, () => console.log(`server is connected to port ${process.env.PORT}`));
+
+// File Upload Handler
+const storage = multer.diskStorage({
+  destination: (request, file, cb) => {
+    return cb(null, "./assets")
+  },
+  filename: (request, file, cb) => {
+    return cb(null, file.originalname)
+  }
+});
+const upload = multer({storage});
 
 // Login
 app.post("/login", async (request, response) => {
@@ -35,7 +51,7 @@ app.post("/login", async (request, response) => {
     }
   }
   catch (error) {
-    response.status(500).json({error: "Unxpected error oucerred"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -50,7 +66,7 @@ app.get("/getUsers", async (request, response) => {
     const userList = await UserModel.find();
     response.send({userList: userList});
   } catch (error) {
-    response.status(500).json({error: "Unexpected error oucerred"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -67,7 +83,7 @@ app.post("/addUser", async (request, response) => {
       response.send({msg: "User added successfully", addUser});
     }
   } catch (error) {
-    response.status(500).json({error: "Failed to add user"});
+    response.status(500).json({msg: error.message});
   }
 })
 
@@ -78,7 +94,7 @@ app.delete("/deleteUser/:id", async (request, response) => {
     await UserModel.findByIdAndDelete(userId);
     response.send({msg: "User deleted successfully"});
   } catch (error) {
-    response.status(500).json({error: "Faild to delete user"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -94,7 +110,7 @@ app.put("/editUser/:id", async (request, response) => {
     );
     response.send({msg: "User updated successfully", updatedUser});
   } catch (error) {
-    response.status(500).json({error: "Failed to update user"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -111,7 +127,7 @@ app.post("/addCustomer", async (request, response) => {
       response.send({msg: "Customer added successfully", addCustomer});
     }
   } catch (error) {
-    response.status(500).json({error: "Failed to add customer"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -121,7 +137,7 @@ app.get("/getCustomers", async (request, response) => {
     const customerList = await CustomerModel.find();
     response.send({customerList: customerList});
   } catch (error) {
-    response.status(500).json({error: "Unexpected error oucerred"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -132,7 +148,7 @@ app.delete("/deleteCustomer/:id", async (request, response) => {
     await CustomerModel.findByIdAndDelete(customerId);
     response.send({msg: "Customer deleted successfully"});
   } catch (error) {
-    response.status(500).json({error: "Faild to delete customer"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -148,7 +164,7 @@ app.put("/editCustomer/:id", async (request, response) => {
     );
     response.send({msg: "Customer updated successfully", updatedCustomer});
   } catch (error) {
-    response.status(500).json({error: "Failed to update customer"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -165,7 +181,7 @@ app.post("/addSupplier", async (request, response) => {
       response.send({msg: "Supplier added successfully", addSupplier});
     }
   } catch (error) {
-    response.status(500).json({msg: "Failed to add supplier"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -175,7 +191,7 @@ app.get("/getSuppliers", async (request, response) => {
     const supplierList = await SupplierModel.find();
     response.send({supplierList: supplierList});
   } catch (error) {
-    response.status(500).json({error: "Unexpected error oucerred"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -191,7 +207,7 @@ app.put("/editSupplier/:id", async (request, response) => {
     );
     response.send({msg: "Supplier updated successfully", updatedSupplier});
   } catch (error) {
-    response.status(500).json({error: "Failed to update supplier"})
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -202,7 +218,7 @@ app.delete("/deleteSupplier/:id", async (request, response) => {
     await SupplierModel.findByIdAndDelete(supplierId);
     response.send({msg: "Supplier deleted successfully"});
   } catch (error) {
-    response.status(500).json({error: "Failed to delete supplier"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -219,7 +235,7 @@ app.post("/addCategory", async (request, response) => {
       response.send({msg: "Category added successfully", addCategory});
     }
   } catch (error) {
-    response.status(500).json({msg: "Failed to add category"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -229,7 +245,7 @@ app.get("/getCategories", async (request, response) => {
     const categoryList = await CategoryModel.find();
     response.send({categoryList: categoryList});
   } catch (error) {
-    response.status(500).json({error: "Unexpected error ouccerred"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -241,11 +257,11 @@ app.put("/editCategory/:id", async (request, response) => {
     const updatedCategory = await CategoryModel.findByIdAndUpdate(
       categoryId,
       { name },
-      { name: true }
+      { new: true }
     );
     response.send({msg: "Category updated successfully", updatedCategory});
   } catch (error) {
-    response.status(500).json({error: "Failed to update category"});
+    response.status(500).json({msg: error.message});
   }
 });
 
@@ -256,8 +272,48 @@ app.delete("/deleteCategory/:id", async (request, response) => {
     await CategoryModel.findByIdAndDelete(categoryId);
     response.send({msg: "Category deleted successfully"});
   } catch (error) {
-    response.status(500).json({error: "Failed to delete categorie"});
+    response.status(500).json({msg: error.message});
   }
 });
 
-app.listen(process.env.PORT, () => console.log(`server is connected to port ${process.env.PORT}`));
+// Get System
+app.get("/getSystem", async (request, response) => {
+  try {
+    const systemData = await SystemModel.findOne();
+    if (systemData) {
+      const logo = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
+      response.send({systemData, logo});
+    }
+  } catch(error) {
+    response.status(500).json({msg: error.message});
+  }
+});
+
+// Save System
+app.post("/saveSystem", upload.single('logo'), async (request, response) => {
+  try {
+    const {brand, vat, currency, receiptMsg} = request.body;
+    const logo = request.file?.originalname;
+    const system = await SystemModel.findOne();
+    if (system) {
+      if (system.logo && logo) {
+        const oldLogoPath = `./assets/${system.logo}`;
+        if (fs.existsSync(oldLogoPath)) {
+          fs.unlinkSync(oldLogoPath);
+        }
+      }
+      const systemData = await SystemModel.findByIdAndUpdate(
+        system._id,
+        {brand, vat, logo, currency, receiptMsg},
+        { new: true }
+      )
+      systemData.save();
+    } else {
+      const systemData = SystemModel({brand, vat, logo, currency, receiptMsg});
+      await systemData.save();
+    }
+    response.send({msg: "Settings saved successfully"})
+  } catch(error) {
+    response.status(500).json({msg: error.message})
+  }
+});
