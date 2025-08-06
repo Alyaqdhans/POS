@@ -422,8 +422,8 @@ app.post("/saveSystem", upload.single('logo'), async (request, response) => {
       const systemData = SystemModel({brand, vat, logo, currency, receiptMsg});
       await systemData.save();
     }
-    response.send({msg: "Settings saved successfully"})
+    response.send({msg: "Settings saved successfully"});
   } catch(error) {
-    response.status(500).json({msg: error.message})
+    response.status(500).json({msg: error.message});
   }
 });

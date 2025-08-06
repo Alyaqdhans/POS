@@ -54,6 +54,8 @@ function Branches() {
     setEditModal(false);
     setDeleteModal(false);
     reset();
+    setName("");
+    setMobile("");
   }
 
   const handleSearch = (query) => {

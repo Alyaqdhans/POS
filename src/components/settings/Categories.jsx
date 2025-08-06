@@ -52,6 +52,7 @@ function Categories() {
     setEditModal(false);
     setDeleteModal(false);
     reset();
+    setName("");
   }
 
   const handleSearch = (query) => {

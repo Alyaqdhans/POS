@@ -19,6 +19,8 @@ function System() {
   const [currency, setCurrency] = useState("");
   const [receiptMsg, setReceiptMsg] = useState("");
 
+  const [prevLogo, setprevLogo] = useState("");
+
   const dispatch = useDispatch();
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
@@ -46,18 +48,21 @@ function System() {
     if (status === "success") toast.success(msg);
     if (status === "rejected") toast.error(msg);
 
-    setBrand(systemData.brand || "");
-    setVat(systemData.vat || "0");
-    setLogo(logoData || "");
-    setCurrency(systemData.currency || "");
-    setReceiptMsg(systemData.receiptMsg || "");
-    reset({
-      brand: systemData.brand || "",
-      vat: systemData.vat || "0",
-      logo: logoData || "",
-      currency: systemData.currency || "",
-      receiptMsg: systemData.receiptMsg || ""
-    });
+    if (systemData || logoData) {
+      setBrand(systemData.brand);
+      setVat(systemData.vat);
+      if (logoData !== prevLogo) setLogo(logoData);
+      setprevLogo(logoData);
+      setCurrency(systemData.currency);
+      setReceiptMsg(systemData.receiptMsg);
+      reset({
+        brand: systemData.brand,
+        vat: systemData.vat,
+        logo: logoData,
+        currency: systemData.currency,
+        receiptMsg: systemData.receiptMsg
+      });
+    }
 
     setTimeout(() => {
       setLoading(false);

@@ -56,6 +56,9 @@ function Customers() {
     setEditModal(false);
     setDeleteModal(false);
     reset();
+    setName("");
+    setEmail("");
+    setMobile("");
   }
 
   const handleSearch = (query) => {

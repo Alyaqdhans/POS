@@ -90,6 +90,9 @@ function Users() {
     setEditModal(false);
     setDeleteModal(false);
     reset();
+    setUsername("");
+    setEmail("");
+    setPassword("");
   }
 
   const handleSearch = (query) => {

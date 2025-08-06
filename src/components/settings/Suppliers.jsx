@@ -63,6 +63,12 @@ function Suppliers() {
     setEditModal(false);
     setDeleteModal(false);
     reset();
+    setName("");
+    setEmail("");
+    setMobile("");
+    setFax("");
+    setAddress("");
+    setTax("");
   }
 
   const handleSearch = (query) => {
