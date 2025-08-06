@@ -6,7 +6,7 @@ import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Tab
 import { branchSchemaValidation } from '../../validations/BranchValidation';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import { addBranch, clearMsg, deleteBranch, editBranch } from '../../features/BranchSlice';
+import { addBranch, deleteBranch, editBranch } from '../../features/BranchSlice';
 import moment from 'moment';
 
 function Branches() {
@@ -47,7 +47,6 @@ function Branches() {
 
   const performDelete = () => {
     dispatch(deleteBranch(deleteBranchData));
-    setDeleteModal(false);
   };
 
   const handleCloseModal = () => {
@@ -87,13 +86,17 @@ function Branches() {
       };
       dispatch(editBranch(branchData));
     }
-    handleCloseModal();
   };
 
   useEffect(() => {
-    if (status === "success") toast.success(msg);
-    if (status === "rejected") toast.error(msg);
-    dispatch(clearMsg());
+    if (status === "success" && msg !== null) {
+      toast.success(msg);
+      handleCloseModal();
+    }
+    if (status === "rejected" && msg !== null) {
+      toast.error(msg);
+      handleCloseModal();
+    }
 
     setFilteredBranches(branchList);
     handleSearch(search);

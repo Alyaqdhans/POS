@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
-import { addUser, clearMsg, deleteUser, editUser } from '../features/UserSlice';
+import { addUser, deleteUser, editUser } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
 import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
@@ -83,7 +83,6 @@ function Users() {
 
   const performDelete = () => {
     dispatch(deleteUser(deleteUserData));
-    setDeleteModal(false);
   }
 
   const handleCloseModal = () => {
@@ -158,14 +157,17 @@ function Users() {
       }
       dispatch(editUser(userData));
     }
-
-    handleCloseModal();
   };
 
   useEffect(() => {
-    if (status === "success") toast.success(msg);
-    if (status === "rejected") toast.error(msg);
-    dispatch(clearMsg());
+    if (status === "success" && msg !== null) {
+      toast.success(msg);
+      handleCloseModal();
+    }
+    if (status === "rejected" && msg !== null) {
+      toast.error(msg);
+      handleCloseModal();
+    }
 
     setFilteredUsers(userList);
     handleSearch(search);

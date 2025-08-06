@@ -72,11 +72,7 @@ export const deleteCategory = createAsyncThunk(
 export const categorySlice = createSlice({
   name: 'categories',
   initialState,
-  reducers: {
-    clearMsg: (state) => {
-      state.msg = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => (
     builder
     // add Category
@@ -100,7 +96,7 @@ export const categorySlice = createSlice({
     .addCase(getCategories.fulfilled, (state, action) => {
       state.status = "success";
       state.categoryList = action.payload.categoryList;
-      state.msg = action.payload.msg;
+      state.msg = null;
     })
     .addCase(getCategories.rejected, (state, action) => {
       state.status = "rejected";
@@ -140,4 +136,3 @@ export const categorySlice = createSlice({
 })
 
 export default categorySlice.reducer;
-export const {clearMsg} = categorySlice.actions;

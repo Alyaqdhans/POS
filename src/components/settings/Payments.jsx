@@ -5,7 +5,7 @@ import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { paymentSchemaValidation } from '../../validations/PaymentValidation';
-import { addPayment, clearMsg, deletePayment, editPayment } from '../../features/PaymentSlice';
+import { addPayment, deletePayment, editPayment } from '../../features/PaymentSlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -45,7 +45,6 @@ function Payments() {
 
   const performDelete = () => {
     dispatch(deletePayment(deletePaymentData));
-    setDeleteModal(false);
   }
 
   const handleCloseModal = () => {
@@ -83,13 +82,17 @@ function Payments() {
       };
       dispatch(editPayment(paymentData));
     }
-    handleCloseModal();
   };
 
   useEffect(() => {
-    if (status === "success") toast.success(msg);
-    if (status === "rejected") toast.error(msg);
-    dispatch(clearMsg());
+    if (status === "success" && msg !== null) {
+      toast.success(msg);
+      handleCloseModal();
+    }
+    if (status === "rejected" && msg !== null) {
+      toast.error(msg);
+      handleCloseModal();
+    }
 
     setFilteredPayments(paymentList);
     handleSearch(search);

@@ -5,7 +5,7 @@ import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { customerSchemaValidation } from '../../validations/CustomerValidation';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCustomer, clearMsg, deleteCustomr, editCustomer } from '../../features/CustomerSlice';
+import { addCustomer, deleteCustomr, editCustomer } from '../../features/CustomerSlice';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 
@@ -49,7 +49,6 @@ function Customers() {
 
   const performDelete = () => {
     dispatch(deleteCustomr(deleteCustomerData));
-    setDeleteModal(false);
   }
 
   const handleCloseModal = () => {
@@ -91,13 +90,17 @@ function Customers() {
       }
       dispatch(editCustomer(customerData));
     }
-    handleCloseModal();
   };
 
   useEffect(() => {
-    if (status === "success") toast.success(msg);
-    if (status === "rejected") toast.error(msg);
-    dispatch(clearMsg());
+    if (status === "success" && msg !== null) {
+      toast.success(msg);
+      handleCloseModal();
+    }
+    if (status === "rejected" && msg !== null) {
+      toast.error(msg);
+      handleCloseModal();
+    }
     
     setFilteredCustomers(customerList);
     handleSearch(search);

@@ -43,11 +43,7 @@ export const saveSystem = createAsyncThunk(
 export const systemSlice = createSlice({
   name: 'system',
   initialState,
-  reducers: {
-    clearMsg: (state) => {
-      state.msg = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => (
     builder
     // Get System
@@ -58,7 +54,7 @@ export const systemSlice = createSlice({
       state.status = "success";
       state.systemData = action.payload.systemData;
       state.logoData = action.payload.logo;
-      state.msg = action.payload.msg;
+      state.msg = null;
     })
     .addCase(getSystem.rejected, (state, action) => {
       state.status = "rejected";
@@ -81,4 +77,3 @@ export const systemSlice = createSlice({
 })
 
 export default systemSlice.reducer;
-export const {clearMsg} = systemSlice.actions;

@@ -72,11 +72,7 @@ export const editPayment = createAsyncThunk(
 export const paymentSlice = createSlice({
   name: 'payments',
   initialState,
-  reducers: {
-    clearMsg: (state) => {
-      state.msg = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => (
     builder
     // add payment
@@ -100,7 +96,7 @@ export const paymentSlice = createSlice({
     .addCase(getPayments.fulfilled, (state, action) => {
       state.status = "success";
       state.paymentList = action.payload.paymentList;
-      state.msg = action.payload.msg;
+      state.msg = null;
     })
     .addCase(getPayments.rejected, (state, action) => {
       state.status = "rejected";
@@ -140,4 +136,3 @@ export const paymentSlice = createSlice({
 });
 
 export default paymentSlice.reducer;
-export const {clearMsg} = paymentSlice.actions;

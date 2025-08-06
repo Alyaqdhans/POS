@@ -74,11 +74,7 @@ export const deleteBranch = createAsyncThunk(
 export const branchSlise = createSlice({
   name: 'branches',
   initialState,
-  reducers: {
-    clearMsg: (state) => {
-      state.msg = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => (
     builder
     // add branch
@@ -102,7 +98,7 @@ export const branchSlise = createSlice({
     .addCase(getBranches.fulfilled, (state, action) => {
       state.status = "success";
       state.branchList = action.payload.branchList;
-      state.msg = action.payload.msg;
+      state.msg = null;
     })
     .addCase(getBranches.rejected, (state, action) => {
       state.status = "rejected";
@@ -142,4 +138,3 @@ export const branchSlise = createSlice({
 })
 
 export default branchSlise.reducer;
-export const {clearMsg} = branchSlise.actions;

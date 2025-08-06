@@ -5,7 +5,7 @@ import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { categorySchemaValidation } from '../../validations/CategoryValidation';
-import { addCategory, clearMsg, deleteCategory, editCategory } from '../../features/CategorySlice';
+import { addCategory, deleteCategory, editCategory } from '../../features/CategorySlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -45,7 +45,6 @@ function Categories() {
 
   const perfomDelete = () => {
     dispatch(deleteCategory(deleteCategoryData));
-    setDeleteModal(false);
   }
 
   const handleCloseModal = () => {
@@ -83,13 +82,17 @@ function Categories() {
       }
       dispatch(editCategory(categoryData));
     }
-    handleCloseModal();
   };
 
   useEffect(() => {
-    if (status === "success") toast.success(msg);
-    if (status === "rejected") toast.error(msg);
-    dispatch(clearMsg());
+    if (status === "success" && msg !== null) {
+      toast.success(msg);
+      handleCloseModal();
+    }
+    if (status === "rejected" && msg !== null) {
+      toast.error(msg);
+      handleCloseModal();
+    }
 
     setFilteredCategories(categoryList);
     handleSearch(search);

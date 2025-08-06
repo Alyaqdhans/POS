@@ -91,11 +91,7 @@ export const deleteSupplier = createAsyncThunk(
 export const supplierSlice = createSlice({
   name: "suppliers",
   initialState,
-  reducers: {
-    clearMsg: (state) => {
-      state.msg = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       // addSupplier
@@ -119,7 +115,7 @@ export const supplierSlice = createSlice({
       .addCase(getSuppliers.fulfilled, (state, action) => {
         state.status = "success";
         state.supplierList = action.payload.supplierList;
-        state.msg = action.payload.msg;
+        state.msg = null;
       })
       .addCase(getSuppliers.rejected, (state, action) => {
         state.status = "rejeted";
@@ -161,4 +157,3 @@ export const supplierSlice = createSlice({
 });
 
 export default supplierSlice.reducer;
-export const { clearMsg } = supplierSlice.actions;
