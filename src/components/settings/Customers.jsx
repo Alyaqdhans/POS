@@ -117,7 +117,7 @@ function Customers() {
           <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20}/>
         </div>
-        <Button color='info' onClick={handleAdd}>Add Customer</Button>
+        <Button color='info' onClick={handleAdd} disabled={status === "pendingGetCustomers"}>Add Customer</Button>
       </div>
       {/* Add Modal */}
       <Modal centered isOpen={addModal}>
@@ -236,7 +236,7 @@ function Customers() {
 
       <div className='content-display settings'>
         {
-          (loading || (status === "pendingGetCategories")) ? (
+          (loading || (status === "pendingGetCustomers")) ? (
             <center>
               <Spinner className='large' type='grow' />
             </center>

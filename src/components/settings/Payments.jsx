@@ -109,7 +109,7 @@ function Payments() {
           <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
         </div>
-        <Button color='info' onClick={handleAdd}>Add Payment</Button>
+        <Button color='info' onClick={handleAdd} disabled={status === "pendingGetPayments"}>Add Payment</Button>
       </div>
       {/* Add Modal */}
       <Modal centered isOpen={addModal}>
@@ -175,14 +175,14 @@ function Payments() {
             Cancel
           </Button>
           <Button color='danger' onClick={performDelete} disabled={status === "pendingDeletePayment"}>
-            {(status === "pendingDeletePayment") && <Spinner size='sm' />} Perfomanently Delete
+            {(status === "pendingDeletePayment") && <Spinner size='sm' />} Permanently Delete
           </Button> 
         </ModalFooter>
       </Modal>
 
       <div className='content-display settings'>
         {
-          (loading || (status === "pendingGetPayment")) ? (
+          (loading || (status === "pendingGetPayments")) ? (
             <center>
               <Spinner className='large' type='grow' />
             </center>

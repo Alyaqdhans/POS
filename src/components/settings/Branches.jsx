@@ -113,7 +113,7 @@ function Branches() {
           <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
         </div>
-        <Button color='info' onClick={handleAdd}>Add Branch</Button>
+        <Button color='info' onClick={handleAdd} disabled={status === "pendingGetBranches"}>Add Branch</Button>
       </div>
       {/* Add Modal */}
       <Modal centered isOpen={addModal}>
@@ -200,7 +200,7 @@ function Branches() {
             Cancel
           </Button>
           <Button color='danger' onClick={performDelete} disabled={status === "pendingDeleteBranch"}>
-            {(status === "pendingDeleteBranch") && <Spinner size='sm' />} Perfomanently Delete
+            {(status === "pendingDeleteBranch") && <Spinner size='sm' />} Permanently Delete
           </Button> 
         </ModalFooter>
       </Modal>

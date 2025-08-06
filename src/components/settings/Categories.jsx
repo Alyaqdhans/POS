@@ -109,7 +109,7 @@ function Categories() {
           <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
         </div>
-        <Button color='info' onClick={handleAdd}>Add Category</Button>
+        <Button color='info' onClick={handleAdd} disabled={status === "pendingGetCategories"}>Add Category</Button>
       </div>
       {/* Add Modal */}
       <Modal centered isOpen={addModal}>

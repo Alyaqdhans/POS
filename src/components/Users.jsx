@@ -187,7 +187,7 @@ function Users() {
 
         {
           (user?.permissions.users.add) &&
-          <Button color='info' onClick={handleAdd}>Add User</Button>
+          <Button color='info' onClick={handleAdd} disabled={status === "pendingGetUsers"}>Add User</Button>
         }
       </div>
 
@@ -543,7 +543,7 @@ function Users() {
 
       <div className='content-display'>
         {
-          (loading || (status === "pendingGetCategories")) ? (
+          (loading || (status === "pendingGetUsers")) ? (
             <center>
               <Spinner className='large' type='grow' />
             </center>

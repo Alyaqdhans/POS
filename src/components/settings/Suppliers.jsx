@@ -130,7 +130,7 @@ function Suppliers() {
           <input type='search' placeholder={`Search`} className='form-control' onChange={(e) => handleSearch(e.target.value)} />
           <FaSearch size={20} />
         </div>
-        <Button color='info' onClick={handleAdd}>Add Supplier</Button>
+        <Button color='info' onClick={handleAdd} disabled={status === "pendingGetSuppliers"}>Add Supplier</Button>
       </div>
       {/* Add Modal */}
       <Modal centered isOpen={addModal}>
@@ -318,7 +318,7 @@ function Suppliers() {
 
       <div className='content-display settings'>
         {
-          (loading || (status === "pendingGetCategories")) ? (
+          (loading || (status === "pendingGetSuppliers")) ? (
             <center>
               <Spinner className='large' type='grow' />
             </center>
