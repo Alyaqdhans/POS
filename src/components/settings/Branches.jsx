@@ -120,7 +120,7 @@ function Branches() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Branch</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name</Label>
+            <Label htmlFor='name'>Name*</Label>
             <input
               id='name'
               type='text'
@@ -168,7 +168,7 @@ function Branches() {
               readOnly={status === "pendingEditBranch"}
             />
             <p className='error'>{errors.name?.message}</p>
-            <Label htmlFor='mobile'>Mobile*</Label>
+            <Label htmlFor='mobile'>Mobile</Label>
             <input
               id='mobile'
               type='text'
@@ -194,7 +194,7 @@ function Branches() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Branch</ModalHeader>
-        <ModalHeader>Are you sure you want to delete this branch?</ModalHeader>
+        <ModalBody>Are you sure you want to delete this branch?</ModalBody>
         <ModalFooter>
           <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteBranch"}>
             Cancel

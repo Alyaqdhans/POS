@@ -8,8 +8,8 @@ const initialState = {
 }
 
 export const addBranch = createAsyncThunk(
-  "branches/addBranche",
-  async (brancheData, {rejectedWithValue}) => {
+  "branches/addBranch",
+  async (brancheData, {rejectWithValue}) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/addBranch`, {
         name: brancheData.name,
@@ -20,7 +20,7 @@ export const addBranch = createAsyncThunk(
       return { msg, addBranch };
     } catch (error) { 
       const msg = error.response.data.msg;
-      return rejectedWithValue({msg});
+      return rejectWithValue({msg});
     }
   }
 );

@@ -116,7 +116,7 @@ function Payments() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Payment</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name</Label>
+            <Label htmlFor='name'>Name*</Label>
               <input
                 id='name'
                 type='text'
@@ -169,7 +169,7 @@ function Payments() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Payment</ModalHeader>
-        <ModalHeader>Are you sure you want to delete this payment?</ModalHeader>
+        <ModalBody>Are you sure you want to delete this payment?</ModalBody>
         <ModalFooter>
           <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeletePayment"}>
             Cancel

@@ -282,7 +282,7 @@ app.delete("/deleteCategory/:id", async (request, response) => {
 app.post("/addBranch", async (request, response) => {
   try {
     const { name, mobile } = request.body;
-    const branch = await BranchModel.findOne({name: name, mobile: mobile});
+    const branch = await BranchModel.findOne({name: name});
     if (branch) {
       response.status(409).json({msg: "Branch already exists"});
     } else {
@@ -329,48 +329,6 @@ app.delete("/deleteBranch/:id", async (request, response) => {
     response.send({msg: "Branch deleted successfully"});
   } catch (error) {
     response.status(500).json({msg: error.message});
-  }
-});
-
-// Get System
-app.get("/getSystem", async (request, response) => {
-  try {
-    const systemData = await SystemModel.findOne();
-    if (systemData) {
-      const logo = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
-      response.send({systemData, logo});
-    }
-  } catch(error) {
-    response.status(500).json({msg: error.message});
-  }
-});
-
-// Save System
-app.post("/saveSystem", upload.single('logo'), async (request, response) => {
-  try {
-    const {brand, vat, currency, receiptMsg} = request.body;
-    const logo = request.file?.originalname;
-    const system = await SystemModel.findOne();
-    if (system) {
-      if (system.logo && logo) {
-        const oldLogoPath = `./assets/${system.logo}`;
-        if (fs.existsSync(oldLogoPath)) {
-          fs.unlinkSync(oldLogoPath);
-        }
-      }
-      const systemData = await SystemModel.findByIdAndUpdate(
-        system._id,
-        {brand, vat, logo, currency, receiptMsg},
-        { new: true }
-      )
-      systemData.save();
-    } else {
-      const systemData = SystemModel({brand, vat, logo, currency, receiptMsg});
-      await systemData.save();
-    }
-    response.send({msg: "Settings saved successfully"})
-  } catch(error) {
-    response.status(500).json({msg: error.message})
   }
 });
 
@@ -425,5 +383,47 @@ app.delete("/deletePayment/:id", async (request, response) => {
     response.send({msg: "Payment deleted successfully"});
   } catch (error) {
     response.status(500).json({msg: error.message});
+  }
+});
+
+// Get System
+app.get("/getSystem", async (request, response) => {
+  try {
+    const systemData = await SystemModel.findOne();
+    if (systemData) {
+      const logo = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
+      response.send({systemData, logo});
+    }
+  } catch(error) {
+    response.status(500).json({msg: error.message});
+  }
+});
+
+// Save System
+app.post("/saveSystem", upload.single('logo'), async (request, response) => {
+  try {
+    const {brand, vat, currency, receiptMsg} = request.body;
+    const logo = request.file?.originalname;
+    const system = await SystemModel.findOne();
+    if (system) {
+      if (system.logo && logo) {
+        const oldLogoPath = `./assets/${system.logo}`;
+        if (fs.existsSync(oldLogoPath)) {
+          fs.unlinkSync(oldLogoPath);
+        }
+      }
+      const systemData = await SystemModel.findByIdAndUpdate(
+        system._id,
+        {brand, vat, logo, currency, receiptMsg},
+        { new: true }
+      )
+      systemData.save();
+    } else {
+      const systemData = SystemModel({brand, vat, logo, currency, receiptMsg});
+      await systemData.save();
+    }
+    response.send({msg: "Settings saved successfully"})
+  } catch(error) {
+    response.status(500).json({msg: error.message})
   }
 });
