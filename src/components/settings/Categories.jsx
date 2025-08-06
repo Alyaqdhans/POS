@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 
 function Categories() {
-
   const { status, msg, categoryList } = useSelector((state) => state.categories);
 
   const [loading, setLoading] = useState(true);
@@ -180,41 +179,47 @@ function Categories() {
 
       <div className='content-display settings'>
         {
-          (loading || (status === "pendingGetCategories")) ?
-          <center>
-            <Spinner className='large' type='grow' />
-          </center> :
-          filteredCatrgories.length ?
-          <Table striped>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                filteredCatrgories?.map((c) => (
-                  <tr key={c._id}>
-                    <td>{c.name}</td>
-                    <td className='actions'>
-                      <div className='actionButtons' style={{minHeight: "37xp"}}>
-                        <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
-                        <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
-                      </div>
+          (loading || (status === "pendingGetCategories")) ? (
+            <center>
+              <Spinner className='large' type='grow' />
+            </center>
+          ) : !categoryList.length ? (
+            <div className='no-result'>
+              <h1><FaDatabase/>Database is empty</h1>
+            </div>
+          ) : !filteredCatrgories.length ? (
+            <div className='no-result'>
+              <h1><FaSearch/>No matching results</h1>
+            </div>
+          ) : (
+            <Table striped>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  filteredCatrgories?.map((c) => (
+                    <tr key={c._id}>
+                      <td>{c.name}</td>
+                      <td className='actions'>
+                        <div className='actionButtons'>
+                          <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
+                          <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
+                        </div>
 
-                      <div className='dateInfo'>
-                        Created: {moment(c.createdAt).format('D/M/yyyy')} | Modified: {moment(c.updatedAt).format('D/M/yyyy')}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </Table> :
-          <div className='no-result'>
-            <h1><FaSearch />No matching results</h1>
-          </div>
+                        <div className='dateInfo'>
+                          Created: {moment(c.createdAt).format('D/M/yyyy')} | Modified: {moment(c.updatedAt).format('D/M/yyyy')}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </Table>
+          )
         }
       </div>
     </div>

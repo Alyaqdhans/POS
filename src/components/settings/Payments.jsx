@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
+import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { paymentSchemaValidation } from '../../validations/PaymentValidation';
@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 
 function Payments() {
-
   const { status, msg, paymentList } = useSelector((state) => state.payments);
 
   const [loading, setLoading] = useState(true);
@@ -24,7 +23,7 @@ function Payments() {
   const [name, setName] = useState("");
 
   const [search, setSearch] = useState("");
-  const [filteredPayment, setFilteredPayment] = useState([]) ;
+  const [filteredPayments, setFilteredPayments] = useState([]) ;
   const filterTypes = ['name'];
 
   const dispatch = useDispatch();
@@ -63,7 +62,7 @@ function Payments() {
         payment[type]?.toLowerCase().includes(query.toLowerCase())
       )
     );
-    setFilteredPayment(filtered);
+    setFilteredPayments(filtered);
   };
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
@@ -92,7 +91,7 @@ function Payments() {
     if (status === "rejected") toast.error(msg);
     dispatch(clearMsg());
 
-    setFilteredPayment(paymentList);
+    setFilteredPayments(paymentList);
     handleSearch(search);
 
     setTimeout(() => {
@@ -180,41 +179,47 @@ function Payments() {
 
       <div className='content-display settings'>
         {
-          (loading || (status === "pendingGetPayment")) ?
-          <center>
-            <Spinner className='large' type='grow'/>
-          </center> :
-          filteredPayment.length ?
-          <Table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                filteredPayment?.map((p) => (
-                  <tr key={p._id}>
-                    <td>{p.name}</td>
-                    <td>
-                      <div className='actions'>
-                        <Button color='warning' onClick={() => handleEdit(p)}><FaEdit/></Button>
-                        <Button color='danger' onClick={() => handleDelete(p._id)}><FaTrashAlt/></Button>
-                      </div>
+          (loading || (status === "pendingGetPayment")) ? (
+            <center>
+              <Spinner className='large' type='grow' />
+            </center>
+          ) : !paymentList.length ? (
+            <div className='no-result'>
+              <h1><FaDatabase/>Database is empty</h1>
+            </div>
+          ) : !filteredPayments.length ? (
+            <div className='no-result'>
+              <h1><FaSearch/>No matching results</h1>
+            </div>
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  filteredPayments?.map((p) => (
+                    <tr key={p._id}>
+                      <td>{p.name}</td>
+                      <td className='actions'>
+                        <div className='actionButtons'>
+                          <Button color='warning' onClick={() => handleEdit(p)}><FaEdit/></Button>
+                          <Button color='danger' onClick={() => handleDelete(p._id)}><FaTrashAlt/></Button>
+                        </div>
 
-                      <div className='dateInfo'>
-                        Created: {moment(p.createdAt).format('D/M/yyyy')} | Modified: {moment(p.updatedAt).format('D/M/yyyy')}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </Table> :
-          <div className='no-result'>
-            <h1><FaSearch/>No matching results</h1>
-          </div>
+                        <div className='dateInfo'>
+                          Created: {moment(p.createdAt).format('D/M/yyyy')} | Modified: {moment(p.updatedAt).format('D/M/yyyy')}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </Table>
+          )
         }
       </div>
     </div>

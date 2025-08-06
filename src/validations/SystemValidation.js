@@ -9,11 +9,11 @@ export const systemSchemaValidation = yup.object().shape({
   logo: yup
     .mixed()
     .test("fileType", "Only image files are allowed", value => {
-      if (!value || typeof value === 'string') return true
+      if (!value || !value.length || typeof value === 'string') return true
       return value[0].type.startsWith("image/");
     })
     .test("fileSize", function(value) {
-      if (!value || typeof value === 'string') return true;
+      if (!value || !value.length || typeof value === 'string') return true;
       const fileSize = (value[0].size / 1024 / 1024).toFixed(2);
       if (fileSize > 2) return this.createError({
         message: `File size too large (${fileSize}MB). Max size is 2MB`

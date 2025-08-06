@@ -26,10 +26,15 @@ export const addCategory = createAsyncThunk(
 
 export const getCategories = createAsyncThunk(
   "categories/getCategories",
-  async () => {
-    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getCategories`)
-    const categoryList = response.data.categoryList;
-    return {categoryList};
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getCategories`)
+      const categoryList = response.data.categoryList;
+      return {categoryList};
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
   }
 );
 
@@ -95,9 +100,11 @@ export const categorySlice = createSlice({
     .addCase(getCategories.fulfilled, (state, action) => {
       state.status = "success";
       state.categoryList = action.payload.categoryList;
+      state.msg = action.payload.msg;
     })
     .addCase(getCategories.rejected, (state, action) => {
       state.status = "rejected";
+      state.msg = action.payload.msg;
     })
 
     // editCategory

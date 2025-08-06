@@ -28,10 +28,15 @@ export const addCustomer = createAsyncThunk(
 
 export const getCustomers = createAsyncThunk(
 	"customers/getCustomers",
-	async () => {
-		const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getCustomers`);
-		const customerList = response.data.customerList;
-		return {customerList};
+	async (_, {rejectWithValue}) => {
+		try {
+			const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getCustomers`);
+			const customerList = response.data.customerList;
+			return {customerList};
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
 	}
 );
 
@@ -98,9 +103,11 @@ export const customerSlice = createSlice({
 		.addCase(getCustomers.fulfilled, (state, action) => {
 			state.status = "success";
 			state.customerList = action.payload.customerList;
+			state.msg = action.payload.msg;
 		})
 		.addCase(getCustomers.rejected, (state, action) => {
 			state.status = 'rejected';
+			state.msg = action.payload.msg;
 		})
 
 		// deleteCustomer

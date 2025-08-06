@@ -37,10 +37,15 @@ export const logout = createAsyncThunk(
 
 export const getUsers = createAsyncThunk(
   "users/getUsers",
-  async () => {
-    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getUsers`);
-    const userList = response.data.userList;
-    return {userList};
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getUsers`);
+      const userList = response.data.userList;
+      return {userList};
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
   }
 )
 
@@ -146,9 +151,11 @@ export const userSlice = createSlice({
         if (userIndex) {
           state.user = action.payload.userList[userIndex];
         }
+        state.msg = action.payload.msg;
       })
       .addCase(getUsers.rejected, (state, action) => {
         state.status = "rejected";
+        state.msg = action.payload.msg;
       })
 
       // addUser

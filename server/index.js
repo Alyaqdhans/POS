@@ -66,7 +66,7 @@ app.post("/logout", async (request, response) => {
 app.get("/getUsers", async (request, response) => {
   try {
     const userList = await UserModel.find();
-    response.send({userList: userList});
+    response.send({userList});
   } catch (error) {
     response.status(500).json({msg: error.message});
   }
@@ -137,7 +137,7 @@ app.post("/addCustomer", async (request, response) => {
 app.get("/getCustomers", async (request, response) => {
   try {
     const customerList = await CustomerModel.find();
-    response.send({customerList: customerList});
+    response.send({customerList});
   } catch (error) {
     response.status(500).json({msg: error.message});
   }
@@ -191,7 +191,7 @@ app.post("/addSupplier", async (request, response) => {
 app.get("/getSuppliers", async (request, response) => {
   try {
     const supplierList = await SupplierModel.find();
-    response.send({supplierList: supplierList});
+    response.send({supplierList});
   } catch (error) {
     response.status(500).json({msg: error.message});
   }
@@ -245,7 +245,7 @@ app.post("/addCategory", async (request, response) => {
 app.get("/getCategories", async (request, response) => {
   try {
     const categoryList = await CategoryModel.find();
-    response.send({categoryList: categoryList});
+    response.send({categoryList});
   } catch (error) {
     response.status(500).json({msg: error.message});
   }
@@ -299,7 +299,7 @@ app.post("/addBranch", async (request, response) => {
 app.get("/getBranches", async (request, response) => {
   try {
     const branchList = await BranchModel.find();
-    response.send({branchList: branchList});
+    response.send({branchList});
   } catch (error) {
     response.status(500).json({msg: error.message});
   }
@@ -395,7 +395,7 @@ app.post("/addPayment", async (request, response) => {
 app.get("/getPayments", async (request, response) => {
   try {
     const paymentList = await PaymentModel.find();
-    response.send({paymentList: paymentList});
+    response.send({paymentList});
   } catch (error) {
     response.status(500).json({msg: error.message});
   }

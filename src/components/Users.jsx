@@ -6,7 +6,7 @@ import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Tab
 import { addUser, clearMsg, deleteUser, editUser } from '../features/UserSlice';
 import { editUserSchemaValidation } from '../validations/EditUserValidation';
 import { addUserSchemaValidation } from '../validations/AddUserValidation';
-import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
+import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -541,59 +541,65 @@ function Users() {
 
       <div className='content-display'>
         {
-          (loading || (status === "pendingGetCategories")) ?
-          <center>
-            <Spinner className='large' type='grow' />
-          </center> :
-          filteredUsers.length ?
-          <Table striped>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Last Login</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                filteredUsers?.map((u) => (
-                  <tr key={u._id}>
-                    <td>{u.username}</td>
-                    <td>{u.email}</td>
-                    <td style={{fontSize: "14px"}}>
-                      {
-                        u.lastLogin ?
-                        <>{moment(u.lastLogin).format('D/M/yyyy, h:mm A')} ({moment(u.lastLogin).fromNow()})</> :
-                        'Never logged in'
-                      }
-                    </td>
-                    <td className='actions'>
-                      <div className="actionButtons" style={{minHeight: "37px"}}>
+          (loading || (status === "pendingGetCategories")) ? (
+            <center>
+              <Spinner className='large' type='grow' />
+            </center>
+          ) : !userList.length ? (
+            <div className='no-result'>
+              <h1><FaDatabase/>Database is empty</h1>
+            </div>
+          ) : !filteredUsers.length ? (
+            <div className='no-result'>
+              <h1><FaSearch/>No matching results</h1>
+            </div>
+          ) : (
+            <Table striped>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Last Login</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  filteredUsers?.map((u) => (
+                    <tr key={u._id}>
+                      <td>{u.username}</td>
+                      <td>{u.email}</td>
+                      <td style={{fontSize: "14px"}}>
                         {
-                          // (user have permission to edit | allow user to change their details) & (dont't allow none admin to change admin | allow admin to do anything)
-                          (user?.permissions.users.edit || user?._id === u._id) && (u.username.toLowerCase() !== "admin" || user?.username.toLowerCase() === "admin") &&
-                          <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>
+                          u.lastLogin ?
+                          <>{moment(u.lastLogin).format('D/M/yyyy, h:mm A')} ({moment(u.lastLogin).fromNow()})</> :
+                          'Never logged in'
                         }
-                        {
-                          // (user have permission to delete) & (dont't allow none admin to delete admin | don't allow user to delete themselves)
-                          (user?.permissions.users.delete) && (u.username.toLowerCase() !== "admin" && u.username !== user?.username) &&
-                          <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>
-                        }
-                      </div>
-                      
-                      <div className='dateInfo'>
-                        Created: {moment(u.createdAt).format('D/M/yyyy')} | Modified: {moment(u.updatedAt).format('D/M/yyyy')}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </Table> :
-          <div className="no-result">
-            <h1><FaSearch /> No matching results</h1>
-          </div>
+                      </td>
+                      <td className='actions'>
+                        <div className="actionButtons">
+                          {
+                            // (user have permission to edit | allow user to change their details) & (dont't allow none admin to change admin | allow admin to do anything)
+                            (user?.permissions.users.edit || user?._id === u._id) && (u.username.toLowerCase() !== "admin" || user?.username.toLowerCase() === "admin") &&
+                            <Button color='warning' onClick={() => handleEdit(u)}><FaEdit /></Button>
+                          }
+                          {
+                            // (user have permission to delete) & (dont't allow none admin to delete admin | don't allow user to delete themselves)
+                            (user?.permissions.users.delete) && (u.username.toLowerCase() !== "admin" && u.username !== user?.username) &&
+                            <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>
+                          }
+                        </div>
+                        
+                        <div className='dateInfo'>
+                          Created: {moment(u.createdAt).format('D/M/yyyy')} | Modified: {moment(u.updatedAt).format('D/M/yyyy')}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </Table>
+          )
         }
       </div>
     </div>

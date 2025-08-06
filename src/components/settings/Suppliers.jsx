@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
+import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { supplierSchemaValidation } from '../../validations/SupplierValidation';
@@ -314,51 +314,57 @@ function Suppliers() {
 
       <div className='content-display settings'>
         {
-          (loading || (status === "pendingGetCategories")) ?
-          <center>
-            <Spinner className='large' type='grow' />
-          </center> :
-          filteredSuppliers.length ?
-          <Table striped>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Fax</th>
-                <th>Address</th>
-                <th>Tax</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                filteredSuppliers?.map((s) => (
-                  <tr key={s._id}>
-                    <td>{s.name}</td>
-                    <td>{s.email}</td>
-                    <td>{s.mobile}</td>
-                    <td>{s.fax}</td>
-                    <td>{s.address}</td>
-                    <td>{s.tax}</td>
-                    <td className='actions'>
-                      <div className='actionButtons' style={{minHeight: "37xp"}}>
-                        <Button color='warning' onClick={() => handleEdit(s)}><FaEdit /></Button>
-                        <Button color='danger' onClick={() => handleDelete(s._id)}><FaTrashAlt /></Button>
-                      </div>
+          (loading || (status === "pendingGetCategories")) ? (
+            <center>
+              <Spinner className='large' type='grow' />
+            </center>
+          ) : !supplierList.length ? (
+            <div className='no-result'>
+              <h1><FaDatabase/>Database is empty</h1>
+            </div>
+          ) : !filteredSuppliers.length ? (
+            <div className='no-result'>
+              <h1><FaSearch/>No matching results</h1>
+            </div>
+          ) : (
+            <Table striped>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Fax</th>
+                  <th>Address</th>
+                  <th>Tax</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  filteredSuppliers?.map((s) => (
+                    <tr key={s._id}>
+                      <td>{s.name}</td>
+                      <td>{s.email}</td>
+                      <td>{s.mobile}</td>
+                      <td>{s.fax}</td>
+                      <td>{s.address}</td>
+                      <td>{s.tax}</td>
+                      <td className='actions'>
+                        <div className='actionButtons'>
+                          <Button color='warning' onClick={() => handleEdit(s)}><FaEdit /></Button>
+                          <Button color='danger' onClick={() => handleDelete(s._id)}><FaTrashAlt /></Button>
+                        </div>
 
-                      <div className='dateInfo'>
-                        Created: {moment(s.createdAt).format('D/M/yyyy')} | Modified: {moment(s.updatedAt).format('D/M/yyyy')}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </Table> : 
-          <div className='no-result'>
-            <h1><FaSearch />No matching results</h1>
-          </div>
+                        <div className='dateInfo'>
+                          Created: {moment(s.createdAt).format('D/M/yyyy')} | Modified: {moment(s.updatedAt).format('D/M/yyyy')}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </Table>
+          )
         }
       </div>
     </div>

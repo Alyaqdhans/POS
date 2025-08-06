@@ -10,11 +10,16 @@ const initialState = {
 
 export const getSystem = createAsyncThunk(
   "system/get",
-  async () => {
-    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getSystem`)
-    const systemData = response.data.systemData;
-    const logo = response.data.logo;
-    return {systemData, logo}
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getSystem`)
+      const systemData = response.data.systemData;
+      const logo = response.data.logo;
+      return {systemData, logo}
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
   }
 )
 
@@ -53,10 +58,13 @@ export const systemSlice = createSlice({
       state.status = "success";
       state.systemData = action.payload.systemData;
       state.logoData = action.payload.logo;
+      state.msg = action.payload.msg;
     })
     .addCase(getSystem.rejected, (state, action) => {
       state.status = "rejected";
+      state.msg = action.payload.msg;
     })
+
     // Save System
     .addCase(saveSystem.pending, (state, action) => {
       state.status = "pendingSaveSystem";

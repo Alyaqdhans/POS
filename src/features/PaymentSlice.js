@@ -26,10 +26,15 @@ export const addPayment = createAsyncThunk(
 
 export const getPayments = createAsyncThunk(
   "payments/getPayments",
-  async () => {
-    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getPayments`);
-    const paymentList = response.data.paymentList;
-    return {paymentList}
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getPayments`);
+      const paymentList = response.data.paymentList;
+      return {paymentList}
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
   }
 );
 
@@ -95,9 +100,11 @@ export const paymentSlice = createSlice({
     .addCase(getPayments.fulfilled, (state, action) => {
       state.status = "success";
       state.paymentList = action.payload.paymentList;
+      state.msg = action.payload.msg;
     })
     .addCase(getPayments.rejected, (state, action) => {
       state.status = "rejected";
+      state.msg = action.payload.msg;
     })
 
     // edit payment

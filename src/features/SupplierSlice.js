@@ -34,12 +34,15 @@ export const addSupplier = createAsyncThunk(
 
 export const getSuppliers = createAsyncThunk(
   "suppliers/getSuppliers",
-  async () => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/getSuppliers`
-    );
-    const supplierList = response.data.supplierList;
-    return { supplierList };
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getSuppliers`);
+      const supplierList = response.data.supplierList;
+      return { supplierList };
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
   }
 );
 
@@ -116,9 +119,11 @@ export const supplierSlice = createSlice({
       .addCase(getSuppliers.fulfilled, (state, action) => {
         state.status = "success";
         state.supplierList = action.payload.supplierList;
+        state.msg = action.payload.msg;
       })
       .addCase(getSuppliers.rejected, (state, action) => {
         state.status = "rejeted";
+        state.msg = action.payload.msg;
       })
 
       // editSupplier

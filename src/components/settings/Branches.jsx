@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react'
-import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
+import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { branchSchemaValidation } from '../../validations/BranchValidation';
@@ -10,7 +10,6 @@ import { addBranch, clearMsg, deleteBranch, editBranch } from '../../features/Br
 import moment from 'moment';
 
 function Branches() {
-
   const { status, msg, branchList } = useSelector((state) => state.branches);
 
   const [loading, setLoading] = useState(true);
@@ -205,43 +204,49 @@ function Branches() {
 
       <div className='content-display settings'>
         {
-          (loading || (status === "pendingGetBranches")) ?
-          <center>
-            <Spinner className='large' type='grow' />
-          </center> :
-          filteredBranches.length ?
-          <Table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                filteredBranches?.map((b) => (
-                  <tr key={b._id}> 
-                    <td>{b.name}</td>
-                    <td>{b.mobile}</td>
-                    <td className='actions'>
-                      <div className='actionButtons' style={{minHeight: "37px"}}>
-                        <Button color='warning' onClick={() => handleEdit(b)}><FaEdit/></Button>
-                        <Button color='danger' onClick={() => handleDelete(b._id)}><FaTrashAlt/></Button>
-                      </div>
+          (loading || (status === "pendingGetBranches")) ? (
+            <center>
+              <Spinner className='large' type='grow' />
+            </center>
+          ) : !branchList.length ? (
+            <div className='no-result'>
+              <h1><FaDatabase/>Database is empty</h1>
+            </div>
+          ) : !filteredBranches.length ? (
+            <div className='no-result'>
+              <h1><FaSearch/>No matching results</h1>
+            </div>
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone Number</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  filteredBranches?.map((b) => (
+                    <tr key={b._id}> 
+                      <td>{b.name}</td>
+                      <td>{b.mobile}</td>
+                      <td className='actions'>
+                        <div className='actionButtons'>
+                          <Button color='warning' onClick={() => handleEdit(b)}><FaEdit/></Button>
+                          <Button color='danger' onClick={() => handleDelete(b._id)}><FaTrashAlt/></Button>
+                        </div>
 
-                      <div className='dateInfo'>
-                        Created: {moment(b.createdAt).format('D/M/yyyy')} | Modified: {moment(b.updatedAt).format('D/M/yyyy')}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </Table> :
-          <div className='no-result'>
-            <h1><FaSearch/>No matching results</h1>
-          </div>
+                        <div className='dateInfo'>
+                          Created: {moment(b.createdAt).format('D/M/yyyy')} | Modified: {moment(b.updatedAt).format('D/M/yyyy')}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </Table>
+          )
         }
       </div>
     </div>

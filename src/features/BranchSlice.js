@@ -27,10 +27,15 @@ export const addBranch = createAsyncThunk(
 
 export const getBranches = createAsyncThunk(
   "branches/getBranches",
-  async () => {
-    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getBranches`);
-    const branchList = response.data.branchList;
-    return {branchList}
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/getBranches`);
+      const branchList = response.data.branchList;
+      return {branchList}
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
   }
 );
 
@@ -97,9 +102,11 @@ export const branchSlise = createSlice({
     .addCase(getBranches.fulfilled, (state, action) => {
       state.status = "success";
       state.branchList = action.payload.branchList;
+      state.msg = action.payload.msg;
     })
     .addCase(getBranches.rejected, (state, action) => {
       state.status = "rejected";
+      state.msg = action.payload.msg;
     })
 
     // editBranch

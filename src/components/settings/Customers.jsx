@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
+import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { customerSchemaValidation } from '../../validations/CustomerValidation';
 import { useDispatch, useSelector } from 'react-redux';
@@ -233,45 +233,51 @@ function Customers() {
 
       <div className='content-display settings'>
         {
-          (loading || (status === "pendingGetCategories")) ?
-          <center>
-            <Spinner className='large' type='grow' />
-          </center> :
-          filteredCustomers.length ?
-          <Table striped>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Mobile</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                filteredCustomers?.map((c) => (
-                  <tr key={c._id}>
-                    <td>{c.name}</td>
-                    <td>{c.email}</td>
-                    <td>{c.mobile}</td>
-                    <td className='actions'>
-                      <div className='actionButtons' style={{minHeight: "37px"}}>
-                        <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
-                        <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
-                      </div>
+          (loading || (status === "pendingGetCategories")) ? (
+            <center>
+              <Spinner className='large' type='grow' />
+            </center>
+          ) : !customerList.length ? (
+            <div className='no-result'>
+              <h1><FaDatabase/>Database is empty</h1>
+            </div>
+          ) : !filteredCustomers.length ? (
+            <div className='no-result'>
+              <h1><FaSearch/>No matching results</h1>
+            </div>
+          ) : (
+            <Table striped>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  filteredCustomers?.map((c) => (
+                    <tr key={c._id}>
+                      <td>{c.name}</td>
+                      <td>{c.email}</td>
+                      <td>{c.mobile}</td>
+                      <td className='actions'>
+                        <div className='actionButtons'>
+                          <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
+                          <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
+                        </div>
 
-                      <div className='dateInfo'>
-                        Created: {moment(c.createdAt).format('D/M/yyyy')} | Modified: {moment(c.updatedAt).format('D/M/yyyy')}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </Table> :
-          <div className='no-result'>
-            <h1><FaSearch />No matching results</h1>
-          </div>
+                        <div className='dateInfo'>
+                          Created: {moment(c.createdAt).format('D/M/yyyy')} | Modified: {moment(c.updatedAt).format('D/M/yyyy')}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </Table>
+          )
         }
       </div>
     </div>

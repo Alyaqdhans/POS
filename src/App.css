@@ -227,6 +227,7 @@ hr {
 .actionButtons {
   display: flex;
   gap: 0.5rem;
+  min-height: 37px;
 }
 
 .actionButtons > * {
