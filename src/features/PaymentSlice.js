@@ -72,7 +72,11 @@ export const editPayment = createAsyncThunk(
 export const paymentSlice = createSlice({
   name: 'payments',
   initialState,
-  reducers: {},
+  reducers: {
+    clearMsg: (state) => {
+      state.msg = null;
+    },
+  },
   extraReducers: (builder) => (
     builder
     // add payment
@@ -136,3 +140,4 @@ export const paymentSlice = createSlice({
 });
 
 export default paymentSlice.reducer;
+export const {clearMsg} = paymentSlice.actions;

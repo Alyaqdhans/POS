@@ -5,7 +5,7 @@ import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { paymentSchemaValidation } from '../../validations/PaymentValidation';
-import { addPayment, deletePayment, editPayment } from '../../features/PaymentSlice';
+import { addPayment, clearMsg, deletePayment, editPayment } from '../../features/PaymentSlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -94,6 +94,7 @@ function Payments() {
       toast.error(msg);
       handleCloseModal();
     }
+    dispatch(clearMsg());
 
     setFilteredPayments(paymentList);
     handleSearch(search);

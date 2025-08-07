@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CurrencyList from 'currency-list'
 import { useDispatch, useSelector } from 'react-redux';
-import { saveSystem } from '../../features/SystemSlice';
+import { clearMsg, saveSystem } from '../../features/SystemSlice';
 import { toast } from 'react-toastify';
 
 function System() {
@@ -47,6 +47,7 @@ function System() {
   useEffect(() => {
     if (status === "success") toast.success(msg);
     if (status === "rejected") toast.error(msg);
+    dispatch(clearMsg());
 
     if (systemData || logoData) {
       setBrand(systemData.brand);

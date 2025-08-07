@@ -5,7 +5,7 @@ import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { customerSchemaValidation } from '../../validations/CustomerValidation';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCustomer, deleteCustomr, editCustomer } from '../../features/CustomerSlice';
+import { addCustomer, clearMsg, deleteCustomr, editCustomer } from '../../features/CustomerSlice';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 
@@ -104,6 +104,7 @@ function Customers() {
       toast.error(msg);
       handleCloseModal();
     }
+    dispatch(clearMsg());
     
     setFilteredCustomers(customerList);
     handleSearch(search);

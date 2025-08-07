@@ -91,7 +91,11 @@ export const deleteSupplier = createAsyncThunk(
 export const supplierSlice = createSlice({
   name: "suppliers",
   initialState,
-  reducers: {},
+  reducers: {
+    clearMsg: (state) => {
+      state.msg = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // addSupplier
@@ -157,3 +161,4 @@ export const supplierSlice = createSlice({
 });
 
 export default supplierSlice.reducer;
+export const {clearMsg} = supplierSlice.actions;

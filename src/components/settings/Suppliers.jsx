@@ -5,7 +5,7 @@ import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { supplierSchemaValidation } from '../../validations/SupplierValidation';
-import { addSupplier, deleteSupplier, editSupplier } from '../../features/SupplierSlice';
+import { addSupplier, clearMsg, deleteSupplier, editSupplier } from '../../features/SupplierSlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -120,6 +120,7 @@ function Suppliers() {
       toast.error(msg);
       handleCloseModal();
     }
+    dispatch(clearMsg());
 
     setFilteredSuppliers(supplierList);
     handleSearch(search);

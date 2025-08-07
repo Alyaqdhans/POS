@@ -43,7 +43,11 @@ export const saveSystem = createAsyncThunk(
 export const systemSlice = createSlice({
   name: 'system',
   initialState,
-  reducers: {},
+  reducers: {
+    clearMsg: (state) => {
+      state.msg = null;
+    },
+  },
   extraReducers: (builder) => (
     builder
     // Get System
@@ -77,3 +81,4 @@ export const systemSlice = createSlice({
 })
 
 export default systemSlice.reducer;
+export const {clearMsg} = systemSlice.actions;

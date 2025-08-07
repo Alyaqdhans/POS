@@ -105,7 +105,11 @@ export const editUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    clearMsg: (state) => {
+      state.msg = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // login
@@ -204,3 +208,4 @@ export const userSlice = createSlice({
 })
 
 export default userSlice.reducer;
+export const {clearMsg} = userSlice.actions;

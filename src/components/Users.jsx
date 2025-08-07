@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
-import { addUser, deleteUser, editUser } from '../features/UserSlice';
+import { addUser, clearMsg, deleteUser, editUser } from '../features/UserSlice';
 import { userSchemaValidation } from '../validations/UserValidation';
 import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -192,6 +192,7 @@ function Users() {
       toast.error(msg);
       handleCloseModal();
     }
+    dispatch(clearMsg());
 
     setFilteredUsers(userList);
     handleSearch(search);

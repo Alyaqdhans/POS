@@ -5,7 +5,7 @@ import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
 import { categorySchemaValidation } from '../../validations/CategoryValidation';
-import { addCategory, deleteCategory, editCategory } from '../../features/CategorySlice';
+import { addCategory, clearMsg, deleteCategory, editCategory } from '../../features/CategorySlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
@@ -94,6 +94,7 @@ function Categories() {
       toast.error(msg);
       handleCloseModal();
     }
+    dispatch(clearMsg());
 
     setFilteredCategories(categoryList);
     handleSearch(search);

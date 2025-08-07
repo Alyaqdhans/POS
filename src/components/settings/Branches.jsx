@@ -6,7 +6,7 @@ import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Tab
 import { branchSchemaValidation } from '../../validations/BranchValidation';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import { addBranch, deleteBranch, editBranch } from '../../features/BranchSlice';
+import { addBranch, clearMsg, deleteBranch, editBranch } from '../../features/BranchSlice';
 import moment from 'moment';
 
 function Branches() {
@@ -99,6 +99,7 @@ function Branches() {
       toast.error(msg);
       handleCloseModal();
     }
+    dispatch(clearMsg());
 
     setFilteredBranches(branchList);
     handleSearch(search);

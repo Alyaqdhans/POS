@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchemaValidation } from "../validations/LoginValidation";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../features/UserSlice';
+import { clearMsg, login } from '../features/UserSlice';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -21,6 +21,7 @@ function Login() {
   useEffect(() => {
     if (status === "success") toast.success(msg);
     if (status === "rejected") toast.error(msg);
+    dispatch(clearMsg());
 
     if (user) navigate("/");
   }, [user, status]);

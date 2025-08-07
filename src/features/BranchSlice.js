@@ -71,10 +71,14 @@ export const deleteBranch = createAsyncThunk(
   }
 );
 
-export const branchSlise = createSlice({
+export const branchSlice = createSlice({
   name: 'branches',
   initialState,
-  reducers: {},
+  reducers: {
+    clearMsg: (state) => {
+      state.msg = null;
+    },
+  },
   extraReducers: (builder) => (
     builder
     // add branch
@@ -137,4 +141,5 @@ export const branchSlise = createSlice({
   )
 })
 
-export default branchSlise.reducer;
+export default branchSlice.reducer;
+export const {clearMsg} = branchSlice.actions;
