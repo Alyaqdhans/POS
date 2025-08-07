@@ -4,8 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap';
 import { addUser, deleteUser, editUser } from '../features/UserSlice';
-import { editUserSchemaValidation } from '../validations/EditUserValidation';
-import { addUserSchemaValidation } from '../validations/AddUserValidation';
+import { userSchemaValidation } from '../validations/UserValidation';
 import { FaDatabase, FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import moment from 'moment';
@@ -29,38 +28,37 @@ function Users() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const filterTypes = ['username', 'email'];
 
-  const [usersPage, setUsersPage] = useState(true);
-  const [usersAdd, setUsersAdd] = useState(true);
-  const [usersEdit, setUsersEdit] = useState(true);
-  const [usersDelete, setUsersDelete] = useState(true);
-  const [usersPermission, setUsersPermission] = useState(true);
+  // user page
+  const [usersPage, setUsersPage] = useState(false);
+  const [usersAdd, setUsersAdd] = useState(false);
+  const [usersEdit, setUsersEdit] = useState(false);
+  const [usersDelete, setUsersDelete] = useState(false);
+  const [usersPermission, setUsersPermission] = useState(false);
 
-  const [productsPage, setProductsPage] = useState(true);
-  const [productsAdd, setProductsAdd] = useState(true);
-  const [productsEdit, setProductsEdit] = useState(true);
-  const [productsDelete, setProductsDelete] = useState(true);
+  // product page
+  const [productsPage, setProductsPage] = useState(false);
+  const [productsAdd, setProductsAdd] = useState(false);
+  const [productsEdit, setProductsEdit] = useState(false);
+  const [productsDelete, setProductsDelete] = useState(false);
+
+  // setting page
+  const [settingsPage, setSettingsPage] = useState(false);
+  const [settingsCategory, setSettingsCategory] = useState(false);
+  const [settingsCustomer, setSettingsCustomer] = useState(false);
+  const [settingsSupplier, setSettingsSupplier] = useState(false);
+  const [settingsPayment, setSettingsPayment] = useState(false);
+  const [settingsBranch, setSettingsBranch] = useState(false);
 
   const dispatch = useDispatch();
 
   const handleAdd = () => {
-    setUsersPage(false)
-    setUsersAdd(false)
-    setUsersEdit(false)
-    setUsersDelete(false)
-    setUsersPermission(false)
-
-    setProductsPage(false)
-    setProductsAdd(false)
-    setProductsEdit(false)
-    setProductsDelete(false)
-
     setAddModal(true)
   }
 
   const handleEdit = (user) => {
     setEditUserData(user)
     setUsername(user.username)
-    setPassword("")
+    setEmail(user.email)
 
     setUsersPage(user.permissions.users.read)
     setUsersAdd(user.permissions.users.add)
@@ -72,6 +70,13 @@ function Users() {
     setProductsAdd(user.permissions.products.add)
     setProductsEdit(user.permissions.products.edit)
     setProductsDelete(user.permissions.products.delete)
+
+    setSettingsPage(user.permissions.settings.read)
+    setSettingsCategory(user.permissions.settings.category)
+    setSettingsCustomer(user.permissions.settings.customer)
+    setSettingsSupplier(user.permissions.settings.supplier)
+    setSettingsPayment(user.permissions.settings.payment)
+    setSettingsBranch(user.permissions.settings.branch)
 
     setEditModal(true)
   }
@@ -106,7 +111,7 @@ function Users() {
   }
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
-    resolver: yupResolver(addModal ? addUserSchemaValidation : editUserSchemaValidation),
+    resolver: yupResolver(userSchemaValidation),
     context: { 
       isAdmin: editUserData?.username.toLowerCase() === "admin" 
     }
@@ -131,6 +136,14 @@ function Users() {
             add: productsAdd,
             edit: productsEdit,
             delete: productsDelete
+          },
+          settings: {
+            read: settingsPage,
+            category: settingsCategory,
+            customer: settingsCustomer,
+            supplier: settingsSupplier,
+            payment: settingsPayment,
+            branch: settingsBranch
           }
         }
       }
@@ -155,6 +168,14 @@ function Users() {
             add: productsAdd,
             edit: productsEdit,
             delete: productsDelete
+          },
+          settings: {
+            read: settingsPage,
+            category: settingsCategory,
+            customer: settingsCustomer,
+            supplier: settingsSupplier,
+            payment: settingsPayment,
+            branch: settingsBranch
           }
         }
       }
@@ -199,7 +220,7 @@ function Users() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add User</ModalHeader>
           <ModalBody>
-            <Label htmlFor='username'>Username*</Label>
+            <Label htmlFor='username'>*Username</Label>
             <input
               id='username'
               type='text'
@@ -210,7 +231,7 @@ function Users() {
             />
             <p className='error'>{errors.username?.message}</p>
 
-            <Label htmlFor='email'>Email*</Label>
+            <Label htmlFor='email'>*Email</Label>
             <input
               id='email'
               type='text'
@@ -221,7 +242,7 @@ function Users() {
             />
             <p className='error'>{errors.email?.message}</p>
 
-            <Label htmlFor='password'>Password*</Label>
+            <Label htmlFor='password'>Password</Label>
             <input
               id='password'
               type='password'
@@ -232,7 +253,7 @@ function Users() {
             />
             <p className='error'>{errors.password?.message}</p>
 
-            <Label htmlFor='confirm'>Confirm Password*</Label>
+            <Label htmlFor='confirm'>Confirm Password</Label>
             <input
               id='confirm'
               type='password'
@@ -248,6 +269,7 @@ function Users() {
               <fieldset>
                 <legend>Permissions</legend>
 
+                {/* products permission */}
                 <details>
                   <summary>
                     <span className='checkbox'>
@@ -294,6 +316,7 @@ function Users() {
                   </ul>
                 </details>
 
+                {/* users permission */}
                 <details>
                   <summary>
                     <span className='checkbox'>
@@ -352,6 +375,73 @@ function Users() {
                     }
                   </ul>
                 </details>
+
+                {/* settings permission */}
+                <details>
+                  <summary>
+                    <span className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settings'
+                        checked={settingsPage}
+                        onChange={() => setSettingsPage(!settingsPage)}
+                      /><Label htmlFor='settings'>Settings Page</Label>
+                    </span>
+                  </summary>
+                  <ul>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsCategory'
+                        checked={settingsCategory}
+                        onChange={() => setSettingsCategory(!settingsCategory)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsCategory'>Category</Label>
+                    </dd>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsCustomer'
+                        checked={settingsCustomer}
+                        onChange={() => setSettingsCustomer(!settingsCustomer)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsCustomer'>Customer</Label>
+                    </dd>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsSupplier'
+                        checked={settingsSupplier}
+                        onChange={() => setSettingsSupplier(!settingsSupplier)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsSupplier'>Supplier</Label>
+                    </dd>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsPayment'
+                        checked={settingsPayment}
+                        onChange={() => setSettingsPayment(!settingsPayment)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsPayment'>Payment</Label>
+                    </dd>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsBranch'
+                        checked={settingsBranch}
+                        onChange={() => setSettingsBranch(!settingsBranch)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsBranch'>Branch</Label>
+                    </dd>
+                  </ul>
+                </details>
               </fieldset>
             }
           </ModalBody>
@@ -371,7 +461,7 @@ function Users() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit User ({editUserData?.email})</ModalHeader>
           <ModalBody>
-            <Label htmlFor='username'>Username*</Label>
+            <Label htmlFor='username'>*Username</Label>
             <input
               id='username'
               type='text'
@@ -383,6 +473,18 @@ function Users() {
               readOnly={status === "pendingEditUser"}
             />
             <p className='error'>{errors.username?.message}</p>
+
+            <Label htmlFor='email'>*Email</Label>
+            <input
+              id='email'
+              type='text'
+              placeholder='Enter Email'
+              value={email}
+              className={'form-control' + (errors.email ? ' is-invalid' : '')}
+              {...register("email", { onChange: (e) => setEmail(e.target.value) })}
+              disabled
+            />
+            <p className='error'>{errors.email?.message}</p>
 
             <Label htmlFor='password'>New Password</Label>
             <input
@@ -412,6 +514,7 @@ function Users() {
               <fieldset>
                 <legend>Permissions</legend>
 
+                {/* products permission */}
                 <details>
                   <summary>
                     <span className='checkbox'>
@@ -458,6 +561,7 @@ function Users() {
                   </ul>
                 </details>
 
+                {/* users permission */}
                 <details>
                   <summary>
                     <span className='checkbox'>
@@ -514,6 +618,73 @@ function Users() {
                         /><Label htmlFor='usersPermission' id='warn'>Permission</Label>
                       </dd>
                     }
+                  </ul>
+                </details>
+
+                {/* settings permission */}
+                <details>
+                  <summary>
+                    <span className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settings'
+                        checked={settingsPage}
+                        onChange={() => setSettingsPage(!settingsPage)}
+                      /><Label htmlFor='settings'>Settings Page</Label>
+                    </span>
+                  </summary>
+                  <ul>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsCategory'
+                        checked={settingsCategory}
+                        onChange={() => setSettingsCategory(!settingsCategory)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsCategory'>Category</Label>
+                    </dd>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsCustomer'
+                        checked={settingsCustomer}
+                        onChange={() => setSettingsCustomer(!settingsCustomer)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsCustomer'>Customer</Label>
+                    </dd>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsSupplier'
+                        checked={settingsSupplier}
+                        onChange={() => setSettingsSupplier(!settingsSupplier)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsSupplier'>Supplier</Label>
+                    </dd>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsPayment'
+                        checked={settingsPayment}
+                        onChange={() => setSettingsPayment(!settingsPayment)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsPayment'>Payment</Label>
+                    </dd>
+                    <dd className='checkbox'>
+                      <input
+                        className='form-check-input'
+                        type="checkbox"
+                        id='settingsBranch'
+                        checked={settingsBranch}
+                        onChange={() => setSettingsBranch(!settingsBranch)}
+                        disabled={!settingsPage}
+                      /><Label htmlFor='settingsBranch'>Branch</Label>
+                    </dd>
                   </ul>
                 </details>
               </fieldset>

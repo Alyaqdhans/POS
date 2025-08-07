@@ -19,6 +19,14 @@ const UserSchema = mongoose.Schema({
       edit: {type: Boolean},
       delete: {type: Boolean}
     },
+    settings: {
+      read: {type: Boolean},
+      category: {type: Boolean},
+      customer: {type: Boolean},
+      supplier: {type: Boolean},
+      payment: {type: Boolean},
+      branch: {type: Boolean}
+    },
   },
 }, {timestamps: true})
 

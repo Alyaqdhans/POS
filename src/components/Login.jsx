@@ -32,7 +32,7 @@ function Login() {
   const onSubmit = () => {
     const userData = {
       email: email || "admin@gmail.com",
-      password: password || "admin112233",
+      password: password || "admin112233", // make empty string when done
     }
 
     dispatch(login(userData));
@@ -50,7 +50,7 @@ function Login() {
           type='text'
           placeholder='Enter Email'
           className={'form-control ' + (errors.email ? 'is-invalid' : '')}
-          // {...register("email", {onChange: (e) => setEmail(e.target.value)})}
+          {...register("email", {onChange: (e) => setEmail(e.target.value)})}
           readOnly={status === "pendingLogin"}
         />
         <p className='error'>{errors.email?.message}</p>
@@ -60,7 +60,7 @@ function Login() {
           type='password'
           placeholder='Enter Password'
           className={'form-control ' + (errors.password ? 'is-invalid' : '')}
-          // {...register("password", {onChange: (e) => setPassword(e.target.value)})}
+          {...register("password", {onChange: (e) => setPassword(e.target.value)})}
           readOnly={status === "pendingLogin"}
         />
         <p className='error'>{errors.password?.message}</p>

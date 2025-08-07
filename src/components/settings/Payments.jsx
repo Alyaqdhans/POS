@@ -117,7 +117,7 @@ function Payments() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Payment</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
               <input
                 id='name'
                 type='text'
@@ -144,7 +144,7 @@ function Payments() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit Payment ({editPaymentData?.name})</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'

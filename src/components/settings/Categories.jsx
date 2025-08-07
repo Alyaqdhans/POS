@@ -117,7 +117,7 @@ function Categories() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Category</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'
@@ -144,7 +144,7 @@ function Categories() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit Category ({editCategoryData?.name})</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'

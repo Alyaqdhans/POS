@@ -143,7 +143,7 @@ function Suppliers() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Supplier</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'
@@ -225,7 +225,7 @@ function Suppliers() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit Supplier ({editSupplierData?.email}) </ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'

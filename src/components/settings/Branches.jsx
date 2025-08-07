@@ -122,7 +122,7 @@ function Branches() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Branch</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'
@@ -159,7 +159,7 @@ function Branches() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Edit Branch ({editBranchData?.name})</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'

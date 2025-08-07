@@ -7,7 +7,5 @@ export const loginSchemaValidation = yup.object().shape({
     .required("Email is required"),
   password: yup
     .string()
-    .min(5)
     .max(20)
-    .required("Password is required"),
 })

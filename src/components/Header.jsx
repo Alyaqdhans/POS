@@ -27,14 +27,17 @@ function Header() {
       <NavLink to="/" className={dynamicLink}><FaHome/> Home</NavLink>
       <NavLink to="/dashboard" className={dynamicLink}><MdDashboard/> Dashboard</NavLink>
       {
-        (user.permissions.products.read == true) &&
+        (user.permissions.products.read) &&
         <NavLink to="/products" className={dynamicLink}><BiSolidPackage/> Products</NavLink>
       }
       {
-        (user.permissions.users.read == true) &&
+        (user.permissions.users.read) &&
         <NavLink to="/users" className={dynamicLink}><FaUsers/> Users ({userList.length})</NavLink>
       }
-      <NavLink to="/settings" className={dynamicLink}><FaCog/> Settings</NavLink>
+      {
+        (user.permissions.settings.read) &&
+        <NavLink to="/settings" className={dynamicLink}><FaCog/> Settings</NavLink>
+      }
 
       <span className='userInfo'>
         <Button disabled>{user?.username}</Button>

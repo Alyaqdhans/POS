@@ -1,10 +1,17 @@
 import * as yup from "yup";
 
-export const addUserSchemaValidation = yup.object().shape({
+export const userSchemaValidation = yup.object().shape({
   username: yup
     .string()
     .transform(value => value?.toLowerCase())
-    .notOneOf(["admin"], "This username is not allowed")
+    // this is to allow admin to edit his details
+    .when('$isAdmin', {
+      is: true,
+      then: (schema) => schema,
+      otherwise: (schema) => schema
+        .notOneOf(["admin"], "This username is not allowed")
+        .required("Username is required"),
+    })
     .required("Username is required"),
   email: yup
     .string()
@@ -12,11 +19,8 @@ export const addUserSchemaValidation = yup.object().shape({
     .required("Email is required"),
   password: yup
     .string()
-    .min(5)
-    .max(20)
-    .required("Password is required"),
+    .max(20),
   confirm: yup
     .string()
     .oneOf([yup.ref("password"), null], "Passwords Don't Match")
-    .required("Password is required"),
 })

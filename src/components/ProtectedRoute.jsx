@@ -17,12 +17,13 @@ function ProtectedRoute({children}) {
 
     switch (currentPath) {
       case 'products':
-        if (!user?.permissions.products.read) setDeny(true)
-        else setDeny(false)
+        setDeny(!user?.permissions.products.read)
         break;
       case 'users':
-        if (!user?.permissions.users.read) setDeny(true)
-        else setDeny(false)
+        setDeny(!user?.permissions.users.read)
+        break;
+      case 'settings':
+        setDeny(!user?.permissions.settings.read)
         break;
       default:
         setDeny(false)

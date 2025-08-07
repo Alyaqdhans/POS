@@ -127,7 +127,7 @@ function Customers() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Add Customer</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'
@@ -176,7 +176,7 @@ function Customers() {
         <form onSubmit={handleSubmit(onSubmit)}> 
           <ModalHeader>Edit Customer ({editCustomerData?.email})</ModalHeader>
           <ModalBody>
-            <Label htmlFor='name'>Name*</Label>
+            <Label htmlFor='name'>*Name</Label>
             <input
               id='name'
               type='text'

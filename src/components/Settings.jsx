@@ -19,6 +19,8 @@ import { getSystem } from '../features/SystemSlice';
 import { getPayments } from '../features/PaymentSlice';
 
 function Settings() {
+  const { user } = useSelector((state) => state.users);
+
   const location = useLocation();
   const navigate = useNavigate()
   const dispatch = useDispatch();
@@ -44,21 +46,36 @@ function Settings() {
         <NavLink tag={Link} className='link' to='/settings' active={location.pathname === '/settings'}>
           <LuWrench/> System
         </NavLink>
-        <NavLink tag={Link} className='link' to='/settings/categories' active={location.pathname === '/settings/categories'}>
-          <MdLabelOutline/> Categories ({categoryList.length})
-        </NavLink>
-        <NavLink tag={Link} className='link' to='/settings/customers' active={location.pathname === '/settings/customers'}>
-          <LuUsersRound/> Customers ({customerList.length})
-        </NavLink>
-        <NavLink tag={Link} className='link' to='/settings/suppliers' active={location.pathname === '/settings/suppliers'}>
-          <LuPackageOpen/> Suppliers ({supplierList.length})
-        </NavLink>
-        <NavLink tag={Link} className='link' to='/settings/payments' active={location.pathname === '/settings/payments'}>
-          <FaRegCreditCard/> Payments ({paymentList.length})
-        </NavLink>
-        <NavLink tag={Link} className='link' to='/settings/branches' active={location.pathname === '/settings/branches'}>
-          <FaCodeBranch/> Branches ({branchList.length})
-        </NavLink>
+        {
+          (user?.permissions.settings.category) &&
+          <NavLink tag={Link} className='link' to='/settings/categories' active={location.pathname === '/settings/categories'}>
+            <MdLabelOutline/> Categories ({categoryList.length})
+          </NavLink>
+        }
+        {
+          (user?.permissions.settings.customer) &&
+          <NavLink tag={Link} className='link' to='/settings/customers' active={location.pathname === '/settings/customers'}>
+            <LuUsersRound/> Customers ({customerList.length})
+          </NavLink>
+        }
+        {
+          (user?.permissions.settings.supplier) &&
+          <NavLink tag={Link} className='link' to='/settings/suppliers' active={location.pathname === '/settings/suppliers'}>
+            <LuPackageOpen/> Suppliers ({supplierList.length})
+          </NavLink>
+        }
+        {
+          (user?.permissions.settings.payment) &&
+          <NavLink tag={Link} className='link' to='/settings/payments' active={location.pathname === '/settings/payments'}>
+            <FaRegCreditCard/> Payments ({paymentList.length})
+          </NavLink>
+        }
+        {
+          (user?.permissions.settings.branch) &&
+          <NavLink tag={Link} className='link' to='/settings/branches' active={location.pathname === '/settings/branches'}>
+            <FaCodeBranch/> Branches ({branchList.length})
+          </NavLink>
+        }
       </Nav>
 
       <Routes>
