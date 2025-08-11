@@ -55,7 +55,6 @@ function Suppliers() {
 
   const performDelete = () => {
     dispatch(deleteSupplier(deleteSupplierData));
-    (false);
   }
 
   const handleCloseModal = () => {
@@ -312,7 +311,7 @@ function Suppliers() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Supplier</ModalHeader>
-        <ModalBody>Are you sure you want to delete this Aupplier?</ModalBody>
+        <ModalBody>Are you sure you want to delete this supplier?</ModalBody>
         <ModalFooter>
           <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteSupplier"}>
             Cancel

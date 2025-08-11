@@ -393,8 +393,10 @@ app.get("/getSystem", async (request, response) => {
     if (systemData) {
       const logo = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
       response.send({systemData, logo});
+    } else {
+      response.status(400).json();
     }
-  } catch(error) {
+  } catch (error) {
     response.status(500).json({msg: error.message});
   }
 });
@@ -416,14 +418,41 @@ app.post("/saveSystem", upload.single('logo'), async (request, response) => {
         system._id,
         {brand, vat, logo, currency, receiptMsg},
         { new: true }
-      )
-      systemData.save();
+      );
+      const logoPath = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
+      response.send({msg: "Settings saved successfully", logo: logoPath});
     } else {
-      const systemData = SystemModel({brand, vat, logo, currency, receiptMsg});
+      const systemData = SystemModel({brand, vat, logo: logo || "", currency, receiptMsg});
       await systemData.save();
+
+      const logoPath = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
+      response.send({msg: "Settings saved successfully", logo: logoPath});
     }
-    response.send({msg: "Settings saved successfully"});
-  } catch(error) {
+  } catch (error) {
+    response.status(500).json({msg: error.message});
+  }
+});
+
+// Delete Logo
+app.delete("/deleteLogo", async (request, response) => {
+  try {
+    const system = await SystemModel.findOne();
+    if (system && system.logo) {
+      const oldLogoPath = `./assets/${system.logo}`;
+      if (fs.existsSync(oldLogoPath)) {
+        fs.unlinkSync(oldLogoPath);
+      }
+      const systemData = await SystemModel.findByIdAndUpdate(
+        system._id,
+        {logo: ""},
+        { new: true }
+      );
+      const logo = `${request.protocol}://${request.get('host')}/assets/${systemData.logo}`;
+      response.send({msg: "Logo removed successfully", logo});
+    } else {
+      response.status(400).json({msg: "Failed to remove the logo"});
+    }
+  } catch (error) {
     response.status(500).json({msg: error.message});
   }
 });

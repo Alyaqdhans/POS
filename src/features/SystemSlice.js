@@ -32,8 +32,24 @@ export const saveSystem = createAsyncThunk(
         {headers: {'Content-Type': 'multipart/form-data'}}
       );
       const msg = response.data.msg;
-      return {msg};
-    } catch(error) {
+      const logo = response.data.logo;
+      return {msg, logo};
+    } catch (error) {
+      const msg = error.response.data.msg;
+      return rejectWithValue({msg});
+    }
+  }
+)
+
+export const deleteLogo = createAsyncThunk(
+  "system/delete",
+  async (_, {rejectWithValue}) => {
+    try {
+      const response = await axios.delete(`${import.meta.env.VITE_SERVER_URL}/deleteLogo`);
+      const msg = response.data.msg;
+      const logo = response.data.logo;
+      return {msg, logo};
+    } catch (error) {
       const msg = error.response.data.msg;
       return rejectWithValue({msg});
     }
@@ -72,8 +88,23 @@ export const systemSlice = createSlice({
     .addCase(saveSystem.fulfilled, (state, action) => {
       state.status = "success";
       state.msg = action.payload.msg;
+      state.logoData = action.payload.logo;
     })
     .addCase(saveSystem.rejected, (state, action) => {
+      state.status = "rejected";
+      state.msg = action.payload.msg;
+    })
+
+    // Delete Logo
+    .addCase(deleteLogo.pending, (state, action) => {
+      state.status = "pendingDeleteLogo";
+    })
+    .addCase(deleteLogo.fulfilled, (state, action) => {
+      state.status = "success";
+      state.msg = action.payload.msg;
+      state.logoData = action.payload.logo;
+    })
+    .addCase(deleteLogo.rejected, (state, action) => {
       state.status = "rejected";
       state.msg = action.payload.msg;
     })

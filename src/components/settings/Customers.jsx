@@ -227,7 +227,7 @@ function Customers() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Customer</ModalHeader>
-        <ModalBody>Are you sure you want to delete this Customer?</ModalBody>
+        <ModalBody>Are you sure you want to delete this customer?</ModalBody>
         <ModalFooter>
           <Button color="secondary" outline onClick={handleCloseModal} disabled={status === "pendingDeleteCustomer"}>
             Cancel

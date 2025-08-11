@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Label, Spinner } from 'reactstrap'
+import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from 'reactstrap'
 import { systemSchemaValidation } from '../../validations/SystemValidation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import CurrencyList from 'currency-list'
 import { useDispatch, useSelector } from 'react-redux';
-import { clearMsg, saveSystem } from '../../features/SystemSlice';
+import { clearMsg, deleteLogo, saveSystem } from '../../features/SystemSlice';
 import { toast } from 'react-toastify';
 
 function System() {
   const {status, msg, systemData, logoData} = useSelector((state) => state.system);
 
   const [loading, setLoading] = useState(true);
+
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const [brand, setBrand] = useState("");
   const [vat, setVat] = useState("0");
@@ -22,6 +24,10 @@ function System() {
   const [prevLogo, setprevLogo] = useState("");
 
   const dispatch = useDispatch();
+
+  const performDelete = () => {
+    dispatch(deleteLogo());
+  }
 
   const {register, handleSubmit, formState: {errors}, reset} = useForm({
     resolver: yupResolver(systemSchemaValidation),
@@ -45,11 +51,17 @@ function System() {
   };
 
   useEffect(() => {
-    if (status === "success") toast.success(msg);
-    if (status === "rejected") toast.error(msg);
+    if (status === "success" && msg !== null) {
+      toast.success(msg);
+      setDeleteModal(false);
+    }
+    if (status === "rejected" && msg !== null) {
+      toast.error(msg);
+      setDeleteModal(false);
+    }
     dispatch(clearMsg());
 
-    if (systemData || logoData) {
+    if (systemData.length || logoData) {
       setBrand(systemData.brand);
       setVat(systemData.vat);
       if (logoData !== prevLogo) setLogo(logoData);
@@ -79,81 +91,100 @@ function System() {
             <Spinner className='large' type='grow' />
           </center>
         ) : (
-            <>
-            <div className='system'>
-              <section>
-                <Label htmlFor='brand'>Brand</Label>
-                <input
-                  id='brand'
-                  type='text'
-                  placeholder='Enter Brand'
-                  value={brand}
-                  className={'form-control' + (errors.brand ? ' is-invalid' : '')}
-                  {...register("brand", {onChange: (e) => setBrand(e.target.value)})}
-                  readOnly={status === "pendingSaveSystem"}
-                />
-                <p className='error'>{errors.brand?.message}</p>
+          <>
+          <div className='system'>
+            <section>
+              <Label htmlFor='brand'>Brand</Label>
+              <input
+                id='brand'
+                type='text'
+                placeholder='Enter Brand'
+                value={brand}
+                className={'form-control' + (errors.brand ? ' is-invalid' : '')}
+                {...register("brand", {onChange: (e) => setBrand(e.target.value)})}
+                readOnly={status === "pendingSaveSystem"}
+              />
+              <p className='error'>{errors.brand?.message}</p>
 
-                <Label htmlFor='logo'>Logo</Label>
-                <input
-                  id='logo'
-                  type='file'
-                  className={'form-control' + (errors.logo ? ' is-invalid' : '')}
-                  {...register("logo", {onChange: (e) => setLogo(e.target.files[0])})}
-                  readOnly={status === "pendingSaveSystem"}
-                />
-                <p className='error'>{errors.logo?.message}</p>
+              <Label htmlFor='logo'>Logo</Label>
+              <input
+                id='logo'
+                type='file'
+                className={'form-control' + (errors.logo ? ' is-invalid' : '')}
+                {...register("logo", {onChange: (e) => setLogo(e.target.files[0])})}
+                readOnly={status === "pendingSaveSystem"}
+              />
+              <p className='error'>{errors.logo?.message}</p>
 
+              <div className="logo-wrap">
                 <img className='logo' src={logo instanceof File ? URL.createObjectURL(logo) : logo} alt="logo" />
-              </section>
+                {
+                  (logoData && logoData.split("/").pop() !== "") &&
+                  <Button color='danger' outline onClick={() => setDeleteModal(true)}>&times;</Button>
+                }
+              </div>
 
-              <section>
-                <Label htmlFor='brand'>VAT%</Label>
-                <input
-                  id='vat'
-                  type='text'
-                  placeholder='Enter Vat %'
-                  value={vat}
-                  className={'form-control' + (errors.vat ? ' is-invalid' : '')}
-                  {...register("vat", {onChange: (e) => setVat(e.target.value)})}
-                  readOnly={status === "pendingSaveSystem"}
-                />
-                <p className='error'>{errors.vat?.message}</p>
+              <Modal centered isOpen={deleteModal}>
+                <ModalHeader>Remove Logo</ModalHeader>
+                <ModalBody>Are you sure you want to remove the logo?</ModalBody>
+                <ModalFooter>
+                  <Button color='secondary' outline onClick={() => setDeleteModal(false)} disabled={status === "pendingDeleteLogo"}>
+                    Cancel
+                  </Button>
+                  <Button color='danger' onClick={performDelete} disabled={status === "pendingDeleteLogo"}>
+                    {(status === "pendingDeleteLogo") && <Spinner size='sm' />} Remove
+                  </Button>
+                </ModalFooter>
+              </Modal>
+            </section>
 
-                <Label htmlFor='currency'>Currency</Label>
-                <select
-                  id="currency"
-                  value={currency}
-                  className={'form-select' + (errors.currency ? ' is-invalid' : '')}
-                  {...register("currency", {onChange: (e) => setCurrency(e.target.value)})}
-                  readOnly={status === "pendingSaveSystem"}
-                >
-                  <option value="">Choose</option>
-                  {
-                    Object.values(CurrencyList.getAll("en_US")).sort().map((c) => (
-                      <option key={c.code} value={c.code}>{c.code} ({c.symbol_native})</option>
-                    ))
-                  }
-                </select>
-                <p className='error'>{errors.currency?.message}</p>
+            <section>
+              <Label htmlFor='brand'>VAT%</Label>
+              <input
+                id='vat'
+                type='text'
+                placeholder='Enter Vat %'
+                value={vat}
+                className={'form-control' + (errors.vat ? ' is-invalid' : '')}
+                {...register("vat", {onChange: (e) => setVat(e.target.value)})}
+                readOnly={status === "pendingSaveSystem"}
+              />
+              <p className='error'>{errors.vat?.message}</p>
 
-                <Label htmlFor='receiptMsg'>Receipt Message</Label>
-                <textarea
-                  style={{resize: "none"}}
-                  rows={5}
-                  id='receiptMsg'
-                  placeholder='Enter Message'
-                  value={receiptMsg}
-                  className={'form-control' + (errors.receiptMsg ? ' is-invalid' : '')}
-                  {...register("receiptMsg", {onChange: (e) => setReceiptMsg(e.target.value)})}
-                  readOnly={status === "pendingSaveSystem"}></textarea>
-                <p className='error'>{errors.receiptMsg?.message}</p>
-              </section>
-            </div>
-            <Button color='primary' type='submit' disabled={status === "pendingSaveSystem"}>
-              {(status === "pendingSaveSystem") && <Spinner size='sm' />} Save
-            </Button>
-            </>
+              <Label htmlFor='currency'>Currency</Label>
+              <select
+                id="currency"
+                value={currency}
+                className={'form-select' + (errors.currency ? ' is-invalid' : '')}
+                {...register("currency", {onChange: (e) => setCurrency(e.target.value)})}
+                readOnly={status === "pendingSaveSystem"}
+              >
+                <option value="">Choose</option>
+                {
+                  Object.values(CurrencyList.getAll("en_US")).sort().map((c) => (
+                    <option key={c.code} value={c.code}>{c.code} ({c.symbol_native})</option>
+                  ))
+                }
+              </select>
+              <p className='error'>{errors.currency?.message}</p>
+
+              <Label htmlFor='receiptMsg'>Receipt Message</Label>
+              <textarea
+                style={{resize: "none"}}
+                rows={5}
+                id='receiptMsg'
+                placeholder='Enter Message'
+                value={receiptMsg}
+                className={'form-control' + (errors.receiptMsg ? ' is-invalid' : '')}
+                {...register("receiptMsg", {onChange: (e) => setReceiptMsg(e.target.value)})}
+                readOnly={status === "pendingSaveSystem"}></textarea>
+              <p className='error'>{errors.receiptMsg?.message}</p>
+            </section>
+          </div>
+          <Button color='primary' type='submit' disabled={status === "pendingSaveSystem"}>
+            {(status === "pendingSaveSystem") && <Spinner size='sm' />} Save
+          </Button>
+          </>
         )
       }
       </div>

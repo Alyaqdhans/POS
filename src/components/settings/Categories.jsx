@@ -171,7 +171,7 @@ function Categories() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Category</ModalHeader>
-        <ModalBody>Are you sure you want to delete this Category?</ModalBody>
+        <ModalBody>Are you sure you want to delete this category?</ModalBody>
         <ModalFooter>
           <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteCategory"}>
             Cancel
