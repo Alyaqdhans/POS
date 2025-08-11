@@ -42,13 +42,13 @@ function Customers() {
     setEditModal(true)
   }
 
-  const handleDelete = (custumerId) => {
-    setDeleteCustomerData(custumerId)
+  const handleDelete = (custumer) => {
+    setDeleteCustomerData(custumer)
     setDeleteModal(true)
   }
 
   const performDelete = () => {
-    dispatch(deleteCustomr(deleteCustomerData));
+    dispatch(deleteCustomr(deleteCustomerData._id));
   }
 
   const handleCloseModal = () => {
@@ -150,11 +150,11 @@ function Customers() {
             />
             <p className='error'>{errors.email?.message}</p>
 
-            <Label htmlFor='mobile'>Phone Number</Label>
+            <Label htmlFor='mobile'>Mobile</Label>
             <input
               id='mobile'
               type='text'
-              placeholder='Enter Phone Number'
+              placeholder='Enter Mobile'
               className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
               {...register("mobile", {onChange: (e) => setMobile(e.target.value)})}
               readOnly={status === "pendingAddCustomer"}
@@ -175,7 +175,7 @@ function Customers() {
       {/* Edit Modal */}
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}> 
-          <ModalHeader>Edit Customer ({editCustomerData?.email})</ModalHeader>
+          <ModalHeader>Edit Customer</ModalHeader>
           <ModalBody>
             <Label htmlFor='name'>*Name</Label>
             <input
@@ -201,11 +201,11 @@ function Customers() {
             />
             <p className='error'>{errors.email?.message}</p>
 
-            <Label htmlFor='nobile'>Phone Number</Label>
+            <Label htmlFor='nobile'>Mobile</Label>
             <input
               id='mobile'
               type='text'
-              placeholder='Enter Phone Number'
+              placeholder='Enter Mobile'
               value={mobile}
               className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
               {...register("mobile", { onChange: (e) => setMobile(e.target.value) })}
@@ -227,7 +227,12 @@ function Customers() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Customer</ModalHeader>
-        <ModalBody>Are you sure you want to delete this customer?</ModalBody>
+        <ModalBody>
+          Are you sure you want to delete this customer?
+          <ul style={{listStyle: "none"}}>
+            <li><b>Name:</b> {deleteCustomerData.name}</li>
+          </ul>
+        </ModalBody>
         <ModalFooter>
           <Button color="secondary" outline onClick={handleCloseModal} disabled={status === "pendingDeleteCustomer"}>
             Cancel
@@ -272,7 +277,7 @@ function Customers() {
                       <td className='actions'>
                         <div className='actionButtons'>
                           <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
-                          <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
+                          <Button color='danger' onClick={() => handleDelete(c)}><FaTrashAlt /></Button>
                         </div>
 
                         <div className='dateInfo'>

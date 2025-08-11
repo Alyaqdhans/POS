@@ -40,13 +40,13 @@ function Branches() {
     setEditModal(true);
   }
 
-  const handleDelete = (branchId) => {
-    setDeleteBranchData(branchId);
+  const handleDelete = (branch) => {
+    setDeleteBranchData(branch);
     setDeleteModal(true);
   };
 
   const performDelete = () => {
-    dispatch(deleteBranch(deleteBranchData));
+    dispatch(deleteBranch(deleteBranchData._id));
   };
 
   const handleCloseModal = () => {
@@ -158,7 +158,7 @@ function Branches() {
       {/* Edit Modal */}
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Branch ({editBranchData?.name})</ModalHeader>
+          <ModalHeader>Edit Branch</ModalHeader>
           <ModalBody>
             <Label htmlFor='name'>*Name</Label>
             <input
@@ -175,7 +175,7 @@ function Branches() {
             <input
               id='mobile'
               type='text'
-              placeholder='Enter Phone Number'
+              placeholder='Enter Mobile'
               value={mobile}
               className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
               {...register("mobile", {onChange: (e) => setMobile(e.target.value)})}
@@ -197,7 +197,12 @@ function Branches() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Branch</ModalHeader>
-        <ModalBody>Are you sure you want to delete this branch?</ModalBody>
+        <ModalBody>
+          Are you sure you want to delete this branch?
+          <ul style={{listStyle: "none"}}>
+            <li><b>Name:</b> {deleteBranchData.name}</li>
+          </ul>
+        </ModalBody>
         <ModalFooter>
           <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteBranch"}>
             Cancel
@@ -227,7 +232,7 @@ function Branches() {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Phone Number</th>
+                  <th>Mobile</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -240,7 +245,7 @@ function Branches() {
                       <td className='actions'>
                         <div className='actionButtons'>
                           <Button color='warning' onClick={() => handleEdit(b)}><FaEdit/></Button>
-                          <Button color='danger' onClick={() => handleDelete(b._id)}><FaTrashAlt/></Button>
+                          <Button color='danger' onClick={() => handleDelete(b)}><FaTrashAlt/></Button>
                         </div>
 
                         <div className='dateInfo'>

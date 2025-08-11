@@ -48,13 +48,13 @@ function Suppliers() {
     setEditModal(true)
   }
 
-  const handleDelete = (supplierId) => {
-    setDeleteSupplierData(supplierId)
+  const handleDelete = (supplier) => {
+    setDeleteSupplierData(supplier)
     setDeleteModal(true)
   }
 
   const performDelete = () => {
-    dispatch(deleteSupplier(deleteSupplierData));
+    dispatch(deleteSupplier(deleteSupplierData._id));
   }
 
   const handleCloseModal = () => {
@@ -165,11 +165,11 @@ function Suppliers() {
             />
             <p className='error'>{errors.email?.message}</p>
 
-            <Label htmlFor='mobile'>Phone Number</Label>
+            <Label htmlFor='mobile'>Mobile</Label>
             <input
               id='mobile'
               type='text'
-              placeholder='Enter Phone Number'
+              placeholder='Enter Mobile'
               className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
               {...register("mobile", {onChange: (e) => setMobile(e.target.value)})}
               readOnly={status === "pendingAddSupplier"}
@@ -223,7 +223,7 @@ function Suppliers() {
       {/* Edit Modal */}
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Supplier ({editSupplierData?.email}) </ModalHeader>
+          <ModalHeader>Edit Supplier</ModalHeader>
           <ModalBody>
             <Label htmlFor='name'>*Name</Label>
             <input
@@ -249,11 +249,11 @@ function Suppliers() {
             />
             <p className='error'>{errors.email?.message}</p>
 
-            <Label htmlFor='mobile'>Phone Number</Label>
+            <Label htmlFor='mobile'>Mobile</Label>
             <input
               id='mobile'
               type='text'
-              placeholder='Enter Phone Number'
+              placeholder='Enter Mobile'
               value={mobile}
               className={'form-control' + (errors.mobile ? ' is-invalid' : '')}
               {...register("mobile", { onChange: (e) => setMobile(e.target.value) })}
@@ -311,7 +311,12 @@ function Suppliers() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Supplier</ModalHeader>
-        <ModalBody>Are you sure you want to delete this supplier?</ModalBody>
+        <ModalBody>
+          Are you sure you want to delete this supplier?
+          <ul style={{listStyle: "none"}}>
+            <li><b>Name:</b> {deleteSupplierData.name}</li>
+          </ul>
+        </ModalBody>
         <ModalFooter>
           <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteSupplier"}>
             Cancel
@@ -342,7 +347,7 @@ function Suppliers() {
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Phone Number</th>
+                  <th>Mobile</th>
                   <th>Fax</th>
                   <th>Address</th>
                   <th>Tax</th>
@@ -362,7 +367,7 @@ function Suppliers() {
                       <td className='actions'>
                         <div className='actionButtons'>
                           <Button color='warning' onClick={() => handleEdit(s)}><FaEdit /></Button>
-                          <Button color='danger' onClick={() => handleDelete(s._id)}><FaTrashAlt /></Button>
+                          <Button color='danger' onClick={() => handleDelete(s)}><FaTrashAlt /></Button>
                         </div>
 
                         <div className='dateInfo'>

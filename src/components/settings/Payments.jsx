@@ -38,13 +38,13 @@ function Payments() {
     setEditModal(true);
   };
 
-  const handleDelete = (paymentId) => {
-    setDeletePaymentData(paymentId);
+  const handleDelete = (payment) => {
+    setDeletePaymentData(payment);
     setDeleteModal(true);
   }
 
   const performDelete = () => {
-    dispatch(deletePayment(deletePaymentData));
+    dispatch(deletePayment(deletePaymentData._id));
   }
 
   const handleCloseModal = () => {
@@ -143,7 +143,7 @@ function Payments() {
       {/* Edit Modal */}
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Payment ({editPaymentData?.name})</ModalHeader>
+          <ModalHeader>Edit Payment</ModalHeader>
           <ModalBody>
             <Label htmlFor='name'>*Name</Label>
             <input
@@ -171,7 +171,12 @@ function Payments() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Payment</ModalHeader>
-        <ModalBody>Are you sure you want to delete this payment?</ModalBody>
+        <ModalBody>
+          Are you sure you want to delete this payment?
+          <ul style={{listStyle: "none"}}>
+            <li><b>Name:</b> {deletePaymentData.name}</li>
+          </ul>
+        </ModalBody>
         <ModalFooter>
           <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeletePayment"}>
             Cancel
@@ -212,7 +217,7 @@ function Payments() {
                       <td className='actions'>
                         <div className='actionButtons'>
                           <Button color='warning' onClick={() => handleEdit(p)}><FaEdit/></Button>
-                          <Button color='danger' onClick={() => handleDelete(p._id)}><FaTrashAlt/></Button>
+                          <Button color='danger' onClick={() => handleDelete(p)}><FaTrashAlt/></Button>
                         </div>
 
                         <div className='dateInfo'>

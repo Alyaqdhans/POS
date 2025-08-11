@@ -38,13 +38,13 @@ function Categories() {
     setEditModal(true)
   }
 
-  const handleDelete = (categoryId) => {
-    setDeleteCategoryData(categoryId);
+  const handleDelete = (category) => {
+    setDeleteCategoryData(category);
     setDeleteModal(true);
   }
 
   const perfomDelete = () => {
-    dispatch(deleteCategory(deleteCategoryData));
+    dispatch(deleteCategory(deleteCategoryData._id));
   }
 
   const handleCloseModal = () => {
@@ -143,7 +143,7 @@ function Categories() {
       {/* Edit Modal */}
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Category ({editCategoryData?.name})</ModalHeader>
+          <ModalHeader>Edit Category</ModalHeader>
           <ModalBody>
             <Label htmlFor='name'>*Name</Label>
             <input
@@ -171,7 +171,12 @@ function Categories() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete Category</ModalHeader>
-        <ModalBody>Are you sure you want to delete this category?</ModalBody>
+        <ModalBody>
+          Are you sure you want to delete this category?
+          <ul style={{listStyle: "none"}}>
+            <li><b>Name:</b> {deleteCategoryData.name}</li>
+          </ul>
+        </ModalBody>
         <ModalFooter>
           <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteCategory"}>
             Cancel
@@ -212,7 +217,7 @@ function Categories() {
                       <td className='actions'>
                         <div className='actionButtons'>
                           <Button color='warning' onClick={() => handleEdit(c)}><FaEdit /></Button>
-                          <Button color='danger' onClick={() => handleDelete(c._id)}><FaTrashAlt /></Button>
+                          <Button color='danger' onClick={() => handleDelete(c)}><FaTrashAlt /></Button>
                         </div>
 
                         <div className='dateInfo'>

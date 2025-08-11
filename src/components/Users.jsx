@@ -81,13 +81,13 @@ function Users() {
     setEditModal(true)
   }
 
-  const handleDelete = (userId) => {
-    setDeleteUserData(userId);
+  const handleDelete = (user) => {
+    setDeleteUserData(user);
     setDeleteModal(true);
   }
 
   const performDelete = () => {
-    dispatch(deleteUser(deleteUserData));
+    dispatch(deleteUser(deleteUserData._id));
   }
 
   const handleCloseModal = () => {
@@ -460,7 +460,7 @@ function Users() {
       {/* Edit Modal */}
       <Modal centered isOpen={editModal}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit User ({editUserData?.email})</ModalHeader>
+          <ModalHeader>Edit User</ModalHeader>
           <ModalBody>
             <Label htmlFor='username'>*Username</Label>
             <input
@@ -705,7 +705,13 @@ function Users() {
       {/* Delete Modal */}
       <Modal centered isOpen={deleteModal}>
         <ModalHeader>Delete User</ModalHeader>
-        <ModalBody>Are you sure you want to delete this user?</ModalBody>
+        <ModalBody>
+          Are you sure you want to delete this user?
+          <ul style={{listStyle: "none"}}>
+            <li><b>Name:</b> {deleteUserData.username}</li>
+            <li><b>Email:</b> {deleteUserData.email}</li>
+          </ul>
+        </ModalBody>
         <ModalFooter>
           <Button color="secondary" outline onClick={handleCloseModal} disabled={status === "pendingDeleteUser"}>
             Cancel
@@ -763,7 +769,7 @@ function Users() {
                           {
                             // (user have permission to delete) & (dont't allow none admin to delete admin | don't allow user to delete themselves)
                             (user?.permissions.users.delete) && (u.username.toLowerCase() !== "admin" && u.username !== user?.username) &&
-                            <Button color='danger' onClick={() => handleDelete(u._id)}><FaTrashAlt /></Button>
+                            <Button color='danger' onClick={() => handleDelete(u)}><FaTrashAlt /></Button>
                           }
                         </div>
                         
