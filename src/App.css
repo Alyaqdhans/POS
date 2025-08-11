@@ -80,7 +80,7 @@ footer h6 {
 .login {
   border-radius: 1rem;
   background: rgb(235, 235, 235);
-  width: 30rem;
+  width: min(30rem, 95%);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   margin: auto;
 }
@@ -427,7 +427,7 @@ center {
   margin: 3rem;
   display: flex;
   flex-direction: column;
-  width: max(50%, 30rem);
+  max-width: max(50%, 30rem);
   max-height: fit-content;
 }
 
