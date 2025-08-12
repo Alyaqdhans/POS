@@ -92,7 +92,6 @@ function Payments() {
     }
     if (status === "rejected" && msg !== null) {
       toast.error(msg);
-      handleCloseModal();
     }
     dispatch(clearMsg());
 

@@ -97,7 +97,6 @@ function Branches() {
     }
     if (status === "rejected" && msg !== null) {
       toast.error(msg);
-      handleCloseModal();
     }
     dispatch(clearMsg());
 
