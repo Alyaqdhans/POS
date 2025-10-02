@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { FaEdit, FaSearch, FaTrashAlt } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Label, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Table } from 'reactstrap'
+import { Button, Label, Spinner, Table } from 'reactstrap'
 import { categorySchemaValidation } from '../../validations/CategoryValidation';
 import { addCategory, clearMsg, deleteCategory, editCategory } from '../../features/CategorySlice';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import AddModal from '../general/AddModal';
+import EditModal from '../general/EditModal';
+import DeleteModal from '../general/DeleteModal';
 
 function Categories() {
   const { status, msg, categoryList } = useSelector((state) => state.categories);
@@ -18,7 +21,7 @@ function Categories() {
   const [editModal, setEditModal] = useState(false);
   const [editCategoryData, setEditCategoryData] = useState();
   const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteCategoryData, setDeleteCategoryData] = useState(false);
+  const [deleteCategoryData, setDeleteCategoryData] = useState();
 
   const [name, setName] = useState("");
 
@@ -112,79 +115,54 @@ function Categories() {
         </div>
         <Button color='info' onClick={handleAdd} disabled={status === "pendingGetCategories"}>Add Category</Button>
       </div>
-      {/* Add Modal */}
-      <Modal centered isOpen={addModal}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Add Category</ModalHeader>
-          <ModalBody>
-            <Label htmlFor='name'>*Name</Label>
-            <input
-              id='name'
-              type='text'
-              placeholder='Enter Name'
-              className={'form-control' + (errors.name ? ' is-invalid': '')}
-              {...register("name", {onChange: (e) => setName(e.target.value)})}
-              readOnly={status === "pendingAddCategory"}
-            />
-            <p className='error'>{errors.name?.message}</p>
-          </ModalBody>
-          <ModalFooter>
-            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingAddCategory"}>
-              Cancel
-            </Button>
-            <Button color='info' type='submit' disabled={status === "pendingAddCategory"}>
-              {(status === "pendingAddCategory") && <Spinner size='sm' />} Save
-            </Button>
-          </ModalFooter>
-        </form>
-      </Modal>
+      
+      <AddModal
+        header="Add Category"
+        isOpen={addModal}
+        isLoading={status === "pendingAddCategory"}
+        close={handleCloseModal}
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Label htmlFor='name'>*Name</Label>
+        <input
+          id='name'
+          type='text'
+          placeholder='Enter Name'
+          className={'form-control' + (errors.name ? ' is-invalid' : '')}
+          {...register("name", {onChange: (e) => setName(e.target.value)})}
+          readOnly={status === "pendingAddCategory"}
+        />
+        <p className='error'>{errors.name?.message}</p>
+      </AddModal>
 
-      {/* Edit Modal */}
-      <Modal centered isOpen={editModal}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Category</ModalHeader>
-          <ModalBody>
-            <Label htmlFor='name'>*Name</Label>
-            <input
-              id='name'
-              type='text'
-              placeholder='Enter Name'
-              value={name}
-              className={'form-control' + (errors.name ? ' is-invalid' : '')}
-              {...register("name", {onChange: (e) => setName(e.target.value)})}
-              readOnly={status === "pendingEditCategory"}
-            />
-            <p className='error'>{errors.name?.message}</p>
-          </ModalBody>
-          <ModalFooter>
-            <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingEditCategory"}>
-              Cancel
-            </Button>
-            <Button color='warning' type='submit' disabled={status === "pendingEditCategory"}>
-              {(status === "pendingEditCategory") && <Spinner size='sm' />} Save
-            </Button>
-          </ModalFooter>
-        </form>
-      </Modal>
+      <EditModal
+        header="Edit Category"
+        isOpen={editModal}
+        isLoading={status === "pendingEditCategory"}
+        close={handleCloseModal}
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Label htmlFor='name'>*Name</Label>
+        <input
+          id='name'
+          type='text'
+          placeholder='Enter Name'
+          value={name}
+          className={'form-control' + (errors.name ? ' is-invalid' : '')}
+          {...register("name", {onChange: (e) => setName(e.target.value)})}
+          readOnly={status === "pendingEditCategory"}
+        />
+        <p className='error'>{errors.name?.message}</p>
+      </EditModal>
 
-      {/* Delete Modal */}
-      <Modal centered isOpen={deleteModal}>
-        <ModalHeader>Delete Category</ModalHeader>
-        <ModalBody>
-          Are you sure you want to delete this category?
-          <ul style={{listStyle: "none"}}>
-            <li><b>Name:</b> {deleteCategoryData.name}</li>
-          </ul>
-        </ModalBody>
-        <ModalFooter>
-          <Button color='secondary' outline onClick={handleCloseModal} disabled={status === "pendingDeleteCategory"}>
-            Cancel
-          </Button>
-          <Button color='danger' onClick={perfomDelete} disabled={status === "pendingDeleteCategory"}>
-            {(status === "pendingDeleteCategory") && <Spinner size='sm' />} Permanently Delete
-          </Button>
-        </ModalFooter>
-      </Modal>
+      <DeleteModal
+        header="Delete Category"
+        isOpen={deleteModal}
+        isLoading={status === "pendingDeleteCategory"}
+        close={handleCloseModal}
+        onClick={perfomDelete}
+        data={deleteCategoryData}
+      />
 
       <div className='content-display settings'>
         {
