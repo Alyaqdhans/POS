@@ -1,3 +1,6 @@
+Live page
+https://pos-cmfn.onrender.com/
+
 > - Protoype Home screen
 > <img width="921" height="515" alt="image" src="https://github.com/user-attachments/assets/c7d3afdc-51da-4438-a94a-73fc8bfaff94" />
 
